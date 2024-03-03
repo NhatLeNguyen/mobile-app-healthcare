@@ -1,15 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default class HomeScreen extends Component {
+export default class DetailsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Home</Text>
-        <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate("Details")}
-        />
+        <Text>Details</Text>
       </View>
     );
   }
