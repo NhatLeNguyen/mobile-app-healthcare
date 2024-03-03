@@ -5,14 +5,14 @@ export default class HomeScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Welcome to HEALTH CARE ! </Text>
+        <Text style={styles.text}>Welcome to HEALTH CARE !</Text>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    marginTop: 60,
     alignItems: "center",
   },
   text: {
