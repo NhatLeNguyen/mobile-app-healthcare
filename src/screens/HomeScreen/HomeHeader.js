@@ -19,13 +19,14 @@ function HomeHeader() {
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   return (
     <View style={styles.container}>
-      <Pressable
+      <TouchableOpacity
         style={{ paddingTop: 5, marginRight: 10 }}
         onPress={() => handleModal()}
+        activeOpacity={0.5}
       >
         <Ionicons name="information-circle-outline" size={30} />
-      </Pressable>
-      <Pressable>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.7}>
         <Avatar
           rounded
           size={40}
@@ -33,7 +34,7 @@ function HomeHeader() {
             uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
           }}
         />
-      </Pressable>
+      </TouchableOpacity>
       <Modal
         transparent
         animationType="slide"

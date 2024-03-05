@@ -11,6 +11,7 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import Fonts from "../assets/fonts/Fonts";
+import { useState } from "react";
 
 function TaskBlock({
   heading,
@@ -33,8 +34,13 @@ function TaskBlock({
   if (!fontsLoaded) {
     console.log("Loading...");
   }
+  const [isPressed, setIsPress] = useState(false)
   return (
-    <Pressable style={styles.container}>
+    <Pressable 
+      style={[styles.container, isPressed && styles.pressedContainer]}
+      onPressIn={() => setIsPress(true)}
+      onPressOut={() => setIsPress(false)}
+    >
       <Ionicons
         name="arrow-redo-outline"
         size={20}
@@ -88,6 +94,9 @@ function TaskBlock({
 }
 
 const styles = StyleSheet.create({
+  pressedContainer: {
+    backgroundColor: '#ECECEC'
+  },
   container: {
     borderRadius: 15,
     elevation: 1,

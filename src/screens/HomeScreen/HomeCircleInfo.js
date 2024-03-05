@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { Component, useState } from "react";
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import CircleWithPercentage from "../../components/CircleWithPercentage";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -14,6 +14,11 @@ function HomeCircleInfo() {
   if (!fontsLoaded) {
     console.log("Loading...");
   }
+  const [isPressedHeart , setIsPressHeart] = useState(false)
+  const [isPressedStep , setIsPressStep] = useState(false)
+  const [isPressedCalo , setIsPressCalo] = useState(false)
+  const [isPressedDistance , setIsPressDistance] = useState(false)
+  const [isPressedTime , setIsPressTime] = useState(false)
     return ( 
         <View style={styles.circleContainer}>
           <CircleWithPercentage
@@ -38,26 +43,29 @@ function HomeCircleInfo() {
           />
           <View style={{ paddingTop: 220, flexDirection: "row" }}>
             <Pressable
-              style={{
+              style={[{
                 flexDirection: "row",
                 alignItems: "center",
-                // backgroundColor: "red",
                 padding: 15,
-              }}
+              }, isPressedHeart && styles.pressedButton]}
               onPress={() => console.log("Hehe")}
+              onPressIn={() => setIsPressHeart(true)}
+              onPressOut={() => setIsPressHeart(false)}
             >
               <FontAwesome name="heartbeat" size={16} color={"green"} />
               <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_Medium'}}>Điểm nhịp tim</Text>
             </Pressable>
 
             <Pressable
-              style={{
+              style={[{
                 flexDirection: "row",
                 alignItems: "center",
                 marginLeft: 6,
                 padding: 15,
-              }}
+              }, isPressedStep && styles.pressedButton]}
               onPress={() => console.log("Hehe")}
+              onPressIn={() => setIsPressStep(true)}
+              onPressOut={() => setIsPressStep(false)}
             >
               <Ionicons name="footsteps" size={16} color={"blue"} />
               <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_Medium'}}>Bước</Text>
@@ -66,24 +74,30 @@ function HomeCircleInfo() {
 
           <View style={{flexDirection: "row" }}>
             <Pressable
-              style={styles.pressAble}
+              style={[styles.pressAble,isPressedCalo && styles.pressedButton]}
               onPress={() => console.log("Hehe")}
+              onPressIn={() => setIsPressCalo(true)}
+              onPressOut={() => setIsPressCalo(false)}
             >
               <Text style={styles.number}>{1226/1000}</Text>
               <Text style={styles.subText}>Calo</Text>
             </Pressable>
 
             <Pressable
-              style={styles.pressAble}
+              style={[styles.pressAble,isPressedDistance && styles.pressedButton]}
               onPress={() => console.log("Hehe")}
+              onPressIn={() => setIsPressDistance(true)}
+              onPressOut={() => setIsPressDistance(false)}
             >
               <Text style={styles.number}>{0.68}</Text>
               <Text style={styles.subText}>Km</Text>
             </Pressable>
             
             <Pressable
-              style={styles.pressAble}
+              style={[styles.pressAble, isPressedTime && styles.pressedButton]}
               onPress={() => console.log("Hehe")}
+              onPressIn={() => setIsPressTime(true)}
+              onPressOut={() => setIsPressTime(false)}
             >
               <Text style={styles.number}>23</Text>
               <Text style={styles.subText}>Phút vận động</Text>
@@ -118,6 +132,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       color: '#3c4043',
       textAlign: 'center'
+    },
+    pressedButton: {
+      backgroundColor: '#ECECEC'
     }
   });
 export default HomeCircleInfo;
