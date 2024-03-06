@@ -4,7 +4,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 // Screens
-import HomeScreen from "./src/screens/Home/HomeScreen";
+import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
+import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
+import UserNavigator from "./src/screens/User/UserNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -98,10 +100,18 @@ export default function App() {
           },
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeNavigator}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen name="Empty" component={HomeScreen} />
         <Tab.Screen name="Empty1" component={HomeScreen} />
-        <Tab.Screen name="User" component={HomeScreen} />
+        <Tab.Screen
+          name="User"
+          component={UserNavigator}
+          options={{ headerShown: false }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
