@@ -5,6 +5,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import BarChartInfo from "../../components/BarChartInfo";
 import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../../assets/fonts/Fonts";
+import ActivityWeeklyScreen from "./ActivityWeeklyScreen";
 
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
@@ -53,7 +54,7 @@ const ActivityDetailScreen = () => {
       />
       <Tab.Screen
         name="week"
-        component={BarChartInfo}
+        component={ActivityWeeklyScreen}
         options={{ title: "Tuần" }}
       />
     </Tab.Navigator>
