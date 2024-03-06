@@ -2,8 +2,9 @@ import React, { Component, useState } from "react";
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import CircleWithPercentage from "../../components/CircleWithPercentage";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
+import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../../assets/fonts/Fonts";
+import { useNavigation } from "@react-navigation/native";
 
 function HomeCircleInfo() {
   const [fontsLoaded] = useFonts({
@@ -19,6 +20,8 @@ function HomeCircleInfo() {
   const [isPressedCalo , setIsPressCalo] = useState(false)
   const [isPressedDistance , setIsPressDistance] = useState(false)
   const [isPressedTime , setIsPressTime] = useState(false)
+
+  const navigation = useNavigation()
     return ( 
         <View style={styles.circleContainer}>
           <CircleWithPercentage
@@ -63,7 +66,7 @@ function HomeCircleInfo() {
                 marginLeft: 6,
                 padding: 15,
               }, isPressedStep && styles.pressedButton]}
-              onPress={() => console.log("Hehe")}
+              onPress={() => navigation.navigate('ActivityDetail')}
               onPressIn={() => setIsPressStep(true)}
               onPressOut={() => setIsPressStep(false)}
             >

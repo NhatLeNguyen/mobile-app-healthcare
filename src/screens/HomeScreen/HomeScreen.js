@@ -5,17 +5,16 @@ import HomeHeader from "./HomeHeader";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import HomeCircleInfo from "./HomeCircleInfo";
 import HomeBody from "./HomeBody";
+import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 
-export default class HomeScreen extends Component {
-  render() {
-    return (
-      <ScrollView style={styles.container}>
-        <HomeHeader />
-        <HomeCircleInfo />
-        <HomeBody />
-      </ScrollView>
-    );
-  }
+function HomeScreen() {
+  return (
+    <ScrollView style={styles.container}>
+      <HomeHeader />
+      <HomeCircleInfo />
+      <HomeBody />
+    </ScrollView>
+  );
 }
 const styles = StyleSheet.create({
   container: {},
@@ -24,3 +23,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default HomeScreen;

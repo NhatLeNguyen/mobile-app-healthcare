@@ -12,7 +12,7 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import TaskBlock from "../../components/TaskBlock";
-import { useFonts } from "expo-font";
+import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../../assets/fonts/Fonts";
 
 function HomeBody() {
