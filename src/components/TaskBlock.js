@@ -95,7 +95,7 @@ function TaskBlock({
 
 const styles = StyleSheet.create({
   pressedContainer: {
-    backgroundColor: '#ECECEC'
+    backgroundColor: '#ECECEC',
   },
   container: {
     borderRadius: 15,

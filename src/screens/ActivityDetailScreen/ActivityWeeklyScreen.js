@@ -100,9 +100,7 @@ function ActivityWeeklyScreen() {
         data={data}
         width={Dimensions.get("screen").width}
         height={220}
-        // yAxisLabel="$"
         chartConfig={chartConfig}
-        // verticalLabelRotation={30}
         showBarTops={true}
         withInnerLines={false}
         fromZero={true}

@@ -5,7 +5,6 @@ import HomeHeader from "./HomeHeader";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import HomeCircleInfo from "./HomeCircleInfo";
 import HomeBody from "./HomeBody";
-import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 
 function HomeScreen() {
   return (

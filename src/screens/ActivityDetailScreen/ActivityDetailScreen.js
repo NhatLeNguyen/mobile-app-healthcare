@@ -25,7 +25,7 @@ const ActivityDetailScreen = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 13,
           fontFamily: 'Inter_SemiBold',
           alignItems:'center'
         },

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, FontAwesome } from '@expo/vector-icons'
+import { Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 // Screens
 import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
 import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
+import StartPracticeScreenNavigator from "./src/screens/StartPracticeScreen/StartPracticeScreenNavigator";
 
 
 const Tab = createBottomTabNavigator();
@@ -24,8 +25,8 @@ export default function App() {
               ? 'information'
               : 'information'
             return <FontAwesome name="home" size={size} color={color} />
-          } else if (route.name === "Empty"){
-            return <FontAwesome name='star-half-empty' size={size} color={color} />
+          } else if (route.name === "Practice"){
+            return <MaterialCommunityIcons name="electron-framework" size={size} color={color} />
           } else if (route.name === "Empty1"){
             return <FontAwesome name='star-half-empty' size={size} color={color} />
           } else if(route.name === 'User'){
@@ -38,13 +39,13 @@ export default function App() {
             if(focused){
               return <Text style={{ color: focused ? '#6495ED' : 'gray', fontSize: 12, fontWeight:'bold'}}>Màn hình chính</Text>
             }
-          } else if (route.name === 'Empty') {
+          } else if (route.name === 'Practice') {
             if(focused){
-              return <Text style={{ color: focused ? '#6495ED' : 'gray', fontSize: 12, fontWeight:'bold'}}>Empty</Text>;
+              return <Text style={{ color: focused ? '#6495ED' : 'gray', fontSize: 12, fontWeight:'bold'}}>Practice</Text>;
             }
           } else if (route.name === 'Empty1') {
             if(focused){
-              return <Text style={{ color: focused ? '#6495ED' : 'gray', fontSize: 12, fontWeight:'bold'}}>Empty1</Text>;
+              return <Text style={{ color: focused ? '#6495ED' : 'gray', fontSize: 12, fontWeight:'bold'}}>Practice1</Text>;
             }
           } else if (route.name === 'User') {
             if(focused){
@@ -58,8 +59,8 @@ export default function App() {
         }
       })}
       >
-        <Tab.Screen name='Home' component={HomeNavigator} options={{ headerShown: false }}/>
-        <Tab.Screen name='Empty' component={HomeScreen} />
+        <Tab.Screen name='Home' component={HomeNavigator} options={{ headerShown: false}}/>
+        <Tab.Screen name='Practice' component={StartPracticeScreenNavigator} options={{ headerShown: false }}/>
         <Tab.Screen name='Empty1' component={HomeScreen} />
         <Tab.Screen name='User' component={HomeScreen} />
       </Tab.Navigator>

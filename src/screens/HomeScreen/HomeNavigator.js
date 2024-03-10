@@ -10,12 +10,12 @@ function HomeNavigator() {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ title: "Màn hình chính" }}
+        options={{ title: "Màn hình chính",  headerShadowVisible: false}}
       />
       <Stack.Screen
         name="ActivityDetail"
         component={ActivityDetailScreen}
-        options={{ title: "Hoạt động của tôi", headerShadowVisible: false }}
+        options={{ title: "Hoạt động của tôi", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );
