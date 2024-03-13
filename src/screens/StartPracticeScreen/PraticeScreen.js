@@ -14,6 +14,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
 
 function PracticeScreen() {
   const [steps, setSteps] = useState(0);
@@ -201,7 +202,7 @@ function PracticeScreen() {
         {isFirstLocated && <MapDraw isFirstLocated={true} posList={posList} />}
       </View>
       <View style={styles.music}>
-        <Text>Place for playing music</Text>
+        <MusicPlayer name={'Đoạn tuyệt nàng đi'} author={'Phát Huy'}/>
       </View>
       <View style={styles.info}>
         <View style={styles.infoBlock}>
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center'
   },
   music: {
-    backgroundColor: "gray",
+    backgroundColor: "#171717",
     height: "8%",
     margin: 20,
     borderRadius: 20,
