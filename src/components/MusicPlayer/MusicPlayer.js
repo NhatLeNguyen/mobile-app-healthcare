@@ -7,9 +7,10 @@ import { Audio } from "expo-av";
 
 function MusicPlayer({ image, song, name, author }) {
   const [sound, setSound] = useState();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
 
   //   async function playSound() {
   //     console.log("Loading Sound");
@@ -43,7 +44,15 @@ function MusicPlayer({ image, song, name, author }) {
       setSound(sound);
       const { durationMillis } = await sound.getStatusAsync();
       setDuration(durationMillis);
-    //   sound.playAsync();
+
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded) {
+          setPosition(status.positionMillis);
+          setIsPlaying(status.isPlaying);
+        }
+        
+      });
+      sound.setIsLoopingAsync(true)
     };
     initAudio();
     return () => {
@@ -54,6 +63,7 @@ function MusicPlayer({ image, song, name, author }) {
   }, []);
 
   const handlePlayPause = async () => {
+    setIsPlaying(!isPlaying);
     if (!sound) return;
     if (isPlaying) {
       await sound.pauseAsync();
@@ -68,21 +78,19 @@ function MusicPlayer({ image, song, name, author }) {
     sound.setPositionAsync(value);
     setPosition(value);
   };
-
-  const handlePlaybackStatusUpdate = (status) => {
-    if (status.isLoaded) {
-      setPosition(status.positionMillis);
-      setIsPlaying(status.isPlaying);
+  useEffect(() => {
+    if (position == duration) {
+      setPosition(0);
+      setIsComplete(true);
     }
-  };
-
+  }, [position]);
   return (
     <View style={styles.container}>
       <Avatar
         rounded
         size={45}
         source={{
-          uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
+          uri: "https://i.pinimg.com/originals/a2/0d/8d/a20d8d91696a729b496ff09eec1d6f87.jpg",
         }}
         containerStyle={{ borderRadius: 20 }}
       />
@@ -105,12 +113,27 @@ function MusicPlayer({ image, song, name, author }) {
           maximumTrackTintColor="#182d91"
           thumbTintColor="#bfd474"
           style={{ padding: 0, width: "100%" }}
-          onSlidingComplete={handleSeek}
-          //   onValueChange={handleSeek}
+        //   onSlidingComplete={handleSeek}
+          onValueChange={handleSeek}
         />
       </View>
       <View style={{ marginLeft: 25 }}>
-        <Ionicons name="pause-sharp" size={25} color="white"  onPress={() => handlePlayPause}/>
+        {isPlaying && (
+          <Ionicons
+            name="pause-sharp"
+            size={25}
+            color="white"
+            onPress={handlePlayPause}
+          />
+        )}
+        {!isPlaying && (
+          <Ionicons
+            name="play-sharp"
+            size={25}
+            color="white"
+            onPress={handlePlayPause}
+          />
+        )}
       </View>
     </View>
   );
