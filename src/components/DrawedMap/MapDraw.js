@@ -7,7 +7,7 @@ import * as Location from "expo-location";
 import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../../constants/Constants";
 import Route from "./Route";
 
-export default function MapDraw({route}) {
+export default function MapDraw({isFirstLocated, posList}) {
 //   const [location, setLocation] = useState({});
 //   const [curPosition, setCurPosition] = useState({
 //     latitude: 20.9336737,
@@ -17,7 +17,7 @@ export default function MapDraw({route}) {
 //   });
 //   const [posList_, setPosList] = useState([]);
 //   const [isFirstLocated_, setIsFirstLocated] = useState(false);
-const {isFirstLocated, posList} = route.params
+// const {isFirstLocated, posList} = route.params
 
 //   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
 //     const deg2rad = (deg) => {
@@ -99,7 +99,6 @@ const {isFirstLocated, posList} = route.params
 //     }, 6000);
 //     return () => clearInterval(interval);
 //   }, []);
-    console.log(' Params: ' ,route.params);
   return (
     <View style={styles.container}>
       {!isFirstLocated && (
@@ -108,15 +107,10 @@ const {isFirstLocated, posList} = route.params
         </View>
       )}
       {isFirstLocated && (
-        <MapView style={StyleSheet.absoluteFill} initialRegion={posList[0]}>
+        <MapView mapPadding={100} style={[StyleSheet.absoluteFill,{flex: 1}]} initialRegion={posList[0]}>
           <Route posList={posList} />
         </MapView>
       )}
-      {/* <View>
-          <MapView style={StyleSheet.absoluteFill} initialRegion={posList[0]}>
-            <Route posList={posList} />
-          </MapView>
-        </View> */}
     </View>
   );
 }
@@ -124,5 +118,10 @@ const {isFirstLocated, posList} = route.params
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    overflow: 'hidden',
+    // height: '50%',
+    // borderRadius: 100
   },
 });

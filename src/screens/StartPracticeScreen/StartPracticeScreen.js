@@ -53,6 +53,10 @@ export default function StartPracticeScreen() {
     setSteps(0);
     setPosList([]);
   };
+  const handleStartPractice = () => {
+    setIsStartPractice(true);
+    navigation.navigate('PracticeScreen')
+  }
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
     const deg2rad = (deg) => {
@@ -90,85 +94,85 @@ export default function StartPracticeScreen() {
     })();
   };
 
-  useEffect(() => {
-    if (isStartPractice) {
-      let subscription;
-      let lastAccValue = 0;
+  // useEffect(() => {
+  //   if (isStartPractice) {
+  //     let subscription;
+  //     let lastAccValue = 0;
 
-      const handleUpdate = ({ x, y, z }) => {
-        let curAccValue = Math.sqrt(x * x + y * y + z * z);
-        if (isMovingUp && curAccValue < lastAccValue) {
-          setSteps((prevSteps) => prevSteps + 1);
-          setIsMovingUp(false);
-        } else if (
-          !isMovingUp &&
-          Math.abs(curAccValue - lastAccValue) > accelerationThreshold
-        ) {
-          setIsMovingUp(true);
-        }
-        lastAccValue = curAccValue;
-      };
+  //     const handleUpdate = ({ x, y, z }) => {
+  //       let curAccValue = Math.sqrt(x * x + y * y + z * z);
+  //       if (isMovingUp && curAccValue < lastAccValue) {
+  //         setSteps((prevSteps) => prevSteps + 1);
+  //         setIsMovingUp(false);
+  //       } else if (
+  //         !isMovingUp &&
+  //         Math.abs(curAccValue - lastAccValue) > accelerationThreshold
+  //       ) {
+  //         setIsMovingUp(true);
+  //       }
+  //       lastAccValue = curAccValue;
+  //     };
 
-      Accelerometer.setUpdateInterval(100);
-      subscription = Accelerometer.addListener(handleUpdate);
+  //     Accelerometer.setUpdateInterval(100);
+  //     subscription = Accelerometer.addListener(handleUpdate);
 
-      return () => {
-        subscription && subscription.remove();
-      };
-    }
-  }, [isMovingUp, isStartPractice]);
+  //     return () => {
+  //       subscription && subscription.remove();
+  //     };
+  //   }
+  // }, [isMovingUp, isStartPractice]);
 
-  useEffect(() => {
-    if (isStartPractice) {
-      if ((posList.length === 0) & (Object.keys(location).length > 0)) {
-        if (Object.keys(location.coords).length > 0) {
-          console.log("Starting Locate ...");
-          setPosList((lastposList) => [
-            ...lastposList,
-            {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            },
-          ]);
-          setIsFirstLocated(true);
-        }
-      }
-      if ((posList.length >= 1) & (Object.keys(location).length > 0)) {
-        if (Object.keys(location.coords).length > 0) {
-          let distance = getDistanceFromLatLonInKm(
-            posList[posList.length - 1].latitude,
-            posList[posList.length - 1].longitude,
-            location.coords.latitude,
-            location.coords.longitude
-          );
-          console.log(distance);
-          if (distance >= 0.04) {
-            setPosList((lastposList) => [
-              ...lastposList,
-              {
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              },
-            ]);
-          }
-        }
-      }
-    }
-  }, [location, isStartPractice]);
+  // useEffect(() => {
+  //   if (isStartPractice) {
+  //     if ((posList.length === 0) & (Object.keys(location).length > 0)) {
+  //       if (Object.keys(location.coords).length > 0) {
+  //         console.log("Starting Locate ...");
+  //         setPosList((lastposList) => [
+  //           ...lastposList,
+  //           {
+  //             latitude: location.coords.latitude,
+  //             longitude: location.coords.longitude,
+  //             latitudeDelta: LATITUDE_DELTA,
+  //             longitudeDelta: LONGITUDE_DELTA,
+  //           },
+  //         ]);
+  //         setIsFirstLocated(true);
+  //       }
+  //     }
+  //     if ((posList.length >= 1) & (Object.keys(location).length > 0)) {
+  //       if (Object.keys(location.coords).length > 0) {
+  //         let distance = getDistanceFromLatLonInKm(
+  //           posList[posList.length - 1].latitude,
+  //           posList[posList.length - 1].longitude,
+  //           location.coords.latitude,
+  //           location.coords.longitude
+  //         );
+  //         console.log(distance);
+  //         if (distance >= 0.04) {
+  //           setPosList((lastposList) => [
+  //             ...lastposList,
+  //             {
+  //               latitude: location.coords.latitude,
+  //               longitude: location.coords.longitude,
+  //               latitudeDelta: LATITUDE_DELTA,
+  //               longitudeDelta: LONGITUDE_DELTA,
+  //             },
+  //           ]);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }, [location, isStartPractice]);
 
-  useEffect(() => {
-    if (isStartPractice) {
-      const interval = setInterval(() => {
-        getCurrentLocation();
-      }, 6000);
-      return () => clearInterval(interval);
-    }
-  }, [isStartPractice]);
-  console.log(posList.length);
+  // useEffect(() => {
+  //   if (isStartPractice) {
+  //     const interval = setInterval(() => {
+  //       getCurrentLocation();
+  //     }, 6000);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [isStartPractice]);
+  // console.log(posList.length);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -214,7 +218,7 @@ export default function StartPracticeScreen() {
             {!isStartPractice && (
               <TouchableOpacity
                 style={{ justifyContent: "center", alignItems: "center" }}
-                onPress={() => setIsStartPractice(true)}
+                onPress={() => navigation.navigate('PracticeScreen')}
               >
                 <Text
                   style={{
@@ -227,7 +231,7 @@ export default function StartPracticeScreen() {
                 </Text>
               </TouchableOpacity>
             )}
-            {isStartPractice && (
+            {/* {isStartPractice && (
               <View style={{ alignItems: "center", justifyContent: 'center' }}>
                 <Text>Number of Steps: {steps}</Text>
                 <Button title="Reset Steps" onPress={() => setSteps(0)} />
@@ -249,7 +253,7 @@ export default function StartPracticeScreen() {
                   </Text>
                 </TouchableOpacity>
               </View>
-            )}
+            )} */}
           </View>
           {/* </BlurView> */}
         </View>
@@ -305,7 +309,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     height: "25%",
-    backgroundColor: "rgba(251, 101, 66 , 0.1)",
+    backgroundColor: "rgba(251, 101, 66 , 0.05)",
   },
   slide: {
     flex: 1,
