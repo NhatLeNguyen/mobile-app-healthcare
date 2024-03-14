@@ -5,43 +5,19 @@ import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
 
-function MusicPlayer({ image, song, name, author }) {
-  const [sound, setSound] = useState();
+function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,setS}) {
+  const [sound, setSound] = useState(s);
   const [isPlaying, setIsPlaying] = useState(true);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [onlyOne, setOnlyOne] = useState(0)
 
-  //   async function playSound() {
-  //     console.log("Loading Sound");
-  //     const { sound } = await Audio.Sound.createAsync(
-  //       require("../../assets/musics/doantuyetnangdi.mp3")
-  //     );
-  //     setSound(sound);
-
-  //     console.log("Playing Sound");
-  //     await sound.playAsync();
-  //   }
-
-  //   useEffect(() => {
-  //     return sound
-  //       ? () => {
-  //           console.log("Unloading Sound");
-  //           sound.unloadAsync();
-  //         }
-  //       : undefined;
-  //   }, [sound]);
-  //   useEffect(() => {
-  //     playSound()
-  //   },[])
   useEffect(() => {
     const initAudio = async () => {
-      const { sound } = await Audio.Sound.createAsync(
-        // { uri: 'https://example.com/audio.mp3' },
-        require("../../assets/musics/doantuyetnangdi.mp3")
-        // { shouldPlay: false }
-      );
+      const { sound } = await Audio.Sound.createAsync(song);
       setSound(sound);
+      setS(sound)
       const { durationMillis } = await sound.getStatusAsync();
       setDuration(durationMillis);
 
@@ -50,17 +26,25 @@ function MusicPlayer({ image, song, name, author }) {
           setPosition(status.positionMillis);
           setIsPlaying(status.isPlaying);
         }
-        
       });
-      sound.setIsLoopingAsync(true)
+      sound.setIsLoopingAsync(true);
+      // await sound.playAsync();
     };
     initAudio();
+    if (isChanged) {
+      setIsChanged(false);
+      return () => {
+        if (sound) {
+          sound.unloadAsync();
+        }
+      };
+    }
     return () => {
       if (sound) {
         sound.unloadAsync();
       }
     };
-  }, []);
+  }, [isChanged]);
 
   const handlePlayPause = async () => {
     setIsPlaying(!isPlaying);
@@ -86,13 +70,17 @@ function MusicPlayer({ image, song, name, author }) {
   }, [position]);
   return (
     <View style={styles.container}>
-      <Avatar
+      {/* <Avatar
         rounded
         size={45}
         source={{
-          uri: "https://i.pinimg.com/originals/a2/0d/8d/a20d8d91696a729b496ff09eec1d6f87.jpg",
+          uri: image,
         }}
         containerStyle={{ borderRadius: 20 }}
+      /> */}
+      <Image
+        source={{ uri: image }}
+        style={{ height: 45, width: 45, borderRadius: 15 }}
       />
       <View style={{ paddingTop: 0, marginLeft: 2, width: "65%" }}>
         <Text
@@ -113,7 +101,7 @@ function MusicPlayer({ image, song, name, author }) {
           maximumTrackTintColor="#182d91"
           thumbTintColor="#bfd474"
           style={{ padding: 0, width: "100%" }}
-        //   onSlidingComplete={handleSeek}
+          //   onSlidingComplete={handleSeek}
           onValueChange={handleSeek}
         />
       </View>

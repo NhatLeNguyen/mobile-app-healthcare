@@ -1,4 +1,13 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  Modal,
+  Pressable,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { Icon } from "react-native-elements";
@@ -15,6 +24,9 @@ import {
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
+import MusicList from "../../components/MusicList/MusicList";
+import { musicData } from "../../components/MusicList/MusicData";
+const MUSIC_INDEX_DEFAULT = 0;
 
 function PracticeScreen() {
   const [steps, setSteps] = useState(0);
@@ -35,7 +47,13 @@ function PracticeScreen() {
   const [totalDistance, setTotalDistance] = useState(0);
   const [second, setSecond] = useState(1);
   const [minute, setMinute] = useState(0);
-
+  const [isMusicModalVisible, setIsMusicModalVisible] = useState(false);
+  const [choosenSong, setChoosenSong] = useState(
+    musicData[MUSIC_INDEX_DEFAULT]
+  );
+  const [isChangedMusic, setIsChangedMusic] = useState(false);
+  const [sound, setSound] = useState();
+  const [musicTextInput, setMusicTextInput] = useState("");
   const navigation = useNavigation();
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
@@ -144,7 +162,7 @@ function PracticeScreen() {
         }
       }
     }
-  }, [location,isPlayed]);
+  }, [location, isPlayed]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -173,6 +191,64 @@ function PracticeScreen() {
   // console.log(posList.length);
   return (
     <View style={styles.container}>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isMusicModalVisible}
+        // style={{height: 80, flex: 0.5 }}
+        onRequestClose={() => setIsMusicModalVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+            // backgroundColor: "rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: "70%",
+              padding: 20,
+              borderRadius: 20,
+              backgroundColor: "rgb(6,6,6)",
+              borderWidth: 1,
+              // borderColor: '#bfd474',
+              borderColor: "white",
+              elevation: 5,
+            }}
+          >
+            <TextInput
+              style={{
+                backgroundColor: "white",
+                marginTop: 20,
+                height: 40,
+                borderRadius: 20,
+                paddingLeft: 20,
+                justifyContent: "center",
+                color:"#0092CC"
+              }}
+              placeholderTextColor={"#0092CC"}
+              value={musicTextInput}
+              onChangeText={setMusicTextInput}
+              placeholder="Search music ..."
+            />
+            <MusicList
+              onChange={setChoosenSong}
+              onClose={setIsMusicModalVisible}
+              isChanged={setIsChangedMusic}
+            />
+            <Pressable
+              style={{ top: 8, right: 8, position: "absolute" }}
+              onPress={() => setIsMusicModalVisible(false)}
+            >
+              <Ionicons name="close" size={25} color="gray" />
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View style={{ height: "50%" }}>
         {!isFirstLocated && (
           <View
@@ -202,7 +278,16 @@ function PracticeScreen() {
         {isFirstLocated && <MapDraw isFirstLocated={true} posList={posList} />}
       </View>
       <View style={styles.music}>
-        <MusicPlayer name={'Đoạn tuyệt nàng đi'} author={'Phát Huy'}/>
+        <MusicPlayer
+          image={choosenSong.img_url}
+          name={choosenSong.name}
+          author={choosenSong.author}
+          song={choosenSong.song}
+          isChanged={isChangedMusic}
+          setIsChanged={setIsChangedMusic}
+          s={sound}
+          setS={setSound}
+        />
       </View>
       <View style={styles.info}>
         <View style={styles.infoBlock}>
@@ -258,7 +343,12 @@ function PracticeScreen() {
       <View style={styles.buttonList}>
         {/* <AntDesign name="pausecircle" size={70} color="#bfd474" /> */}
         {/* <FontAwesome name="pause-circle" size={70} color="#bfd474" /> */}
-        <MaterialIcons name="my-library-music" size={40} color="white" />
+        <MaterialIcons
+          name="my-library-music"
+          size={40}
+          color="white"
+          onPress={() => setIsMusicModalVisible(true)}
+        />
         {isPlayed && (
           <Ionicons
             name="pause-circle-sharp"
@@ -281,7 +371,10 @@ function PracticeScreen() {
           name="scan1"
           size={40}
           color="white"
-          onPress={() => navigation.navigate("TapLuyen")}
+          onPress={() => {
+            sound.unloadAsync();
+            navigation.navigate("TapLuyen");
+          }}
         />
       </View>
     </View>

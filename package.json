@@ -39,7 +39,8 @@
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-track-player": "^4.0.1",
-    "swiper": "^11.0.7"
+    "swiper": "^11.0.7",
+    "zingmp3-api-full": "^1.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
