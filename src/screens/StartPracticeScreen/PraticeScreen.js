@@ -26,7 +26,12 @@ import { useNavigation } from "@react-navigation/native";
 import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
 import MusicList from "../../components/MusicList/MusicList";
 import { musicData } from "../../components/MusicList/MusicData";
+import NhacCuaTui from "nhaccuatui-api-full";
 const MUSIC_INDEX_DEFAULT = 0;
+
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
 
 function PracticeScreen() {
   const [steps, setSteps] = useState(0);
@@ -54,7 +59,49 @@ function PracticeScreen() {
   const [isChangedMusic, setIsChangedMusic] = useState(false);
   const [sound, setSound] = useState();
   const [musicTextInput, setMusicTextInput] = useState("");
+  const [musicList, setMusicList] = useState([]);
+  const [isLoadedMusicList, setIsLoadedMusicList] = useState(0);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    if (isLoadedMusicList == 0) {
+      console.log("vllll");
+      NhacCuaTui.getTop100("m3liaiy6vVsF").then(async (response) => {
+        for (let i = 0; i < response.playlist.songs.length; i++) {
+          let info = response.playlist.songs[i];
+          let key = info["key"];
+          let name = info["title"];
+          let thumbnail = info["thumbnail"];
+          let artists = "";
+          for (let j = 0; j < info.artists.length; j++) {
+            artists += info.artists[j].name;
+            if (j < info.artists.length - 1) {
+              artists += ", ";
+            }
+          }
+          let song_url = "";
+          await NhacCuaTui.getSong(key).then((data) => {
+            if (data.song.streamUrls.length > 0) {
+              song_url = data.song.streamUrls[0].streamUrl;
+            }
+          });
+          if (song_url !== "") {
+            setMusicList((prev) => [
+              ...prev,
+              {
+                key: key,
+                name: name,
+                thumbnail: thumbnail,
+                artists: artists,
+                url: song_url,
+              },
+            ]);
+          }
+        }
+      });
+      setIsLoadedMusicList(1);
+    }
+  }, []);
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
     const deg2rad = (deg) => {
@@ -228,7 +275,7 @@ function PracticeScreen() {
                 borderRadius: 20,
                 paddingLeft: 20,
                 justifyContent: "center",
-                color:"#0092CC"
+                color: "#0092CC",
               }}
               placeholderTextColor={"#0092CC"}
               value={musicTextInput}
@@ -236,6 +283,7 @@ function PracticeScreen() {
               placeholder="Search music ..."
             />
             <MusicList
+              listMusic={musicList.slice(0,25)}
               onChange={setChoosenSong}
               onClose={setIsMusicModalVisible}
               isChanged={setIsChangedMusic}
@@ -279,10 +327,10 @@ function PracticeScreen() {
       </View>
       <View style={styles.music}>
         <MusicPlayer
-          image={choosenSong.img_url}
-          name={choosenSong.name}
-          author={choosenSong.author}
-          song={choosenSong.song}
+          image={choosenSong.thumbnail}
+          name={capitalizeFirstLetter(choosenSong.name)}
+          author={choosenSong.artists}
+          song={choosenSong.url}
           isChanged={isChangedMusic}
           setIsChanged={setIsChangedMusic}
           s={sound}

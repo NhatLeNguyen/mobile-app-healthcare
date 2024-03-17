@@ -5,8 +5,11 @@ import HomeHeader from "./HomeHeader";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import HomeCircleInfo from "./HomeCircleInfo";
 import HomeBody from "./HomeBody";
-
+import { useState,useEffect } from "react";
+const LIST = "ABCDEFGHIJKLMNOPURSTUVWXYZ0123456789"
 function HomeScreen() {
+  const [id, setId] = useState([])
+  
   return (
     <ScrollView style={styles.container}>
       <HomeHeader />

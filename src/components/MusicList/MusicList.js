@@ -2,20 +2,24 @@ import { ScrollView, TouchableOpacity, View } from "react-native";
 import MusicItem from "./MusicItem";
 import { musicData } from "./MusicData";
 
-function MusicList({onChange, onClose, isChanged}) {
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function MusicList({listMusic, onChange, onClose, isChanged}) {
   const handleChooseMusic = (index) => {
-    onChange(musicData[index])
+    onChange(listMusic[index])
     onClose(false)
     isChanged(true)
   }
   return (
     <ScrollView style={{marginTop: 10}}>
-      {musicData.map((item, index) => (
-        <TouchableOpacity key={index} onPress={() => handleChooseMusic(index)} activeOpacity={0.8}>
+      {listMusic.map((item, index) => (
+        <TouchableOpacity key={item.key} onPress={() => handleChooseMusic(index)} activeOpacity={0.8}>
           <MusicItem
-            uriMusic={item.img_url}
-            name={item.name}
-            author={item.author}
+            uriMusic={item.thumbnail}
+            name={capitalizeFirstLetter(item.name)}
+            author={item.artists}
           />
         </TouchableOpacity>
       ))}
