@@ -62,6 +62,7 @@ function PracticeScreen() {
   const [musicList, setMusicList] = useState([]);
   const [isLoadedMusicList, setIsLoadedMusicList] = useState(0);
   const navigation = useNavigation();
+  const [musicSearched, setMusicSearched] = useState([]);
 
   useEffect(() => {
     if (isLoadedMusicList == 0) {
@@ -102,7 +103,46 @@ function PracticeScreen() {
       setIsLoadedMusicList(1);
     }
   }, []);
-
+  const handleSearchMusic = () => {
+    let list = [];
+    if (musicTextInput.length > 0) {
+      NhacCuaTui.searchByKeyword(musicTextInput).then(async (response) => {
+        console.log(response);
+        for (let i = 0; i < response.search.song.song.length; i++) {
+          let info = response.search.song.song[i];
+          let key = info["key"];
+          let name = info["title"];
+          let thumbnail = info["thumbnail"];
+          let artists = "";
+          for (let j = 0; j < info.artists.length; j++) {
+            artists += info.artists[j].name;
+            if (j < info.artists.length - 1) {
+              artists += ", ";
+            }
+          }
+          let song_url = "";
+          await NhacCuaTui.getSong(key).then((data) => {
+            if (data.status == "success") {
+              if (data.song.streamUrls.length > 0) {
+                song_url = data.song.streamUrls[0].streamUrl;
+              }
+            }
+          });
+          if (song_url !== "") {
+            list.push({
+              key: key,
+              name: name,
+              thumbnail: thumbnail,
+              artists: artists,
+              url: song_url,
+            });
+          }
+        }
+      });
+      console.log('list: ',list);
+      setMusicSearched(list);
+    }
+  };
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
     const deg2rad = (deg) => {
       return deg * (Math.PI / 180);
@@ -267,23 +307,38 @@ function PracticeScreen() {
               elevation: 5,
             }}
           >
-            <TextInput
+            <View
               style={{
-                backgroundColor: "white",
-                marginTop: 20,
-                height: 40,
-                borderRadius: 20,
-                paddingLeft: 20,
-                justifyContent: "center",
-                color: "#0092CC",
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 25,
               }}
-              placeholderTextColor={"#0092CC"}
-              value={musicTextInput}
-              onChangeText={setMusicTextInput}
-              placeholder="Search music ..."
-            />
+            >
+              <TextInput
+                style={{
+                  backgroundColor: "white",
+                  // marginTop: 20,
+                  height: 40,
+                  borderRadius: 20,
+                  paddingLeft: 20,
+                  justifyContent: "center",
+                  color: "#0092CC",
+                  width: "95%",
+                }}
+                placeholderTextColor={"#0092CC"}
+                value={musicTextInput}
+                onChangeText={setMusicTextInput}
+                placeholder="Search music ..."
+              />
+              <MaterialIcons
+                name="navigate-next"
+                size={30}
+                color="#0092CC"
+                onPress={() => handleSearchMusic()}
+              />
+            </View>
             <MusicList
-              listMusic={musicList.slice(0,25)}
+              listMusic={musicSearched.slice(0, 25)}
               onChange={setChoosenSong}
               onClose={setIsMusicModalVisible}
               isChanged={setIsChangedMusic}

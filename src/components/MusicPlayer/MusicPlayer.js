@@ -14,7 +14,6 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
   const [onlyOne, setOnlyOne] = useState(0)
 
   useEffect(() => {
-    console.log(song);
     const initAudio = async () => {
       const { sound } = await Audio.Sound.createAsync({uri: song});
       setSound(sound);
@@ -80,7 +79,7 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
         containerStyle={{ borderRadius: 20 }}
       /> */}
       <Image
-        source={{ uri: image }}
+        source={{ uri: image !== '' ? image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4bDfU2mvxC6CL_CfyW47bd1ga9OWSHxYbNx6EbwzgtA&s' }}
         style={{ height: 45, width: 45, borderRadius: 15 }}
       />
       <View style={{ paddingTop: 0, marginLeft: 2, width: "65%" }}>
