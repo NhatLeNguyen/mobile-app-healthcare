@@ -28,6 +28,7 @@ import MusicList from "../../components/MusicList/MusicList";
 import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
 import axios from "axios";
+import { getFormatedDate } from "react-native-modern-datepicker";
 const MUSIC_INDEX_DEFAULT = 0;
 
 function capitalizeFirstLetter(str) {
@@ -64,7 +65,10 @@ function PracticeScreen() {
   const [isLoadedMusicList, setIsLoadedMusicList] = useState(0);
   const navigation = useNavigation();
   const [musicSearched, setMusicSearched] = useState([]);
-    // console.log(choosenSong);
+
+  const [date, setDate] = useState(new Date());
+  // cosnt [startTime, setStartTime] = useState(new Date())
+  // console.log(choosenSong);
   useEffect(() => {
     if (isLoadedMusicList == 0) {
       console.log("vllll");
@@ -105,25 +109,27 @@ function PracticeScreen() {
     }
   }, []);
   const handleCompletePractice = () => {
-    console.log("DMmmmmmmmmmmmmmmmmmmmmmmmm");
-    axios
-      .post(`http://192.168.1.110:1510/savePracticeHistory`, {
-        id: "1",
-        start_time: "123",
-        end_time: "123",
-        date: "123",
-        steps: steps,
-        distances: totalDistance,
-        praticetime: minute + ":" + second,
-        caloris: 1.0,
-        posList: JSON.stringify(posList),
-      })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    if (isFirstLocated) {
+      console.log("Saving...");
+      axios
+        .post(`http://192.168.1.110:1510/savePracticeHistory`, {
+          id: "1",
+          start_time: getFormatedDate(date, "hh:mm:ss"),
+          end_time: getFormatedDate(new Date(), 'hh:mm:ss'),
+          date: getFormatedDate(date, "YYYY/MM/DD"),
+          steps: steps,
+          distances: totalDistance,
+          praticetime: minute + ":" + second,
+          caloris: 1.0,
+          posList: JSON.stringify(posList),
+        })
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   };
   const handleSearchMusic = () => {
     let list = [];
@@ -360,7 +366,11 @@ function PracticeScreen() {
               />
             </View>
             <MusicList
-              listMusic={musicSearched.length != 0 ? musicSearched.slice(0, 25) : musicList.slice(0,25)}
+              listMusic={
+                musicSearched.length != 0
+                  ? musicSearched.slice(0, 25)
+                  : musicList.slice(0, 25)
+              }
               onChange={setChoosenSong}
               onClose={setIsMusicModalVisible}
               isChanged={setIsChangedMusic}

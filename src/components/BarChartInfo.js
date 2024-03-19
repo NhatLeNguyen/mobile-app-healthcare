@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -17,6 +17,7 @@ import Fonts from "../assets/fonts/Fonts";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
 import StepDetail from "./StepDetail";
+import axios from "axios";
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -67,6 +68,19 @@ function BarChartInfo() {
       },
     ],
   };
+  useEffect(() => {
+    console.log("Getting data...");
+      axios
+        .post(`http://192.168.1.110:1510/savePracticeHistory`, {
+          id: "1",
+        })
+        .then(function (response) {
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  },[selectedDate])
 
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
@@ -103,7 +117,7 @@ function BarChartInfo() {
         mình.
       </Text>
       <Modal
-        animationType="slide"
+        animationType='fade'
         transparent={true}
         visible={openChooseDate}
         onRequestClose={() => setOpenChooseDate(false)}

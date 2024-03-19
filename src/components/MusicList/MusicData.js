@@ -3,7 +3,7 @@ export const musicData = [
         thumbnail: 'https://i.pinimg.com/originals/a2/0d/8d/a20d8d91696a729b496ff09eec1d6f87.jpg',
         name: 'Đoạn tuyệt nàng đi',
         artists: 'Phát Huy',
-        url: "https://c3-ex-swe.nct.vn/NhacCuaTui1017/DoanTuyetNangDi-PhatHuyT4-7034809.mp3?st=mK0my12ir9FceLLZQQEY2g&e=1710754562"
+        url: "https://c3-ex-swe.nct.vn/NhacCuaTui1017/DoanTuyetNangDi-PhatHuyT4-7034809.mp3?st=_R4S1nsC906IcmR6nwZU-Q&e=1710933479"
     },
     {
         thumbnail: 'https://i.ytimg.com/vi/bDMFeZlc24c/maxresdefault.jpg',

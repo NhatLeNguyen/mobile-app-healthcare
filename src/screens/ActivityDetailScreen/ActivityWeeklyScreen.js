@@ -111,7 +111,7 @@ function ActivityWeeklyScreen() {
         mình.
       </Text>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={openChooseDate}
         onRequestClose={() => setOpenChooseDate(false)}
