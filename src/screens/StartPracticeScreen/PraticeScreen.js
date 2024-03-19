@@ -27,6 +27,7 @@ import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
 import MusicList from "../../components/MusicList/MusicList";
 import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
+import axios from "axios";
 const MUSIC_INDEX_DEFAULT = 0;
 
 function capitalizeFirstLetter(str) {
@@ -63,7 +64,7 @@ function PracticeScreen() {
   const [isLoadedMusicList, setIsLoadedMusicList] = useState(0);
   const navigation = useNavigation();
   const [musicSearched, setMusicSearched] = useState([]);
-
+    // console.log(choosenSong);
   useEffect(() => {
     if (isLoadedMusicList == 0) {
       console.log("vllll");
@@ -103,6 +104,27 @@ function PracticeScreen() {
       setIsLoadedMusicList(1);
     }
   }, []);
+  const handleCompletePractice = () => {
+    console.log("DMmmmmmmmmmmmmmmmmmmmmmmmm");
+    axios
+      .post(`http://192.168.1.110:1510/savePracticeHistory`, {
+        id: "1",
+        start_time: "123",
+        end_time: "123",
+        date: "123",
+        steps: steps,
+        distances: totalDistance,
+        praticetime: minute + ":" + second,
+        caloris: 1.0,
+        posList: JSON.stringify(posList),
+      })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   const handleSearchMusic = () => {
     let list = [];
     if (musicTextInput.length > 0) {
@@ -139,7 +161,7 @@ function PracticeScreen() {
           }
         }
       });
-      console.log('list: ',list);
+      console.log("list: ", list);
       setMusicSearched(list);
     }
   };
@@ -338,7 +360,7 @@ function PracticeScreen() {
               />
             </View>
             <MusicList
-              listMusic={musicSearched.slice(0, 25)}
+              listMusic={musicSearched.length != 0 ? musicSearched.slice(0, 25) : musicList.slice(0,25)}
               onChange={setChoosenSong}
               onClose={setIsMusicModalVisible}
               isChanged={setIsChangedMusic}
@@ -477,6 +499,7 @@ function PracticeScreen() {
           onPress={() => {
             sound.unloadAsync();
             navigation.navigate("TapLuyen");
+            handleCompletePractice();
           }}
         />
       </View>
