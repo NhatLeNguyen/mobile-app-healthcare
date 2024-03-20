@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import Calendar from "./Calender";
-import moment from "moment";
+import moment, { min } from "moment";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../assets/fonts/Fonts";
@@ -19,6 +19,7 @@ import { BarChart } from "react-native-chart-kit";
 import StepDetail from "./StepDetail";
 import axios from "axios";
 import { IP } from "../constants/Constants";
+import { useNavigation } from "@react-navigation/native";
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -43,6 +44,7 @@ function BarChartInfo() {
   if (!fontsLoaded) {
     console.log("Loading...");
   }
+  const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -73,39 +75,58 @@ function BarChartInfo() {
   const [sumSteps, setSumSteps] = useState(0);
   useEffect(() => {
     console.log("Getting data...");
-      axios
-        .get(`http://${IP}:1510/getDailyPracticeDetail`, {
-          params: {
-            id: '1',
-            date: selectedDate
-          }
-        })
-        .then(function (response) {
-          let detail = response.data.data;
-          // console.log(response.data);
-          let stepDataReturned = {labels: ["0:00"], datasets: [ { data: [0]}]}
-          let sumStepsReturned = 0;
-          let detailDataReturned = [];
-          for(var i = 0; i < detail.length ; i++){
-            stepDataReturned.labels.push(detail[i].start_time.slice(0,5))
-            stepDataReturned.datasets[0].data.push(detail[i].steps)
-            sumStepsReturned += detail[i].steps
-            detailDataReturned.push({start_time: detail[i].start_time.slice(0,5), practice_time: detail[i].practice_time, steps: detail[i].steps})
-          }
-          stepDataReturned.labels.push('24:00')
-          stepDataReturned.datasets[0].data.push(0)
-          setStepData(stepDataReturned)
-          setSumSteps(sumStepsReturned)
-          setDetailData(detailDataReturned)
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-  },[selectedDate])
+    axios
+      .get(`http://${IP}:1510/getDailyPracticeDetail`, {
+        params: {
+          id: "1",
+          date: selectedDate,
+        },
+      })
+      .then(function (response) {
+        let detail = response.data.data;
+        // console.log(response.data);
+        let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
+        let sumStepsReturned = 0;
+        let detailDataReturned = [];
+        for (var i = 0; i < detail.length; i++) {
+          stepDataReturned.labels.push(detail[i].start_time.slice(0, 5));
+          stepDataReturned.datasets[0].data.push(detail[i].steps);
+          sumStepsReturned += detail[i].steps;
+          detailDataReturned.push({
+            start_time: detail[i].start_time.slice(0, 5),
+            practice_time: detail[i].practice_time,
+            steps: detail[i].steps,
+            posList: detail[i].posList,
+            calories: detail[i].caloris,
+            totalDistance: detail[i].distances
+          });
+        }
+        stepDataReturned.labels.push("24:00");
+        stepDataReturned.datasets[0].data.push(0);
+        setStepData(stepDataReturned);
+        setSumSteps(sumStepsReturned);
+        setDetailData(detailDataReturned);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [selectedDate]);
 
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
     setOpenChooseDate(false);
+  };
+
+  const handleGetDetailActivity = (data) => {
+    let [minute, second] = data.practice_time.split(':')
+    minute = parseInt(minute)
+    second = parseInt(second)
+    data.minute = minute;
+    data.second = second;
+    let jsonObject = JSON.parse(data.posList);
+    let posList = Object.keys(jsonObject).map((key) => jsonObject[key]);
+    data.posList = posList
+    navigation.navigate('ActivityDetailPerDay', {data})
   };
   return (
     <ScrollView style={styles.container}>
@@ -116,8 +137,8 @@ function BarChartInfo() {
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {sumSteps > 1000 ? sumSteps / 1000 : sumSteps}{" "}
-          bước
+          <Ionicons name="footsteps" size={16} color={"blue"} />{" "}
+          {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} bước
         </Text>
       </View>
       <BarChart
@@ -138,7 +159,7 @@ function BarChartInfo() {
         mình.
       </Text>
       <Modal
-        animationType='fade'
+        animationType="fade"
         transparent={true}
         visible={openChooseDate}
         onRequestClose={() => setOpenChooseDate(false)}
@@ -158,11 +179,28 @@ function BarChartInfo() {
           </View>
         </View>
       </Modal>
-      <View style={{borderColor: 'gray', borderTopWidth: 0.5, borderBottomWidth: 0.5, marginBottom: 0}}>
+      <View
+        style={{
+          borderColor: "gray",
+          borderTopWidth: 0.5,
+          borderBottomWidth: 0.5,
+          marginBottom: 0,
+        }}
+      >
         {detailData.map((item, index) => (
-          <StepDetail key={index} startTime={item.start_time} totalTime={item.practice_time} stepCount={item.steps}/>
+          <TouchableOpacity
+            key={index}
+            activeOpacity={0.7}
+            onPress={() => handleGetDetailActivity(item)}
+          >
+            <StepDetail
+              startTime={item.start_time}
+              totalTime={item.practice_time}
+              stepCount={item.steps}
+            />
+          </TouchableOpacity>
         ))}
-        
+
         {/* <StepDetail startTime="19:09" totalTime="8ph 18giây" stepCount="757"/> */}
       </View>
     </ScrollView>

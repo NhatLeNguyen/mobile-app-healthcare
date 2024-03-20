@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
+import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,11 @@ function HomeNavigator() {
         name="ActivityDetail"
         component={ActivityDetailScreen}
         options={{ title: "Hoạt động của tôi", headerShadowVisible: false}}
+      />
+      <Stack.Screen
+        name="ActivityDetailPerDay"
+        component={ActivityDetail}
+        options={{ title: "Chi tiết", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );

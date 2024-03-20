@@ -17,7 +17,7 @@ function StepDetail({ startTime, totalTime, stepCount }) {
   const title = parseInt(hourStart) <= 10 ? "Đi bộ buổi sáng" : parseInt(hourStart) <= 6 ? 'Đi bộ buổi chiều' : "Đi bộ buổi tối"
   const [minutePractice, secondPractice] = totalTime.split(':');
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.7}>
+    <View style={styles.container}>
       <View style={{ flexDirection: "row" }}>
         <FontAwesome5 name="walking" size={16} color="gray" />
         <Text style={{ paddingLeft: 10, color: "gray" }}>{startTime}</Text>
@@ -30,7 +30,7 @@ function StepDetail({ startTime, totalTime, stepCount }) {
         <Ionicons name="footsteps" size={15} color={"blue"} />
         <Text style={{color:'gray', marginLeft: 5}}>{stepCount} bước</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
