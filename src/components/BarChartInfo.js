@@ -18,6 +18,7 @@ import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
 import StepDetail from "./StepDetail";
 import axios from "axios";
+import { IP } from "../constants/Constants";
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -60,22 +61,42 @@ function BarChartInfo() {
   ];
   const dayOfWeek = daysOfWeek[date.getDay()];
 
-  const data = {
-    labels: ["0:00", "15:00", "24:00"],
+  const [stepData, setStepData] = useState({
+    labels: ["0:00"],
     datasets: [
       {
-        data: [0, 45, 0],
+        data: [0],
       },
     ],
-  };
+  });
+  const [detailData, setDetailData] = useState([]);
+  const [sumSteps, setSumSteps] = useState(0);
   useEffect(() => {
     console.log("Getting data...");
       axios
-        .post(`http://192.168.1.110:1510/savePracticeHistory`, {
-          id: "1",
+        .get(`http://${IP}:1510/getDailyPracticeDetail`, {
+          params: {
+            id: '1',
+            date: selectedDate
+          }
         })
         .then(function (response) {
-          console.log(response.data);
+          let detail = response.data.data;
+          // console.log(response.data);
+          let stepDataReturned = {labels: ["0:00"], datasets: [ { data: [0]}]}
+          let sumStepsReturned = 0;
+          let detailDataReturned = [];
+          for(var i = 0; i < detail.length ; i++){
+            stepDataReturned.labels.push(detail[i].start_time.slice(0,5))
+            stepDataReturned.datasets[0].data.push(detail[i].steps)
+            sumStepsReturned += detail[i].steps
+            detailDataReturned.push({start_time: detail[i].start_time.slice(0,5), practice_time: detail[i].practice_time, steps: detail[i].steps})
+          }
+          stepDataReturned.labels.push('24:00')
+          stepDataReturned.datasets[0].data.push(0)
+          setStepData(stepDataReturned)
+          setSumSteps(sumStepsReturned)
+          setDetailData(detailDataReturned)
         })
         .catch(function (error) {
           console.log(error);
@@ -95,13 +116,13 @@ function BarChartInfo() {
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {1234 / 1000}{" "}
+          <Ionicons name="footsteps" size={16} color={"blue"} /> {sumSteps > 1000 ? sumSteps / 1000 : sumSteps}{" "}
           bước
         </Text>
       </View>
       <BarChart
         style={{ marginTop: 20 }}
-        data={data}
+        data={stepData}
         width={Dimensions.get("screen").width}
         height={220}
         // yAxisLabel="$"
@@ -138,8 +159,11 @@ function BarChartInfo() {
         </View>
       </Modal>
       <View style={{borderColor: 'gray', borderTopWidth: 0.5, borderBottomWidth: 0.5, marginBottom: 0}}>
-        <StepDetail startTime="17:19" totalTime="5ph 22giây" stepCount="154"/>
-        <StepDetail startTime="19:09" totalTime="8ph 18giây" stepCount="757"/>
+        {detailData.map((item, index) => (
+          <StepDetail key={index} startTime={item.start_time} totalTime={item.practice_time} stepCount={item.steps}/>
+        ))}
+        
+        {/* <StepDetail startTime="19:09" totalTime="8ph 18giây" stepCount="757"/> */}
       </View>
     </ScrollView>
   );

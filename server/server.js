@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import session from 'express-session';
 import auth from './middleware/auth.js';
 import jwt from 'jsonwebtoken';
+import { IP } from './configs/ip.js';
 
 dotenv.config();
 const app = express();
@@ -34,7 +35,7 @@ initWebRoute(app);
 initAPIRoute(app);
 // Init API route
 
-app.listen(port, '192.168.1.110',() => {
+app.listen(port, IP,() => {
   console.log(`Example app listening on port ${port}`);
 });
 

@@ -12,7 +12,7 @@ import React, { useState, useEffect } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { Icon } from "react-native-elements";
 import * as Location from "expo-location";
-import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../../constants/Constants";
+import { IP, LATITUDE_DELTA, LONGITUDE_DELTA } from "../../constants/Constants";
 // import Route from "../../components/DrawedMap/Route";
 import MapDraw from "../../components/DrawedMap/MapDraw";
 import { Accelerometer } from "expo-sensors";
@@ -112,7 +112,7 @@ function PracticeScreen() {
     if (isFirstLocated) {
       console.log("Saving...");
       axios
-        .post(`http://192.168.1.110:1510/savePracticeHistory`, {
+        .post(`http://${IP}:1510/savePracticeHistory`, {
           id: "1",
           start_time: getFormatedDate(date, "hh:mm:ss"),
           end_time: getFormatedDate(new Date(), 'hh:mm:ss'),

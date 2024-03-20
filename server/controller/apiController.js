@@ -39,6 +39,20 @@ let savePracticeHistory = async (req, res) => {
   }
 };
 
+let getDailyPracticeDetail = async (req, res) => {
+  try{
+    console.log(req.query);
+    let {id ,date} = req.query;
+    let data = await pool.execute('select * from practicehistory where user_id = ? and date = ?', [id, date])
+    console.log(data[0]);
+    return res.status(200).send({data: data[0]})
+  }catch (err){
+    console.log(err);
+    return res.status(400).send("Fail")
+  }
+}
+
 export default {
   savePracticeHistory,
+  getDailyPracticeDetail
 };
