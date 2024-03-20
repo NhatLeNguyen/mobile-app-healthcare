@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -16,6 +16,9 @@ import Fonts from "../../assets/fonts/Fonts";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
 import StepDailyDetail from "../../components/StepDailyDetail";
+import axios from "axios";
+import { IP } from "../../constants/Constants";
+import { useNavigation } from "@react-navigation/native";
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -31,6 +34,7 @@ const chartConfig = {
 };
 
 function ActivityWeeklyScreen() {
+  const navigation = useNavigation()
   const [fontsLoaded] = useFonts({
     Inter_400Regular: Fonts.Inter_Regular,
     Inter_Medium: Fonts.Inter_Medium,
@@ -58,22 +62,55 @@ function ActivityWeeklyScreen() {
   ];
   const dayOfWeek = daysOfWeek[date.getDay()];
 
-  const data = {
-    labels: ["0:00", "15:00", "24:00"],
+  const [chartData, setChartData]= useState({
+    labels: ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"],
     datasets: [
       {
-        data: [0, 45, 0],
+        data: [0, 45, 0, 0, 0, 0, 0],
       },
     ],
-  };
+  });
+  const [detailData, setDetailData] = useState([])
   const startDate = new Date()
   startDate.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1))
-//   console.log(startDate);
-  console.log(date.getDay());
   const endDate = new Date()
   endDate.setDate(date.getDate() + (7 - (date.getDay() === 0 ? 7: date.getDay())))
-  console.log(endDate);
-
+  useEffect(() => {
+    axios
+      .get(`http://${IP}:1510/getWeeklyPracticeDetail`, {
+        params: {
+          startDate: getFormatedDate(startDate, 'YYYY-MM-DD'),
+          endDate: currentDate,
+        },
+      })
+      .then(function (response) {
+        let detail = response.data.data;
+        // console.log(detail);
+        let chartDataReturned = {
+          labels: ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"],
+          datasets: [
+            {
+              data: [0, 0, 0, 0, 0, 0, 0],
+            },
+          ],
+        }
+        let detailDataReturned = []
+        for(var i = 0 ; i< detail.length; i++){
+          let cur_date = new Date(detail[i].date)
+          chartDataReturned.datasets[0].data[cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1] = parseInt(detail[i].steps)
+        }
+        setChartData(chartDataReturned)
+        for(var j = 0 ; j < new Date(today - startDate).getDate() ; j++){
+          let d = new Date(startDate)
+          d.setDate(d.getDate() + j)
+          detailDataReturned.push({date: d, steps: chartDataReturned.datasets[0].data[j]})
+        }
+        setDetailData(detailDataReturned)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [selectedDate])
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
     setOpenChooseDate(false);
@@ -97,7 +134,7 @@ function ActivityWeeklyScreen() {
       </View>
       <BarChart
         style={{ marginTop: 20 }}
-        data={data}
+        data={chartData}
         width={Dimensions.get("screen").width}
         height={220}
         chartConfig={chartConfig}
@@ -132,8 +169,15 @@ function ActivityWeeklyScreen() {
         </View>
       </Modal>
       <View style={{borderColor: 'gray', borderTopWidth: 0.5, borderBottomWidth: 0.5, marginBottom: 0}}>
-        <StepDailyDetail day={"Thứ Hai"} date={4} month={3} stepCount="154"/>
-        <StepDailyDetail day={"Thứ Ba"} date={5} month={3} stepCount="757"/>
+        {detailData.map((item, index) => {
+          return (
+          <TouchableOpacity key={index} activeOpacity={0.7} onPress={() => navigation.navigate('day', {prop: getFormatedDate(item.date, 'YYYY/MM/DD')})}>
+            <StepDailyDetail date={item.date} stepCount={item.steps}/>
+          </TouchableOpacity>
+          )
+        })}
+        {/* <StepDailyDetail day={"Thứ Hai"} date={4} month={3} stepCount="154"/> */}
+        {/* <StepDailyDetail day={"Thứ Ba"} date={5} month={3} stepCount="757"/> */}
       </View>
     </ScrollView>
   );

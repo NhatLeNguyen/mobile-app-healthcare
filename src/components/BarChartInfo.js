@@ -20,6 +20,11 @@ import StepDetail from "./StepDetail";
 import axios from "axios";
 import { IP } from "../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -34,7 +39,8 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-function BarChartInfo() {
+function BarChartInfo({route}) {
+  const choosedDate = route.params ? route.params.prop : undefined;
   const [fontsLoaded] = useFonts({
     Inter_400Regular: Fonts.Inter_Regular,
     Inter_Medium: Fonts.Inter_Medium,
@@ -48,8 +54,12 @@ function BarChartInfo() {
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
+  useEffect(() => {
+    if(choosedDate){
+      setSelectedDate(prev => choosedDate)
+    }
+  }, [choosedDate])
   const [openChooseDate, setOpenChooseDate] = useState(false);
-
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
   const daysOfWeek = [
@@ -123,9 +133,12 @@ function BarChartInfo() {
     second = parseInt(second)
     data.minute = minute;
     data.second = second;
-    let jsonObject = JSON.parse(data.posList);
-    let posList = Object.keys(jsonObject).map((key) => jsonObject[key]);
-    data.posList = posList
+    let jsonObject = data.posList
+    if(typeof data.posList !== 'object'){
+      jsonObject = JSON.parse(data.posList);
+    }
+    // let posList = Object.keys(jsonObject).map(key => jsonObject[key]);
+    data.posList = jsonObject
     navigation.navigate('ActivityDetailPerDay', {data})
   };
   return (

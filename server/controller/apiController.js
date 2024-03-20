@@ -48,11 +48,26 @@ let getDailyPracticeDetail = async (req, res) => {
     return res.status(200).send({data: data[0]})
   }catch (err){
     console.log(err);
-    return res.status(400).send("Fail")
+    return res.status(400).send("Failed")
+  }
+}
+
+let getWeeklyPracticeDetail = async (req, res) => {
+  try{
+    let {startDate, endDate} = req.query;
+    console.log(req.query);
+    let data = await pool.execute('SELECT date,sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date', [startDate, endDate])
+    // let data = await pool.execute('select * from `practicehistory`')
+    console.log(data[0]);
+    return res.status(200).send({data: data[0]})
+  } catch(err){
+    console.log(err);
+    return res.status(400).send('Failed')
   }
 }
 
 export default {
   savePracticeHistory,
-  getDailyPracticeDetail
+  getDailyPracticeDetail,
+  getWeeklyPracticeDetail
 };

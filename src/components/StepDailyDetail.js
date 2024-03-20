@@ -2,8 +2,9 @@ import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-nativ
 import {Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../assets/fonts/Fonts";
+import { getFormatedDate } from "react-native-modern-datepicker";
 
-function StepDailyDetail({ day, date, month, stepCount}) {
+function StepDailyDetail({ date, stepCount}) {
   const [fontsLoaded] = useFonts({
     Inter_400Regular: Fonts.Inter_Regular,
     Inter_Medium: Fonts.Inter_Medium,
@@ -13,15 +14,28 @@ function StepDailyDetail({ day, date, month, stepCount}) {
   if (!fontsLoaded) {
     console.log("Loading...");
   }
+  const daysOfWeek = [
+    "Chủ Nhật",
+    "Thứ Hai",
+    "Thứ Ba",
+    "Thứ Tư",
+    "Thứ Năm",
+    "Thứ Sáu",
+    "Thứ Bảy",
+  ];
+  const day = daysOfWeek[date.getDay()]
+  const dayInMonth = date.getDate()
+  const month = date.getMonth() + 1;
+  
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={0.7}>
+    <View style={styles.container}>
       <View>
-        <Text style={styles.time}>{day}, {date} tháng {month}</Text>
+        <Text style={styles.time}>{day}, {dayInMonth} tháng {month}</Text>
       </View>
       <View>
         <Text style={{fontFamily:'Inter_Medium', fontSize: 15, marginTop: 6}}>{stepCount} bước</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
