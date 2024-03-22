@@ -13,7 +13,7 @@ import Calendar from "./Calender";
 import moment, { min } from "moment";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../assets/fonts/Fonts";
+import Fonts from "../constants/Fonts";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
 import StepDetail from "./StepDetail";
@@ -41,15 +41,6 @@ const chartConfig = {
 
 function BarChartInfo({route}) {
   const choosedDate = route.params ? route.params.prop : undefined;
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-    Inter_SemiBold: Fonts.Inter_SemiBold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
@@ -255,6 +246,6 @@ const styles = StyleSheet.create({
   },
   dateTimeText: {
     fontSize: 15,
-    fontFamily: "Inter_Medium",
+    fontFamily: "Inter_500Medium",
   },
 });

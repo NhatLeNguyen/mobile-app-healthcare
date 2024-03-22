@@ -3,30 +3,19 @@ import { View, Text, Dimensions } from "react-native";
 // import Slider from '@react-native-community/slider';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import BarChartInfo from "../../components/BarChartInfo";
-import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../../assets/fonts/Fonts";
 import ActivityWeeklyScreen from "./ActivityWeeklyScreen";
 
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
 
 const ActivityDetailScreen = () => {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-    Inter_SemiBold: Fonts.Inter_SemiBold
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarLabelStyle: {
           fontSize: 13,
-          fontFamily: 'Inter_SemiBold',
+          fontFamily: 'Inter_600SemiBold',
           alignItems:'center'
         },
         tabBarStyle: {

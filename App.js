@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -7,12 +7,37 @@ import { Ionicons, FontAwesome, MaterialCommunityIcons } from '@expo/vector-icon
 import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
 import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
 import StartPracticeScreenNavigator from "./src/screens/StartPracticeScreen/StartPracticeScreenNavigator";
+import SQLite from 'react-native-sqlite-storage'
+import * as SplashScreen from 'expo-splash-screen'
+import { useFonts } from "expo-font";
+import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
+
+// const db = SQLite.openDatabase('health-care.db')
+
 
 
 const Tab = createBottomTabNavigator();
+SplashScreen.preventAutoHideAsync()
+  .then((result) => console.log(`SplashScreen preventAutoHideAsync Success ${result}`));
 
 export default function App() {
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  const [fontsLoaded, fontError] = useFonts({
+    Inter_500Medium,
+    Inter_600SemiBold
+  })
+  const onLayoutRoot = useCallback(async() => {
+    if(fontsLoaded){
+      console.log("Load font successfully");
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded])
+  if (!fontsLoaded) {
+    return null;  
+  }
   return (
+    <View onLayout={onLayoutRoot} style={styles.container}>
     <NavigationContainer>
       <Tab.Navigator screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
@@ -65,6 +90,7 @@ export default function App() {
         <Tab.Screen name='User' component={HomeScreen} />
       </Tab.Navigator>
     </NavigationContainer>
+    </View>
   );
 }
 

@@ -2,19 +2,24 @@ import React, { Component, useState } from "react";
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import CircleWithPercentage from "../../components/CircleWithPercentage";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../../assets/fonts/Fonts";
+import { Inter_500Medium } from "@expo-google-fonts/inter";
+import { useFonts } from "expo-font";
+import Fonts from "../../constants/Fonts";
 import { useNavigation } from "@react-navigation/native";
 
+
 function HomeCircleInfo() {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
+  // const [fontsLoaded] = useFonts({
+  //   Inter_400Regular: Fonts.Inter_Regular,
+  //   Inter_Medium: Fonts.Inter_Medium,
+  //   Inter_700Bold: Fonts.Inter_Bold,
+  // });
+  // if (!fontsLoaded) {
+  //   console.log("Loading...");
+  // }
+  // const [fontsLoaded] = useFonts({
+  //   Inter_500Medium
+  // })
   const [isPressedHeart , setIsPressHeart] = useState(false)
   const [isPressedStep , setIsPressStep] = useState(false)
   const [isPressedCalo , setIsPressCalo] = useState(false)
@@ -56,7 +61,7 @@ function HomeCircleInfo() {
               onPressOut={() => setIsPressHeart(false)}
             >
               <FontAwesome name="heartbeat" size={16} color={"green"} />
-              <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_Medium'}}>Điểm nhịp tim</Text>
+              <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_500Medium'}}>Điểm nhịp tim</Text>
             </Pressable>
 
             <Pressable
@@ -71,7 +76,7 @@ function HomeCircleInfo() {
               onPressOut={() => setIsPressStep(false)}
             >
               <Ionicons name="footsteps" size={16} color={"blue"} />
-              <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_Medium'}}>Bước</Text>
+              <Text style={{ marginLeft: 5, fontSize: 16, fontFamily:'Inter_500Medium'}}>Bước</Text>
             </Pressable>
           </View>
 

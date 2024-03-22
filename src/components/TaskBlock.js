@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import Fonts from "../assets/fonts/Fonts";
+import Fonts from "../constants/Fonts";
 import { useState } from "react";
 
 function TaskBlock({
@@ -26,14 +26,14 @@ function TaskBlock({
   linkText,
   imageTimeLink,
 }) {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
+  // const [fontsLoaded] = useFonts({
+  //   Inter_400Regular: Fonts.Inter_Regular,
+  //   Inter_Medium: Fonts.Inter_Medium,
+  //   Inter_700Bold: Fonts.Inter_Bold,
+  // });
+  // if (!fontsLoaded) {
+  //   console.log("Loading...");
+  // }
   const [isPressed, setIsPress] = useState(false)
   return (
     <Pressable 
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 15,
-    fontFamily: "Inter_Medium",
+    fontFamily: "Inter_500Medium",
   },
   time: {
     marginTop: 4,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     color: "#1a9be8",
     marginTop: 20,
     fontSize: 14,
-    fontFamily: "Inter_Medium",
+    fontFamily: "Inter_500Medium",
   },
 });
 

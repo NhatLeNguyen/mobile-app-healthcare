@@ -1,18 +1,7 @@
 import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 import {Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../assets/fonts/Fonts";
 
 function StepDetail({ startTime, totalTime, stepCount }) {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-    Inter_SemiBold: Fonts.Inter_SemiBold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
   const [hourStart, minuteStart] = startTime.split(':')
   const title = parseInt(hourStart) <= 10 ? "Đi bộ buổi sáng" : parseInt(hourStart) <= 6 ? 'Đi bộ buổi chiều' : "Đi bộ buổi tối"
   const [minutePractice, secondPractice] = totalTime.split(':');
@@ -47,6 +36,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    fontFamily: 'Inter_SemiBold'
+    fontFamily: 'Inter_600SemiBold'
   },
 });

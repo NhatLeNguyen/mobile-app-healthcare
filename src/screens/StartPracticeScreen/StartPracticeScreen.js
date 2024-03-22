@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,23 +14,12 @@ import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../../constants/Constants";
 import * as Location from "expo-location";
 import { BlurView } from "expo-blur";
 import imagePath from "../../constants/imagePath";
-import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../../assets/fonts/Fonts";
+import Fonts from "../../constants/Fonts";
 import Fact from "../../components/Fact";
 import Swiper from "react-native-swiper";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 
 export default function StartPracticeScreen() {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-    Inter_SemiBold: Fonts.Inter_SemiBold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
-
   const [steps, setSteps] = useState(0);
   const [isMovingUp, setIsMovingUp] = useState(false);
   const [accelerationThreshold, setAccelerationThreshold] = useState(1);
@@ -223,7 +212,7 @@ export default function StartPracticeScreen() {
                 <Text
                   style={{
                     fontSize: 18,
-                    fontFamily: "Inter_Medium",
+                    fontFamily: "Inter_500Medium",
                     color: "white",
                   }}
                 >

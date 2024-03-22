@@ -12,19 +12,22 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import TaskBlock from "../../components/TaskBlock";
-import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../../assets/fonts/Fonts";
+import { Inter_500Medium } from "@expo-google-fonts/inter";
+import { useFonts } from "expo-font";
+import Fonts from "../../constants/Fonts";
 
 function HomeBody() {
+  // const [fontsLoaded] = useFonts({
+  //   Inter_400Regular: Fonts.Inter_Regular,
+  //   Inter_Medium: Fonts.Inter_Medium,
+  //   Inter_700Bold: Fonts.Inter_Bold,
+  // });
+  // if (!fontsLoaded) {
+  //   console.log("Loading...");
+  // }
   const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_Regular,
-    Inter_Medium: Fonts.Inter_Medium,
-    Inter_700Bold: Fonts.Inter_Bold,
-  });
-  if (!fontsLoaded) {
-    console.log("Loading...");
-  }
-
+    Inter_500Medium
+  })
   return (
     <View style={styles.container}>
       <TaskBlock
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 15,
     marginLeft: 8,
-    fontFamily: 'Inter_Medium',
+    fontFamily: 'Inter_500Medium',
     textShadowColor: 'rgba(0, 0, 0, 0.2)', // Màu của bóng chữ
     textShadowRadius: 2, // Độ mờ của bóng chữ
   }
