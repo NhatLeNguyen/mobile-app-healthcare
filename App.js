@@ -14,8 +14,6 @@ import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 
 // const db = SQLite.openDatabase('health-care.db')
 
-
-
 const Tab = createBottomTabNavigator();
 SplashScreen.preventAutoHideAsync()
   .then((result) => console.log(`SplashScreen preventAutoHideAsync Success ${result}`));
@@ -30,14 +28,27 @@ export default function App() {
   const onLayoutRoot = useCallback(async() => {
     if(fontsLoaded){
       console.log("Load font successfully");
-      await SplashScreen.hideAsync();
+      await SplashScreen.hideAsync()
+      setIsAppReady(true)
     }
   }, [fontsLoaded])
-  if (!fontsLoaded) {
-    return null;  
+  useEffect(() => {
+    async function onLayout(){
+      if(fontsLoaded){
+        setTimeout(() => {
+          SplashScreen.hideAsync()
+          setIsAppReady(true)
+        }, 5000)
+      }
+    }
+    onLayout()
+  }, [fontsLoaded])
+  console.log(isAppReady);
+  if(!isAppReady){
+    return null;
   }
   return (
-    <View onLayout={onLayoutRoot} style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRoot}>
     <NavigationContainer>
       <Tab.Navigator screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {

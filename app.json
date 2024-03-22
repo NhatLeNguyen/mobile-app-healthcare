@@ -3,6 +3,11 @@
     "name": "DemoRN",
     "slug": "DemoRN",
     "version": "1.0.0",
+    "splash": {
+      "image": "./src/assets/images/practice.jpg",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
