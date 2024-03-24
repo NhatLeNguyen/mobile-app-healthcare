@@ -52,7 +52,7 @@ function ActivityWeeklyScreen() {
   const dayOfWeek = daysOfWeek[date.getDay()];
 
   const [chartData, setChartData]= useState({
-    labels: ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"],
+    labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
     datasets: [
       {
         data: [0, 45, 0, 0, 0, 0, 0],
@@ -76,7 +76,7 @@ function ActivityWeeklyScreen() {
         let detail = response.data.data;
         // console.log(detail);
         let chartDataReturned = {
-          labels: ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"],
+          labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
           datasets: [
             {
               data: [0, 0, 0, 0, 0, 0, 0],

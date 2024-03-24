@@ -11,8 +11,8 @@ function Route({ posList }) {
     return (
         <View>
             {posList.length > 0 && (
-                <Marker coordinate={{ ...firstPoint }}>
-                    <Image source={imagePath.icCurloc} style={{ width: 40, height: 40 }} />
+                <Marker coordinate={{ ...firstPoint }} focusable={true}>
+                    <Image source={imagePath.icCurloc} style={{ width: 35, height: 35 }} />
                 </Marker>
             )}
             {posList.length > 1 &&

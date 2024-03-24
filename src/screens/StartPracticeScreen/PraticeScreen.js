@@ -111,24 +111,24 @@ function PracticeScreen() {
   const handleCompletePractice = () => {
     if (isFirstLocated) {
       console.log("Saving...");
-      axios
-        .post(`http://${IP}:1510/savePracticeHistory`, {
-          id: "1",
-          start_time: getFormatedDate(date, "hh:mm:ss"),
-          end_time: getFormatedDate(new Date(), 'hh:mm:ss'),
-          date: getFormatedDate(date, "YYYY/MM/DD"),
-          steps: steps,
-          distances: totalDistance,
-          praticetime: minute + ":" + second,
-          caloris: 1.0,
-          posList: JSON.stringify(posList),
-        })
-        .then(function (response) {
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      // axios
+      //   .post(`http://${IP}:1510/savePracticeHistory`, {
+      //     id: "1",
+      //     start_time: getFormatedDate(date, "hh:mm:ss"),
+      //     end_time: getFormatedDate(new Date(), 'hh:mm:ss'),
+      //     date: getFormatedDate(date, "YYYY/MM/DD"),
+      //     steps: steps,
+      //     distances: totalDistance,
+      //     praticetime: minute + ":" + second,
+      //     caloris: 1.0,
+      //     posList: JSON.stringify(posList),
+      //   })
+      //   .then(function (response) {
+      //     console.log(response.data);
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     }
   };
   const handleSearchMusic = () => {
@@ -302,7 +302,6 @@ function PracticeScreen() {
     }, 1200);
     return () => clearInterval(intervalSecond);
   }, [isPlayed, isFirstLocated]);
-
   // console.log(posList.length);
   return (
     <View style={styles.container}>

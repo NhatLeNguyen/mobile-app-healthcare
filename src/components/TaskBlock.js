@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     // position:'relative',
     width: "100%",
+    backgroundColor: 'white'
   },
   heading: {
     fontSize: 15,

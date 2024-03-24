@@ -104,7 +104,7 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
           onValueChange={handleSeek}
         />
       </View>
-      <View style={{ marginLeft: 25 }}>
+      <View style={{ position: 'absolute', right: 30 }}>
         {isPlaying && (
           <Ionicons
             name="pause-sharp"
