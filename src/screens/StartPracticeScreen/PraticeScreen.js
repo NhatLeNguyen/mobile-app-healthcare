@@ -29,6 +29,10 @@ import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
 import axios from "axios";
 import { getFormatedDate } from "react-native-modern-datepicker";
+import * as SQLite from "expo-sqlite/next";
+
+const db = SQLite.openDatabaseAsync("health-care.db");
+
 const MUSIC_INDEX_DEFAULT = 0;
 
 function capitalizeFirstLetter(str) {
@@ -110,7 +114,26 @@ function PracticeScreen() {
   }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
-      console.log("Saving...");
+      const loading = async () => {
+        console.log("Saving...");
+        (await db).runSync(
+          "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            "1",
+            getFormatedDate(date, "hh:mm:ss"),
+            getFormatedDate(new Date(), "hh:mm:ss"),
+            getFormatedDate(date, "YYYY-MM-DD"),
+            steps,
+            totalDistance,
+            minute + ":" + second,
+            5.0,
+            JSON.stringify(posList)
+          ]
+        );
+        console.log("Saving successfully");
+      };
+
+      loading();
       // axios
       //   .post(`http://${IP}:1510/savePracticeHistory`, {
       //     id: "1",

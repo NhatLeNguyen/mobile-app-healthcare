@@ -40,6 +40,7 @@ function ActivityWeeklyScreen() {
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [openChooseDate, setOpenChooseDate] = useState(false);
+  const [totalSteps , setTotalSteps ]= useState(0);
 
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
@@ -88,13 +89,16 @@ function ActivityWeeklyScreen() {
         ],
       };
       let detailDataReturned = [];
+      let ttSteps = 0;
       for (var i = 0; i < results.length; i++) {
         let cur_date = new Date(results[i].date);
         chartDataReturned.datasets[0].data[
           cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
         ] = parseInt(results[i].steps);
+        ttSteps += parseInt(results[i].steps)
       }
       setChartData(chartDataReturned);
+      setTotalSteps(ttSteps)
       for (var j = 0; j < new Date(today - startDate).getDate(); j++) {
         let d = new Date(startDate);
         d.setDate(d.getDate() + j);
@@ -164,7 +168,7 @@ function ActivityWeeklyScreen() {
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {1234 / 1000}{" "}
+          <Ionicons name="footsteps" size={16} color={"blue"} /> {totalSteps > 1000 ? totalSteps / 1000 : totalSteps}{" "}
           bước
         </Text>
       </View>
