@@ -20,10 +20,13 @@ import StepDetail from "./StepDetail";
 import axios from "axios";
 import { IP } from "../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
+import * as SQLite from "expo-sqlite/next";
+
+const db = SQLite.openDatabaseAsync("health-care.db");
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
+  "Non-serializable values were found in the navigation state",
 ]);
 
 const chartConfig = {
@@ -39,17 +42,17 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-function BarChartInfo({route}) {
+function BarChartInfo({ route }) {
   const choosedDate = route.params ? route.params.prop : undefined;
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
   useEffect(() => {
-    if(choosedDate){
-      setSelectedDate(prev => choosedDate)
+    if (choosedDate) {
+      setSelectedDate((prev) => choosedDate);
     }
-  }, [choosedDate])
+  }, [choosedDate]);
   const [openChooseDate, setOpenChooseDate] = useState(false);
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
@@ -75,43 +78,78 @@ function BarChartInfo({route}) {
   const [detailData, setDetailData] = useState([]);
   const [sumSteps, setSumSteps] = useState(0);
   useEffect(() => {
-    console.log("Getting data...");
-    axios
-      .get(`http://${IP}:1510/getDailyPracticeDetail`, {
-        params: {
-          id: "1",
-          date: selectedDate,
-        },
-      })
-      .then(function (response) {
-        let detail = response.data.data;
-        // console.log(response.data);
-        let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
-        let sumStepsReturned = 0;
-        let detailDataReturned = [];
-        for (var i = 0; i < detail.length; i++) {
-          stepDataReturned.labels.push(detail[i].start_time.slice(0, 5));
-          stepDataReturned.datasets[0].data.push(detail[i].steps);
-          sumStepsReturned += detail[i].steps;
-          detailDataReturned.push({
-            start_time: detail[i].start_time.slice(0, 5),
-            practice_time: detail[i].practice_time,
-            steps: detail[i].steps,
-            posList: detail[i].posList,
-            calories: detail[i].caloris,
-            totalDistance: detail[i].distances
-          });
-        }
-        stepDataReturned.labels.push("24:00");
-        stepDataReturned.datasets[0].data.push(0);
-        setStepData(stepDataReturned);
-        setSumSteps(sumStepsReturned);
-        setDetailData(detailDataReturned);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const loading = async () => {
+      // Change format
+      let parts = selectedDate.split("/");
+      console.log(parts.join("-"));
+      // Getting data
+      const results = (await db).getAllSync(
+        "select * from practicehistory where user_id = ? and date = ?",
+        ["1", parts.join("-")]
+      );
+
+      let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
+      let sumStepsReturned = 0;
+      let detailDataReturned = [];
+      for (var i = 0; i < results.length; i++) {
+        stepDataReturned.labels.push(results[i].start_time.slice(0, 5));
+        stepDataReturned.datasets[0].data.push(results[i].steps);
+        sumStepsReturned += results[i].steps;
+        detailDataReturned.push({
+          start_time: results[i].start_time.slice(0, 5),
+          practice_time: results[i].practice_time,
+          steps: results[i].steps,
+          posList: results[i].posList,
+          calories: results[i].caloris,
+          totalDistance: results[i].distances,
+        });
+      }
+      stepDataReturned.labels.push("24:00");
+      stepDataReturned.datasets[0].data.push(0);
+      setStepData(stepDataReturned);
+      setSumSteps(sumStepsReturned);
+      setDetailData(detailDataReturned);
+    };
+    loading();
   }, [selectedDate]);
+  // useEffect(() => {
+  //   console.log("Getting data...");
+  //   axios
+  //     .get(`http://${IP}:1510/getDailyPracticeDetail`, {
+  //       params: {
+  //         id: "1",
+  //         date: selectedDate,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       let detail = response.data.data;
+  //       // console.log(response.data);
+  //       let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
+  //       let sumStepsReturned = 0;
+  //       let detailDataReturned = [];
+  //       for (var i = 0; i < detail.length; i++) {
+  //         stepDataReturned.labels.push(detail[i].start_time.slice(0, 5));
+  //         stepDataReturned.datasets[0].data.push(detail[i].steps);
+  //         sumStepsReturned += detail[i].steps;
+  //         detailDataReturned.push({
+  //           start_time: detail[i].start_time.slice(0, 5),
+  //           practice_time: detail[i].practice_time,
+  //           steps: detail[i].steps,
+  //           posList: detail[i].posList,
+  //           calories: detail[i].caloris,
+  //           totalDistance: detail[i].distances
+  //         });
+  //       }
+  //       stepDataReturned.labels.push("24:00");
+  //       stepDataReturned.datasets[0].data.push(0);
+  //       setStepData(stepDataReturned);
+  //       setSumSteps(sumStepsReturned);
+  //       setDetailData(detailDataReturned);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, [selectedDate]);
 
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
@@ -119,18 +157,18 @@ function BarChartInfo({route}) {
   };
 
   const handleGetDetailActivity = (data) => {
-    let [minute, second] = data.practice_time.split(':')
-    minute = parseInt(minute)
-    second = parseInt(second)
+    let [minute, second] = data.practice_time.split(":");
+    minute = parseInt(minute);
+    second = parseInt(second);
     data.minute = minute;
     data.second = second;
-    let jsonObject = data.posList
-    if(typeof data.posList !== 'object'){
+    let jsonObject = data.posList;
+    if (typeof data.posList !== "object") {
       jsonObject = JSON.parse(data.posList);
     }
     // let posList = Object.keys(jsonObject).map(key => jsonObject[key]);
-    data.posList = jsonObject
-    navigation.navigate('ActivityDetailPerDay', {data})
+    data.posList = jsonObject;
+    navigation.navigate("ActivityDetailPerDay", { data });
   };
   return (
     <ScrollView style={styles.container}>

@@ -17,6 +17,9 @@ import StepDailyDetail from "../../components/StepDailyDetail";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
+import * as SQLite from "expo-sqlite/next";
+
+const db = SQLite.openDatabaseAsync("health-care.db");
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -32,7 +35,7 @@ const chartConfig = {
 };
 
 function ActivityWeeklyScreen() {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
@@ -51,7 +54,7 @@ function ActivityWeeklyScreen() {
   ];
   const dayOfWeek = daysOfWeek[date.getDay()];
 
-  const [chartData, setChartData]= useState({
+  const [chartData, setChartData] = useState({
     labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
     datasets: [
       {
@@ -59,47 +62,87 @@ function ActivityWeeklyScreen() {
       },
     ],
   });
-  const [detailData, setDetailData] = useState([])
-  const startDate = new Date()
-  startDate.setDate(date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1))
-  const endDate = new Date()
-  endDate.setDate(date.getDate() + (7 - (date.getDay() === 0 ? 7: date.getDay())))
+  const [detailData, setDetailData] = useState([]);
+  const startDate = new Date();
+  startDate.setDate(
+    date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1)
+  );
+  const endDate = new Date();
+  endDate.setDate(
+    date.getDate() + (7 - (date.getDay() === 0 ? 7 : date.getDay()))
+  );
   useEffect(() => {
-    axios
-      .get(`http://${IP}:1510/getWeeklyPracticeDetail`, {
-        params: {
-          startDate: getFormatedDate(startDate, 'YYYY-MM-DD'),
-          endDate: currentDate,
-        },
-      })
-      .then(function (response) {
-        let detail = response.data.data;
-        // console.log(detail);
-        let chartDataReturned = {
-          labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
-          datasets: [
-            {
-              data: [0, 0, 0, 0, 0, 0, 0],
-            },
-          ],
-        }
-        let detailDataReturned = []
-        for(var i = 0 ; i< detail.length; i++){
-          let cur_date = new Date(detail[i].date)
-          chartDataReturned.datasets[0].data[cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1] = parseInt(detail[i].steps)
-        }
-        setChartData(chartDataReturned)
-        for(var j = 0 ; j < new Date(today - startDate).getDate() ; j++){
-          let d = new Date(startDate)
-          d.setDate(d.getDate() + j)
-          detailDataReturned.push({date: d, steps: chartDataReturned.datasets[0].data[j]})
-        }
-        setDetailData(detailDataReturned)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, [selectedDate])
+    const loading = async () => {
+      const parts = currentDate.split("/");
+      const results = (await db).getAllSync(
+        "SELECT date,sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
+        [getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+      );
+      console.log(results);
+      let chartDataReturned = {
+        labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
+        datasets: [
+          {
+            data: [0, 0, 0, 0, 0, 0, 0],
+          },
+        ],
+      };
+      let detailDataReturned = [];
+      for (var i = 0; i < results.length; i++) {
+        let cur_date = new Date(results[i].date);
+        chartDataReturned.datasets[0].data[
+          cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
+        ] = parseInt(results[i].steps);
+      }
+      setChartData(chartDataReturned);
+      for (var j = 0; j < new Date(today - startDate).getDate(); j++) {
+        let d = new Date(startDate);
+        d.setDate(d.getDate() + j);
+        detailDataReturned.push({
+          date: d,
+          steps: chartDataReturned.datasets[0].data[j],
+        });
+      }
+      setDetailData(detailDataReturned);
+    };
+    loading();
+  }, [selectedDate]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://${IP}:1510/getWeeklyPracticeDetail`, {
+  //       params: {
+  //         startDate: getFormatedDate(startDate, 'YYYY-MM-DD'),
+  //         endDate: currentDate,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       let detail = response.data.data;
+  //       // console.log(detail);
+  //       let chartDataReturned = {
+  //         labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
+  //         datasets: [
+  //           {
+  //             data: [0, 0, 0, 0, 0, 0, 0],
+  //           },
+  //         ],
+  //       }
+  //       let detailDataReturned = []
+  //       for(var i = 0 ; i< detail.length; i++){
+  //         let cur_date = new Date(detail[i].date)
+  //         chartDataReturned.datasets[0].data[cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1] = parseInt(detail[i].steps)
+  //       }
+  //       setChartData(chartDataReturned)
+  //       for(var j = 0 ; j < new Date(today - startDate).getDate() ; j++){
+  //         let d = new Date(startDate)
+  //         d.setDate(d.getDate() + j)
+  //         detailDataReturned.push({date: d, steps: chartDataReturned.datasets[0].data[j]})
+  //       }
+  //       setDetailData(detailDataReturned)
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, [selectedDate])
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
     setOpenChooseDate(false);
@@ -111,9 +154,13 @@ function ActivityWeeklyScreen() {
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
           <Text style={styles.dateTimeText}>
             Ngày {startDate.getDate()}
-            {startDate.getMonth() !== endDate.getMonth() && (<Text> tháng {startDate.getMonth() + 1}</Text>)}
+            {startDate.getMonth() !== endDate.getMonth() && (
+              <Text> tháng {startDate.getMonth() + 1}</Text>
+            )}
             <Text> - </Text>
-            <Text>Ngày {endDate.getDate()} tháng {endDate.getMonth() + 1}</Text>
+            <Text>
+              Ngày {endDate.getDate()} tháng {endDate.getMonth() + 1}
+            </Text>
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
@@ -157,13 +204,28 @@ function ActivityWeeklyScreen() {
           </View>
         </View>
       </Modal>
-      <View style={{borderColor: 'gray', borderTopWidth: 0.5, borderBottomWidth: 0.5, marginBottom: 0}}>
+      <View
+        style={{
+          borderColor: "gray",
+          borderTopWidth: 0.5,
+          borderBottomWidth: 0.5,
+          marginBottom: 0,
+        }}
+      >
         {detailData.map((item, index) => {
           return (
-          <TouchableOpacity key={index} activeOpacity={0.7} onPress={() => navigation.navigate('day', {prop: getFormatedDate(item.date, 'YYYY/MM/DD')})}>
-            <StepDailyDetail date={item.date} stepCount={item.steps}/>
-          </TouchableOpacity>
-          )
+            <TouchableOpacity
+              key={index}
+              activeOpacity={0.7}
+              onPress={() =>
+                navigation.navigate("day", {
+                  prop: getFormatedDate(item.date, "YYYY/MM/DD"),
+                })
+              }
+            >
+              <StepDailyDetail date={item.date} stepCount={item.steps} />
+            </TouchableOpacity>
+          );
         })}
         {/* <StepDailyDetail day={"Thứ Hai"} date={4} month={3} stepCount="154"/> */}
         {/* <StepDailyDetail day={"Thứ Ba"} date={5} month={3} stepCount="757"/> */}
@@ -208,6 +270,6 @@ const styles = StyleSheet.create({
   dateTimeText: {
     fontSize: 15,
     fontFamily: "Inter_500Medium",
-    flexDirection: 'row'
+    flexDirection: "row",
   },
 });
