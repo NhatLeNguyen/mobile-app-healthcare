@@ -23,6 +23,7 @@
     "expo-asset": "^9.0.2",
     "expo-av": "^13.10.5",
     "expo-blur": "^12.9.2",
+    "expo-file-system": "^16.0.8",
     "expo-font": "^11.10.3",
     "expo-location": "^16.5.5",
     "expo-sensors": "^12.9.1",
