@@ -39,7 +39,7 @@ function HomeHeader() {
         transparent
         animationType="slide"
         visible={isModalVisible}
-        style={{ height: 80, flex: 0.5 }}
+        // style={{ height: 150, flex: 0.5 }}
         onRequestClose={() => setIsModalVisible(false)}
       >
         <View style={styles.modalBackground}>
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     padding: 10,
     borderRadius: 10,
-    width: 325,
-    height: 600,
+    width: "85%",
+    height: "80%",
     elevation: 5,
   },
   slide1: {

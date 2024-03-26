@@ -42,8 +42,8 @@ function ActivityDetail({ route }) {
       <View style={{ height: "50%" }}>
         <MapDraw isFirstLocated={true} posList={data.posList} />
       </View>
-
-      <View style={styles.info}>
+      
+      <View style={[{marginTop: 50},styles.info]}>
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>AVG Speed</Text>
           <Text style={styles.infoText}>
@@ -68,7 +68,7 @@ function ActivityDetail({ route }) {
           </Text>
         </View>
       </View>
-      <View style={styles.info}>
+      <View style={[{marginTop: 10},styles.info]}>
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>Time</Text>
           <Text style={styles.infoText}>
@@ -103,7 +103,7 @@ export default ActivityDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "black",
     // justifyContent: 'center'
     // alignItems: 'center'
   },
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   infoBlock: {
-    marginTop: 50,
     width: "30%",
     justifyContent: "center",
     alignItems: "center",
@@ -128,15 +127,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   headerText: {
-    color: "black",
-    fontSize: 11,
+    color: "white",
+    fontSize: 13,
   },
   subText: {
-    fontSize: 10,
+    fontSize: 12,
   },
   infoText: {
-    color: "black",
-    fontSize: 30,
+    color: "green",
+    fontSize: 32,
   },
   buttonList: {
     flex: 1,

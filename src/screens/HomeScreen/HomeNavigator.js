@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
+// import ActivityWeeklyScreen from "../ActivityDetailScreen/ActivityWeeklyScreen";
 
 const Stack = createNativeStackNavigator();
 

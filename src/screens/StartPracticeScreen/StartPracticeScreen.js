@@ -165,16 +165,9 @@ export default function StartPracticeScreen() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        // source={{
-        //   uri: "https://i.pinimg.com/736x/b7/ea/6c/b7ea6c2f7f1a5a1e08ee69f3060d6dfe.jpg",
-        // }}
         source={imagePath.practiceBgImage}
         style={styles.bgImage}
       >
-        {/* <View style={styles.fact}>
-          <Fact text={'Đi bộ là một cách tuyệt vời để cải thiện sức khỏe tim mạch, tăng cường sức chịu đựng, đốt cháy calo và là một hình thức hoạt động aerobic'}/>
-          <Fact text={'Một người trưởng thành trung bình sẽ đi bộ 65.000 lần trong đời, tương đương với việc đi bộ 3 lần vòng quanh thế giới!'}/>
-        </View> */}
         <Swiper style={styles.wrapper} showsButtons={false} autoplay={true} autoplayTimeout={5} showsPagination={false}>
           <View style={styles.slide}>
             <Text style={styles.factText}>

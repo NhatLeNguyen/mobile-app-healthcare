@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { useFonts } from "expo-font";
 import Fonts from "../../constants/Fonts";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
+import { getFormatedDate } from "react-native-modern-datepicker";
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function HomeCircleInfo() {
@@ -21,24 +22,54 @@ function HomeCircleInfo() {
   const [isPressedCalo, setIsPressCalo] = useState(false);
   const [isPressedDistance, setIsPressDistance] = useState(false);
   const [isPressedTime, setIsPressTime] = useState(false);
-  const useDatabase =async () => {
+  const [today, setToday] = useState(new Date());
+  const [stepsToday, setStepsToday] = useState(0);
+  const [distanceToday, setDistanceToday] = useState(0);
+  const [calorisToday, setCalorisToday] = useState(0);
+  const [practiceTime, setPracticeTime] = useState(0);
+
+  const useDatabase = async () => {
     // console.log("Inserting ...");
     // (await db).runSync('insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)',
     // ['1', '00:01:23', '00:01:23', '2024-03-19', '50', '0', '1:49', '1', '[{\"latitude\":20.9336862,\"longitude\":105.6472441,\"latitudeDelta\":0.01,\"longitudeDelta\":0.01}]'])
     // console.log("Inserting success!!");
   };
-  const checkDB =async () => {
-    console.log("Checking ...");
-    const allRows = (await db).getAllSync('select * from practicehistory');
-    for (const row of allRows){
-      console.log(row);
-    }
-    console.log(allRows.length);
+  const checkDB = async () => {
+    // console.log("Checking ...");
+    // const allRows = (await db).getAllSync('select * from practicehistory');
+    // for (const row of allRows){
+    //   console.log(row);
+    // }
+    // console.log(allRows.length);
   };
   const deleteRow = async () => {
     // console.log("Delete row ...");
     // (await db).runSync('delete from practicehistory');
-  }
+  };
+  useEffect(() => {
+    const loading = async () => {
+      let secondTime = 0;
+      const results = (await db).getAllSync(
+        "SELECT sum(steps) as steps, sum(distances) as distances,sum(caloris) as caloris FROM `practicehistory` WHERE date = ? GROUP BY DATE",
+        [getFormatedDate(today, "YYYY-MM-DD")]
+      );
+      const results1 = (await db).getAllSync(
+        "SELECT practice_time FROM `practicehistory` WHERE date = ?",
+        [getFormatedDate(today, "YYYY-MM-DD")]
+      );
+      // console.log(results1);
+      for (const row of results1){
+        let [minute, second] = row.practice_time.split(':')
+        secondTime += parseInt(minute) * 60 + parseInt(second)
+      }
+      // console.log(results);
+      setPracticeTime(parseInt(secondTime / 60))
+      setStepsToday(results[0].steps);
+      setDistanceToday(results[0].distances)
+      setCalorisToday(results[0].caloris)
+    };
+    loading();
+  }, [today]);
 
   const navigation = useNavigation();
   return (
@@ -57,11 +88,11 @@ function HomeCircleInfo() {
         diameter={180}
         color="#184ea6"
         restColor="#dfe7f3"
-        value={500}
-        MAX_VALUE={1000}
+        value={stepsToday}
+        MAX_VALUE={500}
         paddingCircle={20}
         paddingText={90}
-        textSize={30}
+        textSize={28}
       />
       <View style={{ paddingTop: 220, flexDirection: "row" }}>
         <Pressable
@@ -123,7 +154,7 @@ function HomeCircleInfo() {
           onPressIn={() => setIsPressCalo(true)}
           onPressOut={() => setIsPressCalo(false)}
         >
-          <Text style={styles.number}>{1226 / 1000}</Text>
+          <Text style={styles.number}>{calorisToday > 1000 ? calorisToday / 1000 : calorisToday}</Text>
           <Text style={styles.subText}>Calo</Text>
         </Pressable>
 
@@ -133,7 +164,7 @@ function HomeCircleInfo() {
           onPressIn={() => setIsPressDistance(true)}
           onPressOut={() => setIsPressDistance(false)}
         >
-          <Text style={styles.number}>{0.68}</Text>
+          <Text style={styles.number}>{distanceToday.toFixed(2)}</Text>
           <Text style={styles.subText}>Km</Text>
         </Pressable>
 
@@ -143,7 +174,7 @@ function HomeCircleInfo() {
           onPressIn={() => setIsPressTime(true)}
           onPressOut={() => setIsPressTime(false)}
         >
-          <Text style={styles.number}>23</Text>
+          <Text style={styles.number}>{practiceTime}</Text>
           <Text style={styles.subText}>Phút vận động</Text>
         </Pressable>
       </View>

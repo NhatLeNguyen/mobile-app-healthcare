@@ -8,10 +8,11 @@ import ActivityWeeklyScreen from "./ActivityWeeklyScreen";
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
 
-const ActivityDetailScreen = () => {
+const ActivityDetailScreen = ({route}) => {
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
+      initialRouteName={route.params ? route.params.name :'day'}
       screenOptions={({ route }) => ({
         tabBarLabelStyle: {
           fontSize: 13,

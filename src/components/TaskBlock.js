@@ -25,6 +25,7 @@ function TaskBlock({
   link,
   linkText,
   imageTimeLink,
+  pressedFunction
 }) {
   // const [fontsLoaded] = useFonts({
   //   Inter_400Regular: Fonts.Inter_Regular,
@@ -38,7 +39,7 @@ function TaskBlock({
   return (
     <Pressable 
       style={[styles.container, isPressed && styles.pressedContainer]}
-      onPressIn={() => setIsPress(true)}
+      onPress={() => {setIsPress(true); pressedFunction()}}
       onPressOut={() => setIsPress(false)}
     >
       <Ionicons
@@ -55,7 +56,7 @@ function TaskBlock({
           {time && <Text style={styles.timeText}>{time}</Text>}
         </Text>
       )}
-      {target && (
+      {target !== undefined && (
         <Text style={[styles.target, { color: targetColor }]}>
           {target}
           <Text style={[styles.subTextTarget, { color: targetColor }]}>

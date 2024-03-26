@@ -99,7 +99,7 @@ function ActivityWeeklyScreen() {
       }
       setChartData(chartDataReturned);
       setTotalSteps(ttSteps)
-      for (var j = 0; j < new Date(today - startDate).getDate(); j++) {
+      for (var j = 0; j < new Date(endDate < today ? endDate - startDate : today - startDate).getDate(); j++) {
         let d = new Date(startDate);
         d.setDate(d.getDate() + j);
         detailDataReturned.push({
