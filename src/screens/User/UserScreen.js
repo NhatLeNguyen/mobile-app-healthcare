@@ -34,7 +34,7 @@ function UserScreen() {
         return <Text>Profile Content</Text>;
       case "Change Password":
         return <Text>Change Password Content</Text>;
-      case "Dark mode":
+      case "Dark mode ":
         return <Text>Dark Mode Content</Text>;
       case "Setting":
         return <Text>Setting Content</Text>;
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 20, // Thêm khoảng lề bên trái
     borderRadius: 8, // Bo tròn góc của avatarContainer
-    overflow: "hidden", // Đảm bảo nội dung bên trong không vượt qua biên của avatarContainer
+    overflow: "hidden", // Nội dung bên trong không vượt qua biên của avatarContainer
     elevation: 10, // Thêm độ nâng cao cho box shadow
     shadowColor: "#000", // Màu sắc của box shadow
     shadowOffset: { width: 0, height: 2 }, // Độ dịch chuyển của box shadow

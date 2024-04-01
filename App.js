@@ -8,12 +8,14 @@ import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
 import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
 import UserNavigator from "./src/screens/User/UserNavigator";
 
+import LoginPage from "./src/screens/LoginScreen/LoginPage";
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
+      {/* <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -112,7 +114,8 @@ export default function App() {
           component={UserNavigator}
           options={{ headerShown: false }}
         />
-      </Tab.Navigator>
+      </Tab.Navigator> */}
+      <LoginPage></LoginPage>
     </NavigationContainer>
   );
 }
