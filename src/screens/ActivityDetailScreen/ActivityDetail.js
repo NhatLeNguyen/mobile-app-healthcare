@@ -89,7 +89,7 @@ function ActivityDetail({ route }) {
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>Step/second:</Text>
           <Text style={styles.infoText}>
-            {Math.ceil(data.steps / ((data.minute * 60 + data.second)/60))}
+            {Math.ceil(data.steps / (data.minute+1))}
             <Text style={styles.subText}> steps/m</Text>
           </Text>
         </View>

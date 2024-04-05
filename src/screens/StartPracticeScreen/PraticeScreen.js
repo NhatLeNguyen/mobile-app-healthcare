@@ -115,12 +115,14 @@ function PracticeScreen() {
   }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
+      let now = new Date();
       const loading = async () => {
-        console.log("Saving...");
+        // console.log("Saving...");
         console.log([
           "1",
-          getFormatedDate(date, "hh:mm:ss"),
-          getFormatedDate(new Date(), "hh:mm:ss"),
+          // getFormatedDate(date, "hh:mm:ss"),
+          ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
+          ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
           getFormatedDate(date, "YYYY-MM-DD"),
           steps,
           totalDistance,
@@ -132,8 +134,8 @@ function PracticeScreen() {
           "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
           [
             "1",
-            getFormatedDate(date, "hh:mm:ss"),
-            getFormatedDate(new Date(), "hh:mm:ss"),
+            ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
+            ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
             getFormatedDate(date, "YYYY-MM-DD"),
             steps,
             totalDistance,
