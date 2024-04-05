@@ -16,7 +16,6 @@ import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
-import { Asset } from "expo-asset";
 
 const db = SQLite.openDatabase("health-care.db");
 db.transaction(tx => {

@@ -1,10 +1,10 @@
 import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 import {Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../constants/Fonts";
+import Fonts from "../../constants/Fonts";
 import { getFormatedDate } from "react-native-modern-datepicker";
 
-function StepDailyDetail({ date, stepCount}) {
+function CaloDailyDetail({ date, stepCount}) {
   const daysOfWeek = [
     "Chủ Nhật",
     "Thứ Hai",
@@ -24,13 +24,13 @@ function StepDailyDetail({ date, stepCount}) {
         <Text style={styles.time}>{day}, {dayInMonth} tháng {month}</Text>
       </View>
       <View>
-        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6}}>{stepCount} bước</Text>
+        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6}}>{stepCount} calo</Text>
       </View>
     </View>
   );
 }
 
-export default StepDailyDetail;
+export default CaloDailyDetail;
 
 const styles = StyleSheet.create({
   container: {

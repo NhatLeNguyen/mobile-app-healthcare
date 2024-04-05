@@ -16,7 +16,7 @@ import * as SQLite from "expo-sqlite/next";
 import { getFormatedDate } from "react-native-modern-datepicker";
 const db = SQLite.openDatabaseAsync("health-care.db");
 
-function HomeCircleInfo() {
+function HomeCircleInfo({isRefresh}) {
   const [isPressedHeart, setIsPressHeart] = useState(false);
   const [isPressedStep, setIsPressStep] = useState(false);
   const [isPressedCalo, setIsPressCalo] = useState(false);
@@ -28,12 +28,6 @@ function HomeCircleInfo() {
   const [calorisToday, setCalorisToday] = useState(0);
   const [practiceTime, setPracticeTime] = useState(0);
 
-  const useDatabase = async () => {
-    // console.log("Inserting ...");
-    // (await db).runSync('insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    // ['1', '00:01:23', '00:01:23', '2024-03-19', '50', '0', '1:49', '1', '[{\"latitude\":20.9336862,\"longitude\":105.6472441,\"latitudeDelta\":0.01,\"longitudeDelta\":0.01}]'])
-    // console.log("Inserting success!!");
-  };
   const checkDB = async () => {
     // console.log("Checking ...");
     // const allRows = (await db).getAllSync('select * from practicehistory');
@@ -62,14 +56,15 @@ function HomeCircleInfo() {
         let [minute, second] = row.practice_time.split(':')
         secondTime += parseInt(minute) * 60 + parseInt(second)
       }
-      // console.log(results);
-      setPracticeTime(parseInt(secondTime / 60))
-      setStepsToday(results[0].steps);
-      setDistanceToday(results[0].distances)
-      setCalorisToday(results[0].caloris)
+      if(results.length != 0){
+        setPracticeTime(parseInt(secondTime / 60))
+        setStepsToday(results[0].steps);
+        setDistanceToday(results[0].distances)
+        setCalorisToday(results[0].caloris)
+      }
     };
     loading();
-  }, [today]);
+  }, [today, isRefresh]);
 
   const navigation = useNavigation();
   return (
@@ -82,7 +77,7 @@ function HomeCircleInfo() {
         MAX_VALUE={1000}
         paddingCircle={0}
         paddingText={60}
-        textSize={45}
+        textSize={40}
       />
       <CircleWithPercentage
         diameter={180}
@@ -91,7 +86,7 @@ function HomeCircleInfo() {
         value={stepsToday}
         MAX_VALUE={500}
         paddingCircle={20}
-        paddingText={90}
+        paddingText={95}
         textSize={28}
       />
       <View style={{ paddingTop: 220, flexDirection: "row" }}>
@@ -150,7 +145,7 @@ function HomeCircleInfo() {
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={[styles.pressAble, isPressedCalo && styles.pressedButton]}
-          onPress={() => useDatabase()}
+          onPress={() => navigation.navigate('CaloActivityDetailPerDay')}
           onPressIn={() => setIsPressCalo(true)}
           onPressOut={() => setIsPressCalo(false)}
         >

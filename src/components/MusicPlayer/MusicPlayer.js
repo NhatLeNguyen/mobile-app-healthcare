@@ -13,6 +13,7 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
   const [isComplete, setIsComplete] = useState(false);
   const [onlyOne, setOnlyOne] = useState(0)
   useEffect(() => {
+    console.log(song);
     const initAudio = async () => {
       const { sound } = await Audio.Sound.createAsync({uri: song});
       setSound(sound);

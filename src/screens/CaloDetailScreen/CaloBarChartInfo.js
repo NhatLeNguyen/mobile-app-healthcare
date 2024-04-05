@@ -8,20 +8,22 @@ import {
   Text,
   Dimensions,
   ScrollView,
+  Image,
 } from "react-native";
-import Calendar from "./Calender";
+import Calendar from "../../components/Calender";
 import moment, { min } from "moment";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { useFonts } from "@expo-google-fonts/inter";
-import Fonts from "../constants/Fonts";
+import Fonts from "../../constants/Fonts";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
-import StepDetail from "./StepDetail";
+import StepDetail from "../ActivityDetailScreen/StepDetail";
 import axios from "axios";
-import { IP } from "../constants/Constants";
+import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import { LogBox } from "react-native";
 import * as SQLite from "expo-sqlite/next";
+import CaloDetail from "./CaloDetail";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -42,7 +44,7 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-function BarChartInfo({ route }) {
+function CaloBarChartInfo({ route }) {
   const choosedDate = route.params ? route.params.prop : undefined;
   const navigation = useNavigation();
   const today = new Date();
@@ -93,8 +95,8 @@ function BarChartInfo({ route }) {
       let detailDataReturned = [];
       for (var i = 0; i < results.length; i++) {
         stepDataReturned.labels.push(results[i].start_time.slice(0, 5));
-        stepDataReturned.datasets[0].data.push(results[i].steps);
-        sumStepsReturned += results[i].steps;
+        stepDataReturned.datasets[0].data.push(results[i].caloris);
+        sumStepsReturned += results[i].caloris;
         detailDataReturned.push({
           start_time: results[i].start_time.slice(0, 5),
           practice_time: results[i].practice_time,
@@ -112,44 +114,6 @@ function BarChartInfo({ route }) {
     };
     loading();
   }, [selectedDate]);
-  // useEffect(() => {
-  //   console.log("Getting data...");
-  //   axios
-  //     .get(`http://${IP}:1510/getDailyPracticeDetail`, {
-  //       params: {
-  //         id: "1",
-  //         date: selectedDate,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       let detail = response.data.data;
-  //       // console.log(response.data);
-  //       let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
-  //       let sumStepsReturned = 0;
-  //       let detailDataReturned = [];
-  //       for (var i = 0; i < detail.length; i++) {
-  //         stepDataReturned.labels.push(detail[i].start_time.slice(0, 5));
-  //         stepDataReturned.datasets[0].data.push(detail[i].steps);
-  //         sumStepsReturned += detail[i].steps;
-  //         detailDataReturned.push({
-  //           start_time: detail[i].start_time.slice(0, 5),
-  //           practice_time: detail[i].practice_time,
-  //           steps: detail[i].steps,
-  //           posList: detail[i].posList,
-  //           calories: detail[i].caloris,
-  //           totalDistance: detail[i].distances
-  //         });
-  //       }
-  //       stepDataReturned.labels.push("24:00");
-  //       stepDataReturned.datasets[0].data.push(0);
-  //       setStepData(stepDataReturned);
-  //       setSumSteps(sumStepsReturned);
-  //       setDetailData(detailDataReturned);
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, [selectedDate]);
 
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
@@ -179,8 +143,13 @@ function BarChartInfo({ route }) {
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} />{" "}
-          {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} bước
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/4812/4812918.png",
+            }}
+            style={{ width: 20, height: 20 }}
+          />
+          {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} Calo
         </Text>
       </View>
       <BarChart
@@ -235,10 +204,10 @@ function BarChartInfo({ route }) {
             activeOpacity={0.7}
             onPress={() => handleGetDetailActivity(item)}
           >
-            <StepDetail
+            <CaloDetail
               startTime={item.start_time}
               totalTime={item.practice_time}
-              stepCount={item.steps}
+              stepCount={item.calories}
             />
           </TouchableOpacity>
         ))}
@@ -248,7 +217,7 @@ function BarChartInfo({ route }) {
     </ScrollView>
   );
 }
-export default BarChartInfo;
+export default CaloBarChartInfo;
 
 const styles = StyleSheet.create({
   container: {

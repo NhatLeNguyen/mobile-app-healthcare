@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 // import Slider from '@react-native-community/slider';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import BarChartInfo from "./BarChartInfo";
-import ActivityWeeklyScreen from "./ActivityWeeklyScreen";
+import CaloActivityWeeklyScreen from "./CaloActivityWeeklyScreen";
+import CaloBarChartInfo from "./CaloBarChartInfo";
 
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
 
-const ActivityDetailScreen = ({route}) => {
+const CaloActivityDetailScreen = ({route}) => {
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
@@ -38,17 +38,17 @@ const ActivityDetailScreen = ({route}) => {
       })}
     >
       <Tab.Screen
-        name="day"
-        component={BarChartInfo}
+        name="calo_day"
+        component={CaloBarChartInfo}
         options={{ title: "Ngày" }}
       />
       <Tab.Screen
-        name="week"
-        component={ActivityWeeklyScreen}
+        name="calo_week"
+        component={CaloActivityWeeklyScreen}
         options={{ title: "Tuần" }}
       />
     </Tab.Navigator>
   );
 };
 
-export default ActivityDetailScreen;
+export default CaloActivityDetailScreen;

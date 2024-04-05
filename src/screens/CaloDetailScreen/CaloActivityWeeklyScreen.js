@@ -8,12 +8,13 @@ import {
   Text,
   Dimensions,
   ScrollView,
+  Image,
 } from "react-native";
 import moment from "moment";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
-import StepDailyDetail from "./StepDailyDetail";
+import CaloDailyDetail from "./CaloDailyDetail";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
@@ -34,13 +35,13 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-function ActivityWeeklyScreen() {
+function CaloActivityWeeklyScreen() {
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [openChooseDate, setOpenChooseDate] = useState(false);
-  const [totalSteps , setTotalSteps ]= useState(0);
+  const [totalCaloris, setTotalCaloris] = useState(0);
 
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
@@ -76,7 +77,7 @@ function ActivityWeeklyScreen() {
     const loading = async () => {
       const parts = currentDate.split("/");
       const results = (await db).getAllSync(
-        "SELECT date,sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
+        "SELECT date,sum(caloris) as caloris FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
         [getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
       );
       console.log(results);
@@ -89,72 +90,37 @@ function ActivityWeeklyScreen() {
         ],
       };
       let detailDataReturned = [];
-      let ttSteps = 0;
+      let ttCaloris = 0;
       for (var i = 0; i < results.length; i++) {
         let cur_date = new Date(results[i].date);
         chartDataReturned.datasets[0].data[
           cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
-        ] = parseInt(results[i].steps);
-        ttSteps += parseInt(results[i].steps)
+        ] = parseInt(results[i].caloris);
+        ttCaloris += parseInt(results[i].caloris);
       }
       setChartData(chartDataReturned);
-      setTotalSteps(ttSteps)
-      console.log('EndDate: ', endDate);
-      console.log('Today: ', today);
-      console.log('Subb: ', endDate > today);
-      let dateRange = new Date(endDate - startDate).getDate()
-      if(endDate > today){
-        dateRange = new Date(today - startDate).getDate()
+      setTotalCaloris(ttCaloris);
+      console.log("EndDate: ", endDate);
+      console.log("Today: ", today);
+      console.log("Subb: ", endDate > today);
+      let dateRange = new Date(endDate - startDate).getDate();
+      if (endDate > today) {
+        dateRange = new Date(today - startDate).getDate();
       }
-      console.log('Date Range: ', dateRange);
+      console.log("Date Range: ", dateRange);
       for (var j = 0; j < dateRange; j++) {
         let d = new Date(startDate);
         d.setDate(d.getDate() + j);
         detailDataReturned.push({
           date: d,
-          steps: chartDataReturned.datasets[0].data[j],
+          caloris: chartDataReturned.datasets[0].data[j],
         });
       }
       setDetailData(detailDataReturned);
     };
     loading();
   }, [selectedDate]);
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://${IP}:1510/getWeeklyPracticeDetail`, {
-  //       params: {
-  //         startDate: getFormatedDate(startDate, 'YYYY-MM-DD'),
-  //         endDate: currentDate,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       let detail = response.data.data;
-  //       // console.log(detail);
-  //       let chartDataReturned = {
-  //         labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
-  //         datasets: [
-  //           {
-  //             data: [0, 0, 0, 0, 0, 0, 0],
-  //           },
-  //         ],
-  //       }
-  //       let detailDataReturned = []
-  //       for(var i = 0 ; i< detail.length; i++){
-  //         let cur_date = new Date(detail[i].date)
-  //         chartDataReturned.datasets[0].data[cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1] = parseInt(detail[i].steps)
-  //       }
-  //       setChartData(chartDataReturned)
-  //       for(var j = 0 ; j < new Date(today - startDate).getDate() ; j++){
-  //         let d = new Date(startDate)
-  //         d.setDate(d.getDate() + j)
-  //         detailDataReturned.push({date: d, steps: chartDataReturned.datasets[0].data[j]})
-  //       }
-  //       setDetailData(detailDataReturned)
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, [selectedDate])
+
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
     setOpenChooseDate(false);
@@ -176,8 +142,13 @@ function ActivityWeeklyScreen() {
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {totalSteps > 1000 ? totalSteps / 1000 : totalSteps}{" "}
-          bước
+          <Image
+            source={{
+              uri: "https://cdn-icons-png.flaticon.com/512/4812/4812918.png",
+            }}
+            style={{ width: 20, height: 20 }}
+          />
+          {totalCaloris > 1000 ? totalCaloris / 1000 : totalCaloris} calo
         </Text>
       </View>
       <BarChart
@@ -230,22 +201,20 @@ function ActivityWeeklyScreen() {
               key={index}
               activeOpacity={0.7}
               onPress={() =>
-                navigation.navigate("day", {
+                navigation.navigate("calo_day", {
                   prop: getFormatedDate(item.date, "YYYY/MM/DD"),
                 })
               }
             >
-              <StepDailyDetail date={item.date} stepCount={item.steps} />
+              <CaloDailyDetail date={item.date} stepCount={item.caloris} />
             </TouchableOpacity>
           );
         })}
-        {/* <StepDailyDetail day={"Thứ Hai"} date={4} month={3} stepCount="154"/> */}
-        {/* <StepDailyDetail day={"Thứ Ba"} date={5} month={3} stepCount="757"/> */}
       </View>
     </ScrollView>
   );
 }
-export default ActivityWeeklyScreen;
+export default CaloActivityWeeklyScreen;
 
 const styles = StyleSheet.create({
   container: {

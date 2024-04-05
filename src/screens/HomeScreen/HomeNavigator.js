@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
+import CaloActivityDetailScreen from "../CaloDetailScreen/CaloActivityDetailScreen";
 // import ActivityWeeklyScreen from "../ActivityDetailScreen/ActivityWeeklyScreen";
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,11 @@ function HomeNavigator() {
         name="ActivityDetailPerDay"
         component={ActivityDetail}
         options={{ title: "Chi tiết", headerShadowVisible: false}}
+      />
+      <Stack.Screen
+        name="CaloActivityDetailPerDay"
+        component={CaloActivityDetailScreen}
+        options={{ title: "Năng lượng tiêu thụ", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );

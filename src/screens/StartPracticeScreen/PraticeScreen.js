@@ -59,9 +59,7 @@ function PracticeScreen() {
   const [second, setSecond] = useState(1);
   const [minute, setMinute] = useState(0);
   const [isMusicModalVisible, setIsMusicModalVisible] = useState(false);
-  const [choosenSong, setChoosenSong] = useState(
-    musicData[MUSIC_INDEX_DEFAULT]
-  );
+  const [choosenSong, setChoosenSong] = useState();
   const [isChangedMusic, setIsChangedMusic] = useState(false);
   const [sound, setSound] = useState();
   const [musicTextInput, setMusicTextInput] = useState("");
@@ -107,6 +105,9 @@ function PracticeScreen() {
               },
             ]);
           }
+          if( i == 1 & song_url !== ""){
+            setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
+          }
         }
       });
       setIsLoadedMusicList(1);
@@ -116,6 +117,17 @@ function PracticeScreen() {
     if (isFirstLocated) {
       const loading = async () => {
         console.log("Saving...");
+        console.log([
+          "1",
+          getFormatedDate(date, "hh:mm:ss"),
+          getFormatedDate(new Date(), "hh:mm:ss"),
+          getFormatedDate(date, "YYYY-MM-DD"),
+          steps,
+          totalDistance,
+          minute + ":" + second,
+          5.0,
+          JSON.stringify(posList)
+        ]);
         (await db).runSync(
           "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
           [
@@ -134,24 +146,6 @@ function PracticeScreen() {
       };
 
       loading();
-      // axios
-      //   .post(`http://${IP}:1510/savePracticeHistory`, {
-      //     id: "1",
-      //     start_time: getFormatedDate(date, "hh:mm:ss"),
-      //     end_time: getFormatedDate(new Date(), 'hh:mm:ss'),
-      //     date: getFormatedDate(date, "YYYY/MM/DD"),
-      //     steps: steps,
-      //     distances: totalDistance,
-      //     praticetime: minute + ":" + second,
-      //     caloris: 1.0,
-      //     posList: JSON.stringify(posList),
-      //   })
-      //   .then(function (response) {
-      //     console.log(response.data);
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
     }
   };
   const handleSearchMusic = () => {
@@ -435,6 +429,11 @@ function PracticeScreen() {
         {isFirstLocated && <MapDraw isFirstLocated={true} posList={posList} />}
       </View>
       <View style={styles.music}>
+        {/* {!choosenSong && (
+    
+        )} */}
+        {/* {console.log(choosenSong)} */}
+        {choosenSong &&
         <MusicPlayer
           image={choosenSong.thumbnail}
           name={capitalizeFirstLetter(choosenSong.name)}
@@ -445,6 +444,7 @@ function PracticeScreen() {
           s={sound}
           setS={setSound}
         />
+        }
       </View>
       <View style={styles.info}>
         <View style={styles.infoBlock}>
@@ -490,10 +490,10 @@ function PracticeScreen() {
           </Text>
         </View>
         <View style={styles.infoBlock}>
-          <Text style={styles.headerText}>Step/second:</Text>
+          <Text style={styles.headerText}>Step/minute:</Text>
           <Text style={styles.infoText}>
-            {Math.ceil(steps / (minute * 60 + second))}
-            <Text style={styles.subText}> steps/s</Text>
+            {Math.ceil(steps / (minute + 1))}
+            <Text style={styles.subText}> steps/m</Text>
           </Text>
         </View>
       </View>

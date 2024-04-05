@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const db = SQLite.openDatabaseAsync('health-care.db')
 
-function HomeBody() {
+function HomeBody({isRefresh}) {
   const navigation = useNavigation()
   const [dayCompleteGoal, setDayCompleteGoal] = useState(0);
   const [today, setToday] = useState(new Date());
@@ -54,7 +54,7 @@ function HomeBody() {
       setDayCompleteGoal(day_complete+'/7')
     };
     loading();
-  }, [today]);
+  }, [today, isRefresh]);
 
 
   return (

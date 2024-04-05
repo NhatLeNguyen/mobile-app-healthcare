@@ -9,17 +9,25 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import moment from "moment";
+import Calendar from "../../components/Calender";
+import moment, { min } from "moment";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
+import { useFonts } from "@expo-google-fonts/inter";
+import Fonts from "../../constants/Fonts";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
-import StepDailyDetail from "./StepDailyDetail";
+import StepDetail from "./StepDetail";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
+import { LogBox } from "react-native";
 import * as SQLite from "expo-sqlite/next";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
+
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 
 const chartConfig = {
   backgroundGradientFrom: "white",
@@ -34,14 +42,18 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
-function ActivityWeeklyScreen() {
+function BarChartInfo({ route }) {
+  const choosedDate = route.params ? route.params.prop : undefined;
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
   const [selectedDate, setSelectedDate] = useState(currentDate);
+  useEffect(() => {
+    if (choosedDate) {
+      setSelectedDate((prev) => choosedDate);
+    }
+  }, [choosedDate]);
   const [openChooseDate, setOpenChooseDate] = useState(false);
-  const [totalSteps , setTotalSteps ]= useState(0);
-
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
   const daysOfWeek = [
@@ -55,137 +67,92 @@ function ActivityWeeklyScreen() {
   ];
   const dayOfWeek = daysOfWeek[date.getDay()];
 
-  const [chartData, setChartData] = useState({
-    labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
+  const [stepData, setStepData] = useState({
+    labels: ["0:00"],
     datasets: [
       {
-        data: [0, 45, 0, 0, 0, 0, 0],
+        data: [0],
       },
     ],
   });
   const [detailData, setDetailData] = useState([]);
-  const startDate = new Date();
-  startDate.setDate(
-    date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1)
-  );
-  const endDate = new Date();
-  endDate.setDate(
-    date.getDate() + (7 - (date.getDay() === 0 ? 7 : date.getDay()))
-  );
+  const [sumSteps, setSumSteps] = useState(0);
   useEffect(() => {
     const loading = async () => {
-      const parts = currentDate.split("/");
+      // Change format
+      let parts = selectedDate.split("/");
+      console.log(parts.join("-"));
+      // Getting data
       const results = (await db).getAllSync(
-        "SELECT date,sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
-        [getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+        "select * from practicehistory where user_id = ? and date = ?",
+        ["1", parts.join("-")]
       );
-      console.log(results);
-      let chartDataReturned = {
-        labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
-        datasets: [
-          {
-            data: [0, 0, 0, 0, 0, 0, 0],
-          },
-        ],
-      };
+
+      let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };
+      let sumStepsReturned = 0;
       let detailDataReturned = [];
-      let ttSteps = 0;
       for (var i = 0; i < results.length; i++) {
-        let cur_date = new Date(results[i].date);
-        chartDataReturned.datasets[0].data[
-          cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
-        ] = parseInt(results[i].steps);
-        ttSteps += parseInt(results[i].steps)
-      }
-      setChartData(chartDataReturned);
-      setTotalSteps(ttSteps)
-      console.log('EndDate: ', endDate);
-      console.log('Today: ', today);
-      console.log('Subb: ', endDate > today);
-      let dateRange = new Date(endDate - startDate).getDate()
-      if(endDate > today){
-        dateRange = new Date(today - startDate).getDate()
-      }
-      console.log('Date Range: ', dateRange);
-      for (var j = 0; j < dateRange; j++) {
-        let d = new Date(startDate);
-        d.setDate(d.getDate() + j);
+        stepDataReturned.labels.push(results[i].start_time.slice(0, 5));
+        stepDataReturned.datasets[0].data.push(results[i].steps);
+        sumStepsReturned += results[i].steps;
         detailDataReturned.push({
-          date: d,
-          steps: chartDataReturned.datasets[0].data[j],
+          start_time: results[i].start_time.slice(0, 5),
+          practice_time: results[i].practice_time,
+          steps: results[i].steps,
+          posList: results[i].posList,
+          calories: results[i].caloris,
+          totalDistance: results[i].distances,
         });
       }
+      stepDataReturned.labels.push("24:00");
+      stepDataReturned.datasets[0].data.push(0);
+      setStepData(stepDataReturned);
+      setSumSteps(sumStepsReturned);
       setDetailData(detailDataReturned);
     };
     loading();
   }, [selectedDate]);
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://${IP}:1510/getWeeklyPracticeDetail`, {
-  //       params: {
-  //         startDate: getFormatedDate(startDate, 'YYYY-MM-DD'),
-  //         endDate: currentDate,
-  //       },
-  //     })
-  //     .then(function (response) {
-  //       let detail = response.data.data;
-  //       // console.log(detail);
-  //       let chartDataReturned = {
-  //         labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
-  //         datasets: [
-  //           {
-  //             data: [0, 0, 0, 0, 0, 0, 0],
-  //           },
-  //         ],
-  //       }
-  //       let detailDataReturned = []
-  //       for(var i = 0 ; i< detail.length; i++){
-  //         let cur_date = new Date(detail[i].date)
-  //         chartDataReturned.datasets[0].data[cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1] = parseInt(detail[i].steps)
-  //       }
-  //       setChartData(chartDataReturned)
-  //       for(var j = 0 ; j < new Date(today - startDate).getDate() ; j++){
-  //         let d = new Date(startDate)
-  //         d.setDate(d.getDate() + j)
-  //         detailDataReturned.push({date: d, steps: chartDataReturned.datasets[0].data[j]})
-  //       }
-  //       setDetailData(detailDataReturned)
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }, [selectedDate])
+
   const handleChooseDate = (propDate) => {
     setSelectedDate(propDate);
     setOpenChooseDate(false);
   };
 
+  const handleGetDetailActivity = (data) => {
+    let [minute, second] = data.practice_time.split(":");
+    minute = parseInt(minute);
+    second = parseInt(second);
+    data.minute = minute;
+    data.second = second;
+    let jsonObject = data.posList;
+    if (typeof data.posList !== "object") {
+      jsonObject = JSON.parse(data.posList);
+    }
+    // let posList = Object.keys(jsonObject).map(key => jsonObject[key]);
+    data.posList = jsonObject;
+    navigation.navigate("ActivityDetailPerDay", { data });
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
           <Text style={styles.dateTimeText}>
-            Ngày {startDate.getDate()}
-            {startDate.getMonth() !== endDate.getMonth() && (
-              <Text> tháng {startDate.getMonth() + 1}</Text>
-            )}
-            <Text> - </Text>
-            <Text>
-              Ngày {endDate.getDate()} tháng {endDate.getMonth() + 1}
-            </Text>
+            {dayOfWeek}, {day} tháng {month}
           </Text>
         </TouchableOpacity>
         <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {totalSteps > 1000 ? totalSteps / 1000 : totalSteps}{" "}
-          bước
+          <Ionicons name="footsteps" size={16} color={"blue"} />{" "}
+          {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} bước
         </Text>
       </View>
       <BarChart
         style={{ marginTop: 20 }}
-        data={chartData}
+        data={stepData}
         width={Dimensions.get("screen").width}
         height={220}
+        // yAxisLabel="$"
         chartConfig={chartConfig}
+        // verticalLabelRotation={30}
         showBarTops={true}
         withInnerLines={false}
         fromZero={true}
@@ -224,28 +191,26 @@ function ActivityWeeklyScreen() {
           marginBottom: 0,
         }}
       >
-        {detailData.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              activeOpacity={0.7}
-              onPress={() =>
-                navigation.navigate("day", {
-                  prop: getFormatedDate(item.date, "YYYY/MM/DD"),
-                })
-              }
-            >
-              <StepDailyDetail date={item.date} stepCount={item.steps} />
-            </TouchableOpacity>
-          );
-        })}
-        {/* <StepDailyDetail day={"Thứ Hai"} date={4} month={3} stepCount="154"/> */}
-        {/* <StepDailyDetail day={"Thứ Ba"} date={5} month={3} stepCount="757"/> */}
+        {detailData.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            activeOpacity={0.7}
+            onPress={() => handleGetDetailActivity(item)}
+          >
+            <StepDetail
+              startTime={item.start_time}
+              totalTime={item.practice_time}
+              stepCount={item.steps}
+            />
+          </TouchableOpacity>
+        ))}
+
+        {/* <StepDetail startTime="19:09" totalTime="8ph 18giây" stepCount="757"/> */}
       </View>
     </ScrollView>
   );
 }
-export default ActivityWeeklyScreen;
+export default BarChartInfo;
 
 const styles = StyleSheet.create({
   container: {
@@ -282,6 +247,5 @@ const styles = StyleSheet.create({
   dateTimeText: {
     fontSize: 15,
     fontFamily: "Inter_500Medium",
-    flexDirection: "row",
   },
 });

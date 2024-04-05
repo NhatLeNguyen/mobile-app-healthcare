@@ -35,7 +35,7 @@ function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-function ActivityDetail({ route }) {
+function CaloActivityDetail({ route }) {
   const data = route.params.data;
   return (
     <View style={styles.container}>
@@ -89,8 +89,8 @@ function ActivityDetail({ route }) {
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>Step/second:</Text>
           <Text style={styles.infoText}>
-            {Math.ceil(data.steps / ((data.minute * 60 + data.second)/60))}
-            <Text style={styles.subText}> steps/m</Text>
+            {Math.ceil(data.steps / (data.minute * 60 + data.second))}
+            <Text style={styles.subText}> steps/s</Text>
           </Text>
         </View>
       </View>
@@ -98,7 +98,7 @@ function ActivityDetail({ route }) {
   );
 }
 
-export default ActivityDetail;
+export default CaloActivityDetail;
 
 const styles = StyleSheet.create({
   container: {
