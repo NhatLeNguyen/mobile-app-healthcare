@@ -16,7 +16,7 @@ import * as SQLite from "expo-sqlite/next";
 import { getFormatedDate } from "react-native-modern-datepicker";
 const db = SQLite.openDatabaseAsync("health-care.db");
 
-function HomeCircleInfo({isRefresh}) {
+function HomeCircleInfo({ isRefresh }) {
   const [isPressedHeart, setIsPressHeart] = useState(false);
   const [isPressedStep, setIsPressStep] = useState(false);
   const [isPressedCalo, setIsPressCalo] = useState(false);
@@ -40,15 +40,15 @@ function HomeCircleInfo({isRefresh}) {
         [getFormatedDate(today, "YYYY-MM-DD")]
       );
       // console.log(results1);
-      for (const row of results1){
-        let [minute, second] = row.practice_time.split(':')
-        secondTime += parseInt(minute) * 60 + parseInt(second)
+      for (const row of results1) {
+        let [minute, second] = row.practice_time.split(":");
+        secondTime += parseInt(minute) * 60 + parseInt(second);
       }
-      if(results.length != 0){
-        setPracticeTime(Math.ceil(secondTime / 60))
+      if (results.length != 0) {
+        setPracticeTime(Math.ceil(secondTime / 60));
         setStepsToday(results[0].steps);
-        setDistanceToday(results[0].distances)
-        setCalorisToday(results[0].caloris)
+        setDistanceToday(results[0].distances);
+        setCalorisToday(results[0].caloris);
       }
     };
     loading();
@@ -133,17 +133,19 @@ function HomeCircleInfo({isRefresh}) {
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={[styles.pressAble, isPressedCalo && styles.pressedButton]}
-          onPress={() => navigation.navigate('CaloActivityDetail')}
+          onPress={() => navigation.navigate("CaloActivityDetail")}
           onPressIn={() => setIsPressCalo(true)}
           onPressOut={() => setIsPressCalo(false)}
         >
-          <Text style={styles.number}>{calorisToday > 1000 ? calorisToday / 1000 : calorisToday}</Text>
+          <Text style={styles.number}>
+            {calorisToday > 1000 ? calorisToday / 1000 : calorisToday}
+          </Text>
           <Text style={styles.subText}>Calo</Text>
         </Pressable>
 
         <Pressable
           style={[styles.pressAble, isPressedDistance && styles.pressedButton]}
-          onPress={() => navigation.navigate('DistanceActivityDetailPerDay')}
+          onPress={() => navigation.navigate("DistanceActivityDetailPerDay")}
           onPressIn={() => setIsPressDistance(true)}
           onPressOut={() => setIsPressDistance(false)}
         >
@@ -153,7 +155,7 @@ function HomeCircleInfo({isRefresh}) {
 
         <Pressable
           style={[styles.pressAble, isPressedTime && styles.pressedButton]}
-          onPress={() => navigation.navigate('TimeActivityDetailPerDay')}
+          onPress={() => navigation.navigate("TimeActivityDetailPerDay")}
           onPressIn={() => setIsPressTime(true)}
           onPressOut={() => setIsPressTime(false)}
         >

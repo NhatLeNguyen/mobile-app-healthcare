@@ -93,11 +93,11 @@ function TimeBarChartInfo({ route }) {
       let sumStepsReturned = 0;
       let detailDataReturned = [];
       for (var i = 0; i < results.length; i++) {
-        let [minute, second] = results[i].practice_time.split(':')
-        let practice_time = parseInt(minute) * 60 + parseInt(second)
+        let [minute, second] = results[i].practice_time.split(":");
+        let practice_time = parseInt(minute) * 60 + parseInt(second);
         stepDataReturned.labels.push(results[i].start_time.slice(0, 5));
         stepDataReturned.datasets[0].data.push(Math.ceil(practice_time / 60));
-        sumStepsReturned += practice_time
+        sumStepsReturned += practice_time;
         detailDataReturned.push({
           start_time: results[i].start_time.slice(0, 5),
           practice_time: results[i].practice_time,
@@ -131,7 +131,6 @@ function TimeBarChartInfo({ route }) {
     if (typeof data.posList !== "object") {
       jsonObject = JSON.parse(data.posList);
     }
-    // let posList = Object.keys(jsonObject).map(key => jsonObject[key]);
     data.posList = jsonObject;
     navigation.navigate("ActivityDetailPerDay", { data });
   };
@@ -149,7 +148,8 @@ function TimeBarChartInfo({ route }) {
               uri: "https://cdn-icons-png.flaticon.com/512/2102/2102627.png",
             }}
             style={{ width: 18, height: 18 }}
-          />{'  '}
+          />
+          {"  "}
           {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} phút
         </Text>
       </View>
@@ -166,9 +166,8 @@ function TimeBarChartInfo({ route }) {
         fromZero={true}
       />
       <Text style={{ color: "#777B7E", margin: 20, fontSize: 15 }}>
-        Số bước là một chỉ số hữu ích đo lường mức độ vận động của bạn. Chỉ số
-        này có thể giúp bạn phát hiện những thay đổi về mức độ hoạt động của
-        mình.
+        Số phút vận động là một chỉ số đo lường mọi hoạt động có sự di chuyển,
+        giúp bạn nám được mức độ vận động của mình mỗi ngày
       </Text>
       <Modal
         animationType="fade"
@@ -208,12 +207,11 @@ function TimeBarChartInfo({ route }) {
             <TimeDetail
               startTime={item.start_time}
               totalTime={item.practice_time}
-              stepCount={item.totalDistance}
+              stepCount={item.practice_time}
             />
           </TouchableOpacity>
         ))}
 
-        {/* <StepDetail startTime="19:09" totalTime="8ph 18giây" stepCount="757"/> */}
       </View>
     </ScrollView>
   );

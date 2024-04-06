@@ -95,19 +95,15 @@ function DistanceActivityWeeklyScreen() {
         let cur_date = new Date(results[i].date);
         chartDataReturned.datasets[0].data[
           cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
-        ] = parseInt(results[i].distances);
-        ttCaloris += parseInt(results[i].distances);
+        ] = parseFloat(results[i].distances).toFixed(2);
+        ttCaloris += parseFloat(results[i].distances);
       }
       setChartData(chartDataReturned);
-      setTotalCaloris(ttCaloris);
-      console.log("EndDate: ", endDate);
-      console.log("Today: ", today);
-      console.log("Subb: ", endDate > today);
+      setTotalCaloris(ttCaloris.toFixed(2));
       let dateRange = new Date(endDate - startDate).getDate();
       if (endDate > today) {
         dateRange = new Date(today - startDate).getDate();
       }
-      console.log("Date Range: ", dateRange);
       for (var j = 0; j < dateRange; j++) {
         let d = new Date(startDate);
         d.setDate(d.getDate() + j);
@@ -162,9 +158,8 @@ function DistanceActivityWeeklyScreen() {
         fromZero={true}
       />
       <Text style={{ color: "#777B7E", margin: 20, fontSize: 15 }}>
-        Số bước là một chỉ số hữu ích đo lường mức độ vận động của bạn. Chỉ số
-        này có thể giúp bạn phát hiện những thay đổi về mức độ hoạt động của
-        mình.
+        Việc đo quãng đường là một cách hữu ích để theo dõi thành tích của bạn
+        trong các hoạt động như đạp xe, chạy bộ và bơi lội
       </Text>
       <Modal
         animationType="fade"

@@ -164,9 +164,9 @@ function TimeActivityWeeklyScreen() {
         <Text style={{ fontSize: 13, marginTop: 5 }}>
           <Image
             source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/3133/3133158.png",
+              uri: "https://cdn-icons-png.flaticon.com/512/2102/2102627.png",
             }}
-            style={{ width: 18, height: 18}}
+            style={{ width: 18, height: 18 }}
           />{"  "}
           {totalCaloris > 1000 ? totalCaloris / 1000 : totalCaloris} phút
         </Text>
@@ -182,9 +182,8 @@ function TimeActivityWeeklyScreen() {
         fromZero={true}
       />
       <Text style={{ color: "#777B7E", margin: 20, fontSize: 15 }}>
-        Số bước là một chỉ số hữu ích đo lường mức độ vận động của bạn. Chỉ số
-        này có thể giúp bạn phát hiện những thay đổi về mức độ hoạt động của
-        mình.
+        Số phút vận động là một chỉ số đo lường mọi hoạt động có sự di chuyển,
+        giúp bạn nám được mức độ vận động của mình mỗi ngày
       </Text>
       <Modal
         animationType="fade"

@@ -103,13 +103,13 @@ function DistanceBarChartInfo({ route }) {
           steps: results[i].steps,
           posList: results[i].posList,
           calories: results[i].caloris,
-          totalDistance: results[i].distances,
+          totalDistance: results[i].distances.toFixed(2),
         });
       }
       stepDataReturned.labels.push("24:00");
       stepDataReturned.datasets[0].data.push(0);
       setStepData(stepDataReturned);
-      setSumSteps(sumStepsReturned);
+      setSumSteps(sumStepsReturned.toFixed(2));
       setDetailData(detailDataReturned);
     };
     loading();
@@ -148,7 +148,8 @@ function DistanceBarChartInfo({ route }) {
               uri: "https://cdn-icons-png.flaticon.com/512/6194/6194839.png",
             }}
             style={{ width: 18, height: 18 }}
-          />{'  '}
+          />
+          {"  "}
           {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} km
         </Text>
       </View>
@@ -164,10 +165,9 @@ function DistanceBarChartInfo({ route }) {
         withInnerLines={false}
         fromZero={true}
       />
-      <Text style={{ color: "#777B7E", margin: 20, fontSize: 15 }}>
-        Số bước là một chỉ số hữu ích đo lường mức độ vận động của bạn. Chỉ số
-        này có thể giúp bạn phát hiện những thay đổi về mức độ hoạt động của
-        mình.
+      <Text style={{ color: "#777B7E", margin: 25 , fontSize: 15 }}>
+        Việc đo quãng đường là một cách hữu ích để theo dõi thành tích của bạn
+        trong các hoạt động như đạp xe, chạy bộ và bơi lội
       </Text>
       <Modal
         animationType="fade"

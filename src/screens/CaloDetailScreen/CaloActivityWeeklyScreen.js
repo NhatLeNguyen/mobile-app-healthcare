@@ -162,9 +162,9 @@ function CaloActivityWeeklyScreen() {
         fromZero={true}
       />
       <Text style={{ color: "#777B7E", margin: 20, fontSize: 15 }}>
-        Số bước là một chỉ số hữu ích đo lường mức độ vận động của bạn. Chỉ số
-        này có thể giúp bạn phát hiện những thay đổi về mức độ hoạt động của
-        mình.
+        Cơ thể bạn dùng năng lượng cho nhiều hoạt động chứ không chỉ riêng tập
+        thể dục. Bạn sẽ thấy một chỉ số ước tính tổng lượng calo đốt cháy cả khi
+        vận động lẫn nghỉ ngơi
       </Text>
       <Modal
         animationType="fade"

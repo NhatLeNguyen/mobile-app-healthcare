@@ -82,6 +82,10 @@ export default function App() {
                     color={color}
                   />
                 );
+                // return (<Image 
+                //   style ={{width: 31, height:31}} 
+                //   source={{ uri : "https://cdn-icons-gif.flaticon.com/8756/8756262.gif"}}
+                //   />)
               } else if (route.name === "Empty1") {
                 return (
                   <FontAwesome
