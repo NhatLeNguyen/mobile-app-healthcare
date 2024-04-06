@@ -28,10 +28,6 @@ function HomeCircleInfo({isRefresh}) {
   const [calorisToday, setCalorisToday] = useState(0);
   const [practiceTime, setPracticeTime] = useState(0);
 
-  const deleteRow = async () => {
-    // console.log("Delete row ...");
-    // (await db).runSync('delete from practicehistory');
-  };
   useEffect(() => {
     const loading = async () => {
       let secondTime = 0;
@@ -49,7 +45,7 @@ function HomeCircleInfo({isRefresh}) {
         secondTime += parseInt(minute) * 60 + parseInt(second)
       }
       if(results.length != 0){
-        setPracticeTime(parseInt(secondTime / 60))
+        setPracticeTime(Math.ceil(secondTime / 60))
         setStepsToday(results[0].steps);
         setDistanceToday(results[0].distances)
         setCalorisToday(results[0].caloris)
@@ -157,7 +153,7 @@ function HomeCircleInfo({isRefresh}) {
 
         <Pressable
           style={[styles.pressAble, isPressedTime && styles.pressedButton]}
-          onPress={() => deleteRow()}
+          onPress={() => navigation.navigate('TimeActivityDetailPerDay')}
           onPressIn={() => setIsPressTime(true)}
           onPressOut={() => setIsPressTime(false)}
         >

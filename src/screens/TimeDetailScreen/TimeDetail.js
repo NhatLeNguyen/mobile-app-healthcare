@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-function DistanceDetail({ startTime, totalTime, stepCount }) {
+function TimeDetail({ startTime, totalTime, stepCount }) {
   const [hourStart, minuteStart] = startTime.split(":");
   const title =
     parseInt(hourStart) <= 10
@@ -34,17 +34,17 @@ function DistanceDetail({ startTime, totalTime, stepCount }) {
         </Text>
         <Image
           source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/1196/1196775.png",
+            uri: "https://cdn-icons-png.flaticon.com/512/3133/3133158.png",
           }}
           style={{ width: 20, height: 20 }}
         />
-        <Text style={{ color: "gray", marginLeft: 2 }}>  {stepCount} km</Text>
+        <Text style={{ color: "gray", marginLeft: 2 }}> {stepCount} phút</Text>
       </View>
     </View>
   );
 }
 
-export default DistanceDetail;
+export default TimeDetail;
 
 const styles = StyleSheet.create({
   container: {

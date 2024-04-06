@@ -3,7 +3,7 @@ import {Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
 function StepDetail({ startTime, totalTime, stepCount }) {
   const [hourStart, minuteStart] = startTime.split(':')
-  const title = parseInt(hourStart) <= 10 ? "Đi bộ buổi sáng" : parseInt(hourStart) <= 16 ? 'Đi bộ buổi chiều' : "Đi bộ buổi tối"
+  const title = parseInt(hourStart) <= 10 ? "Đi bộ buổi sáng" : parseInt(hourStart) <= 18 ? 'Đi bộ buổi chiều' : "Đi bộ buổi tối"
   const [minutePractice, secondPractice] = totalTime.split(':');
   return (
     <View style={styles.container}>

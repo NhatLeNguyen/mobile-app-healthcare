@@ -13,7 +13,7 @@ function CaloDetail({ startTime, totalTime, stepCount }) {
   const title =
     parseInt(hourStart) <= 10
       ? "Đi bộ buổi sáng"
-      : parseInt(hourStart) <= 6
+      : parseInt(hourStart) <= 18
       ? "Đi bộ buổi chiều"
       : "Đi bộ buổi tối";
   const [minutePractice, secondPractice] = totalTime.split(":");

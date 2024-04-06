@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   ImageBackground,
+  Image,
 } from "react-native";
 import { Accelerometer } from "expo-sensors";
 import MapDraw from "../../components/DrawedMap/MapDraw";
@@ -44,8 +45,8 @@ export default function StartPracticeScreen() {
   };
   const handleStartPractice = () => {
     setIsStartPractice(true);
-    navigation.navigate('PracticeScreen')
-  }
+    navigation.navigate("PracticeScreen");
+  };
 
   const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
     const deg2rad = (deg) => {
@@ -168,7 +169,19 @@ export default function StartPracticeScreen() {
         source={imagePath.practiceBgImage}
         style={styles.bgImage}
       >
-        <Swiper style={styles.wrapper} showsButtons={false} autoplay={true} autoplayTimeout={5} showsPagination={false}>
+        {/* <Image
+          style={{ width: '100%', height: '30%' }}
+          source={{
+            uri: "https://gifdb.com/images/high/anime-sonic-x-adventure-sonic-running-6z7txlvr2z1j29dh.gif",
+          }}
+        /> */}
+        <Swiper
+          style={styles.wrapper}
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={5}
+          showsPagination={false}
+        >
           <View style={styles.slide}>
             <Text style={styles.factText}>
               Đi bộ là một cách tuyệt vời để cải thiện sức khỏe tim mạch, tăng
@@ -200,8 +213,14 @@ export default function StartPracticeScreen() {
             {!isStartPractice && (
               <TouchableOpacity
                 style={{ justifyContent: "center", alignItems: "center" }}
-                onPress={() => navigation.navigate('PracticeScreen')}
+                onPress={() => navigation.navigate("PracticeScreen")}
               >
+                {/* <Image
+                  style={{ width: 40, height: 40, position:'absolute', right: 0, top:-10}}
+                  source={{
+                    uri: "https://25.media.tumblr.com/9b61ee90f1461f2459513f123e961ddf/tumblr_mvrnn6xt151sjkr6no1_500.gif",
+                  }}
+                /> */}
                 <Text
                   style={{
                     fontSize: 18,
@@ -287,6 +306,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginTop: 120,
+    // marginTop: 10,
     justifyContent: "center",
     textAlign: "center",
     alignItems: "center",

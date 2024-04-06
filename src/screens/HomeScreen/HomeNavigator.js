@@ -4,7 +4,7 @@ import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
 import CaloActivityDetailScreen from "../CaloDetailScreen/CaloActivityDetailScreen";
 import DistanceActivityDetailScreen from "../DistanceDetailScreen/DistanceActivityDetailScreen";
-// import ActivityWeeklyScreen from "../ActivityDetailScreen/ActivityWeeklyScreen";
+import TimeActivityDetailScreen from "../TimeDetailScreen/TimeActivityDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +35,11 @@ function HomeNavigator() {
         name="DistanceActivityDetailPerDay"
         component={DistanceActivityDetailScreen}
         options={{ title: "Khoảng cách", headerShadowVisible: false}}
+      />
+      <Stack.Screen
+        name="TimeActivityDetailPerDay"
+        component={TimeActivityDetailScreen}
+        options={{ title: "Phút vận động", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );

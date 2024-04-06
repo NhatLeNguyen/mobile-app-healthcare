@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
@@ -70,6 +70,10 @@ export default function App() {
               if (route.name === "Home") {
                 iconName = focused ? "information" : "information";
                 return <FontAwesome name="home" size={size} color={color} />;
+                // return (<Image 
+                // style ={{width: 30, height:30}} 
+                // source={{ uri : "https://upload.wikimedia.org/wikipedia/commons/b/bd/Running_animated.gif"}}
+                // />)
               } else if (route.name === "Practice") {
                 return (
                   <MaterialCommunityIcons
