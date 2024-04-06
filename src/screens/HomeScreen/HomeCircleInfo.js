@@ -28,14 +28,6 @@ function HomeCircleInfo({isRefresh}) {
   const [calorisToday, setCalorisToday] = useState(0);
   const [practiceTime, setPracticeTime] = useState(0);
 
-  const checkDB = async () => {
-    // console.log("Checking ...");
-    // const allRows = (await db).getAllSync('select * from practicehistory');
-    // for (const row of allRows){
-    //   console.log(row);
-    // }
-    // console.log(allRows.length);
-  };
   const deleteRow = async () => {
     // console.log("Delete row ...");
     // (await db).runSync('delete from practicehistory');
@@ -155,7 +147,7 @@ function HomeCircleInfo({isRefresh}) {
 
         <Pressable
           style={[styles.pressAble, isPressedDistance && styles.pressedButton]}
-          onPress={() => checkDB()}
+          onPress={() => navigation.navigate('DistanceActivityDetailPerDay')}
           onPressIn={() => setIsPressDistance(true)}
           onPressOut={() => setIsPressDistance(false)}
         >

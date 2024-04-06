@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-function CaloDetail({ startTime, totalTime, stepCount }) {
+function DistanceDetail({ startTime, totalTime, stepCount }) {
   const [hourStart, minuteStart] = startTime.split(":");
   const title =
     parseInt(hourStart) <= 10
@@ -34,17 +34,17 @@ function CaloDetail({ startTime, totalTime, stepCount }) {
         </Text>
         <Image
           source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/4812/4812918.png",
+            uri: "https://cdn-icons-png.flaticon.com/512/1196/1196775.png",
           }}
           style={{ width: 20, height: 20 }}
         />
-        <Text style={{ color: "gray", marginLeft: 2 }}>{stepCount} calo</Text>
+        <Text style={{ color: "gray", marginLeft: 2 }}>  {stepCount} km</Text>
       </View>
     </View>
   );
 }
 
-export default CaloDetail;
+export default DistanceDetail;
 
 const styles = StyleSheet.create({
   container: {

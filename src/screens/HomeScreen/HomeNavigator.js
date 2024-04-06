@@ -3,6 +3,7 @@ import HomeScreen from "./HomeScreen";
 import ActivityDetailScreen from "../ActivityDetailScreen/ActivityDetailScreen";
 import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
 import CaloActivityDetailScreen from "../CaloDetailScreen/CaloActivityDetailScreen";
+import DistanceActivityDetailScreen from "../DistanceDetailScreen/DistanceActivityDetailScreen";
 // import ActivityWeeklyScreen from "../ActivityDetailScreen/ActivityWeeklyScreen";
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +30,11 @@ function HomeNavigator() {
         name="CaloActivityDetailPerDay"
         component={CaloActivityDetailScreen}
         options={{ title: "Năng lượng tiêu thụ", headerShadowVisible: false}}
+      />
+      <Stack.Screen
+        name="DistanceActivityDetailPerDay"
+        component={DistanceActivityDetailScreen}
+        options={{ title: "Khoảng cách", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );
