@@ -25,6 +25,7 @@ function HomeBody({isRefresh}) {
   const navigation = useNavigation()
   const [dayCompleteGoal, setDayCompleteGoal] = useState(0);
   const [today, setToday] = useState(new Date());
+  const [calo, setCalo] = useState(0)
 
   useEffect(() => {
     const loading = async () => {
@@ -38,20 +39,30 @@ function HomeBody({isRefresh}) {
         date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1)
       );
 
+      // const results = (await db).getAllSync(
+      //   "SELECT sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
+      //   [
+      //     getFormatedDate(startDate, "YYYY-MM-DD"),
+      //     getFormatedDate(today, "YYYY-MM-DD"),
+      //   ]
+      // );
       const results = (await db).getAllSync(
-        "SELECT sum(steps) as steps FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
+        "SELECT sum(steps) as steps, sum(caloris) as caloris FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
         [
           getFormatedDate(startDate, "YYYY-MM-DD"),
           getFormatedDate(today, "YYYY-MM-DD"),
         ]
       );
+      let totalCalo = 0;
       for (const row of results){
         if(row.steps > 50){
           day_complete = day_complete + 1;
         }
+        totalCalo = row.caloris
       }
-      console.log('Day: ',day_complete);
+      // console.log('Day: ',day_complete);
       setDayCompleteGoal(day_complete+'/7')
+      setCalo(totalCalo)
     };
     loading();
   }, [today, isRefresh]);
@@ -82,11 +93,11 @@ function HomeBody({isRefresh}) {
       <TaskBlock
         heading="Năng lượng tiêu thụ"
         time="7 ngày qua"
-        target="479"
+        target={calo}
         subTextTarget=" calo"
         text="Hôm nay"
-        targetColor="#1a9be8"
-        pressedFunction={() => {console.log("Hehe");}}
+        targetColor="#fdbd40"
+        pressedFunction={() => {navigation.navigate('CaloActivityDetail', {name: 'calo_week'})}}
       />
       <Text style={styles.heading}>
         KHÁM PHÁ

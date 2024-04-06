@@ -133,7 +133,7 @@ function HomeCircleInfo({isRefresh}) {
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={[styles.pressAble, isPressedCalo && styles.pressedButton]}
-          onPress={() => navigation.navigate('CaloActivityDetailPerDay')}
+          onPress={() => navigation.navigate('CaloActivityDetail')}
           onPressIn={() => setIsPressCalo(true)}
           onPressOut={() => setIsPressCalo(false)}
         >

@@ -37,7 +37,7 @@ const chartConfig = {
   backgroundGradientTo: "white",
   backgroundGradientToOpacity: 0.5,
   //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#1a9be8",
+  color: () => "#fdbd40",
   strokeWidth: 1, // optional, default 3
   decimalPlaces: 0,
   barPercentage: 0.5,
@@ -153,7 +153,7 @@ function CaloBarChartInfo({ route }) {
         </Text>
       </View>
       <BarChart
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 20}}
         data={stepData}
         width={Dimensions.get("screen").width}
         height={220}

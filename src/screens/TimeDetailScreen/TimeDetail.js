@@ -34,9 +34,9 @@ function TimeDetail({ startTime, totalTime, stepCount }) {
         </Text>
         <Image
           source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/3133/3133158.png",
+            uri: "https://cdn-icons-png.flaticon.com/512/2102/2102627.png",
           }}
-          style={{ width: 20, height: 20 }}
+          style={{ width: 18, height: 18}}
         />
         <Text style={{ color: "gray", marginLeft: 2 }}> {stepCount} phút</Text>
       </View>

@@ -36,7 +36,7 @@ const chartConfig = {
   backgroundGradientTo: "white",
   backgroundGradientToOpacity: 0.5,
   //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#1a9be8",
+  color: () => "#a0dac3",
   strokeWidth: 1, // optional, default 3
   decimalPlaces: 0,
   barPercentage: 0.5,
@@ -146,7 +146,7 @@ function TimeBarChartInfo({ route }) {
         <Text style={{ fontSize: 13, marginTop: 5 }}>
           <Image
             source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/3133/3133158.png",
+              uri: "https://cdn-icons-png.flaticon.com/512/2102/2102627.png",
             }}
             style={{ width: 18, height: 18 }}
           />{'  '}

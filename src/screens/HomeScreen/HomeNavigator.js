@@ -27,7 +27,7 @@ function HomeNavigator() {
         options={{ title: "Chi tiết", headerShadowVisible: false}}
       />
       <Stack.Screen
-        name="CaloActivityDetailPerDay"
+        name="CaloActivityDetail"
         component={CaloActivityDetailScreen}
         options={{ title: "Năng lượng tiêu thụ", headerShadowVisible: false}}
       />

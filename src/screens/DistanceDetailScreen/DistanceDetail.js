@@ -34,7 +34,7 @@ function DistanceDetail({ startTime, totalTime, stepCount }) {
         </Text>
         <Image
           source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/1196/1196775.png",
+            uri: "https://cdn-icons-png.flaticon.com/512/6194/6194839.png",
           }}
           style={{ width: 20, height: 20 }}
         />

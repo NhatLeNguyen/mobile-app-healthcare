@@ -28,7 +28,7 @@ const chartConfig = {
   backgroundGradientTo: "white",
   backgroundGradientToOpacity: 0.5,
   //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#1a9be8",
+  color: () => "#ff4a73",
   strokeWidth: 1, // optional, default 3
   decimalPlaces: 0,
   barPercentage: 0.5,
@@ -144,7 +144,7 @@ function DistanceActivityWeeklyScreen() {
         <Text style={{ fontSize: 13, marginTop: 5 }}>
           <Image
             source={{
-              uri: "https://cdn-icons-png.flaticon.com/512/1196/1196775.png",
+              uri: "https://cdn-icons-png.flaticon.com/512/6194/6194839.png",
             }}
             style={{ width: 18, height: 18}}
           />{"  "}

@@ -12,7 +12,7 @@ const CaloActivityDetailScreen = ({route}) => {
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
-      initialRouteName={route.params ? route.params.name :'day'}
+      initialRouteName={route.params ? route.params.name :'calo_day'}
       screenOptions={({ route }) => ({
         tabBarLabelStyle: {
           fontSize: 13,
