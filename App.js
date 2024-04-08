@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -17,19 +17,20 @@ import * as SQLite from "expo-sqlite";
 import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
 import RegisterScreen from "./src/screens/RegisterScreen/RegisterScreen";
 import MainScreen from "./src/screens/MainScreen/MainScreen";
+import InitialScreen from "./src/screens/InitialScreen/InitialScreen";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const db = SQLite.openDatabase("health-care.db");
-db.transaction(tx => {
+db.transaction((tx) => {
   tx.executeSql(
     "create table if not exists practicehistory (practice_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, start_time TEXT, end_time TEXT, date TEXT, steps INT, distances REAL, practice_time TEXT, caloris REAL, posList TEXT)"
   );
 });
-db.transaction(tx => {
+db.transaction((tx) => {
   tx.executeSql(
     "create table if not exists user (user_id INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT, name TEXT, phone TEXT, address TEXT, dobirth TEXT, email TEXT, weight INTERGER, height INTERGER, avatar TEXT)"
   );
 });
-
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync().then((result) =>
@@ -66,27 +67,38 @@ export default function App() {
     return null;
   }
   return (
-    <View style={styles.container} onLayout={onLayoutRoot}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{ title: "Màn hình đăng nhập",  headerShown: false}}
-          />
-          <Stack.Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{ title: "Màn hình đăng ký",  headerShown: false}}
-          />
-          <Stack.Screen
-            name="MainScreen"
-            component={MainScreen}
-            options={{ title: "Màn hình chính",  headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+    <ToastProvider
+      placement="top"
+      successIcon={
+        <Image
+          style={{ width: 30, height: 30 }}
+          source={{
+            uri: "https://cdn-icons-png.freepik.com/512/7518/7518748.png",
+          }}
+        />
+      }
+      dangerIcon={<FontAwesome name="warning" size={24} color="#f9e154" />}
+      offsetTop={30}
+      duration={3000}
+      textStyle={{ fontSize: 13 }}
+    >
+      <View style={styles.container} onLayout={onLayoutRoot}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="InitialScreen"
+              component={InitialScreen}
+              options={{ title: "Màn hình ban đầu", headerShown: false }}
+            />
+            <Stack.Screen
+              name="MainScreen"
+              component={MainScreen}
+              options={{ title: "Màn hình chính", headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    </ToastProvider>
   );
 }
 

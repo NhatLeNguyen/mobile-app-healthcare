@@ -70,6 +70,7 @@ export function Input(props) {
           placeholder={props.placeholder}
           onBlur={handleBlur}
           style={styles.textInput}
+          onChangeText={props.onChange}
         />
       )}
     </View>
@@ -80,14 +81,15 @@ const styles = StyleSheet.create({
   root: {
     flexDirection: "row",
     width: 357,
-    paddingTop: 20,
+    // padding: 20,
+    paddingTop: 10,
     paddingLeft: 20,
-    paddingRight: 35,
-    paddingBottom: 20,
+    paddingBottom: 10,
     alignItems: "center",
     marginVertical: 10,
     borderRadius: 10,
     backgroundColor: "#DDE5FF",
+    // backgroundColor: 'red'
   },
   rootFocused: {
     // Add styles for focused state (e.g., border)
@@ -108,7 +110,12 @@ const styles = StyleSheet.create({
     color: "rgba(255, 0, 0, 1)", // Example color for active state
   },
   textInput: {
-    // Add custom styles for TextInput (optional)
+    // fontSize: 16,
+    // flex: 1,
+    // backgroundColor:'red',
+    width: '100%',
+    paddingTop: 10, 
+    paddingBottom: 10,
   },
 });
 
