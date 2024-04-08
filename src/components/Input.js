@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   placeholder: {
     color: "rgba(98, 98, 98, 1)",
     textAlign: "center",
-    fontFamily: "Poppins",
+    // fontFamily: "Poppins",
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: "500",

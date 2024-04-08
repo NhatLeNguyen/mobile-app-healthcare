@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Ionicons,
@@ -8,14 +9,14 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 // Screens
-import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
-import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
-import StartPracticeScreenNavigator from "./src/screens/StartPracticeScreen/StartPracticeScreenNavigator";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
+import RegisterScreen from "./src/screens/RegisterScreen/RegisterScreen";
+import MainScreen from "./src/screens/MainScreen/MainScreen";
 
 const db = SQLite.openDatabase("health-care.db");
 db.transaction(tx => {
@@ -23,9 +24,14 @@ db.transaction(tx => {
     "create table if not exists practicehistory (practice_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, start_time TEXT, end_time TEXT, date TEXT, steps INT, distances REAL, practice_time TEXT, caloris REAL, posList TEXT)"
   );
 });
+db.transaction(tx => {
+  tx.executeSql(
+    "create table if not exists user (user_id INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT, name TEXT, phone TEXT, address TEXT, dobirth TEXT, email TEXT, weight INTERGER, height INTERGER, avatar TEXT)"
+  );
+});
 
 
-const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync().then((result) =>
   console.log(`SplashScreen preventAutoHideAsync Success ${result}`)
 );
@@ -62,122 +68,23 @@ export default function App() {
   return (
     <View style={styles.container} onLayout={onLayoutRoot}>
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              color = focused ? "#6495ED" : "gray";
-              if (route.name === "Home") {
-                iconName = focused ? "information" : "information";
-                return <FontAwesome name="home" size={size} color={color} />;
-                // return (<Image 
-                // style ={{width: 30, height:30}} 
-                // source={{ uri : "https://upload.wikimedia.org/wikipedia/commons/b/bd/Running_animated.gif"}}
-                // />)
-              } else if (route.name === "Practice") {
-                return (
-                  <MaterialCommunityIcons
-                    name="electron-framework"
-                    size={size}
-                    color={color}
-                  />
-                );
-                // return (<Image 
-                //   style ={{width: 31, height:31}} 
-                //   source={{ uri : "https://cdn-icons-gif.flaticon.com/8756/8756262.gif"}}
-                //   />)
-              } else if (route.name === "Empty1") {
-                return (
-                  <FontAwesome
-                    name="star-half-empty"
-                    size={size}
-                    color={color}
-                  />
-                );
-              } else if (route.name === "User") {
-                return <FontAwesome name="user" size={size} color={color} />;
-              }
-            },
-            tabBarLabel: ({ focused, color }) => {
-              // Add tabBarLabel
-              let label;
-              if (route.name === "Home") {
-                if (focused) {
-                  return (
-                    <Text
-                      style={{
-                        color: focused ? "#6495ED" : "gray",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Màn hình chính
-                    </Text>
-                  );
-                }
-              } else if (route.name === "Practice") {
-                if (focused) {
-                  return (
-                    <Text
-                      style={{
-                        color: focused ? "#6495ED" : "gray",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Practice
-                    </Text>
-                  );
-                }
-              } else if (route.name === "Empty1") {
-                if (focused) {
-                  return (
-                    <Text
-                      style={{
-                        color: focused ? "#6495ED" : "gray",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Practice1
-                    </Text>
-                  );
-                }
-              } else if (route.name === "User") {
-                if (focused) {
-                  return (
-                    <Text
-                      style={{
-                        color: focused ? "#6495ED" : "gray",
-                        fontSize: 12,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      Hồ sơ
-                    </Text>
-                  );
-                }
-              }
-              return null;
-            },
-            tabBarStyle: {
-              backgroundColor: "#F8F8F8", // Màu nền của tabBar
-            },
-          })}
-        >
-          <Tab.Screen
-            name="Home"
-            component={HomeNavigator}
-            options={{ headerShown: false }}
+        <Stack.Navigator>
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{ title: "Màn hình đăng nhập",  headerShown: false}}
           />
-          <Tab.Screen
-            name="Practice"
-            component={StartPracticeScreenNavigator}
-            options={{ headerShown: false }}
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{ title: "Màn hình đăng ký",  headerShown: false}}
           />
-          <Tab.Screen name="Empty1" component={HomeScreen} />
-          <Tab.Screen name="User" component={HomeScreen} />
-        </Tab.Navigator>
+          <Stack.Screen
+            name="MainScreen"
+            component={MainScreen}
+            options={{ title: "Màn hình chính",  headerShown: false}}
+          />
+        </Stack.Navigator>
       </NavigationContainer>
     </View>
   );

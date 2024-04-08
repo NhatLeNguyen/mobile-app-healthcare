@@ -7,7 +7,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 
-const RegisterPage = () => {
+const RegisterScreen = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,6 +44,12 @@ const RegisterPage = () => {
       <Button testID="registerButton" property1="">
         Đăng ký
       </Button>
+      <View style={{flexDirection:'row', marginTop: 20}}>
+        <Text>Bạn đã có tài khoản?  </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+          <Text style={styles.createAccount}>Đăng nhập ngay !</Text>
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.socialMedia}>Hoặc Đăng nhập với </Text>
       <SocialMedia testID="socialMediaButtons" />
@@ -78,7 +84,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   createAccount: {
-    marginTop: 20,
     fontWeight: "700",
   },
 
@@ -94,4 +99,4 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 });
-export default RegisterPage;
+export default RegisterScreen;

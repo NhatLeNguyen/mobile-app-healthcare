@@ -6,7 +6,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 
-const LoginPage = () => {
+const LoginScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -29,13 +29,17 @@ const LoginPage = () => {
       >
         <Text style={styles.forgotPassword}>Quên mật khẩu?</Text>
       </TouchableOpacity>
-
+      <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('MainScreen')}>
       <Button testID="loginButton" property1="">
         Đăng nhập
       </Button>
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.createAccount}>Đăng ký ngay !</Text>
       </TouchableOpacity>
+      <View style={{flexDirection:'row', marginTop: 20}}>
+        <Text>Bạn chưa có tài khoản?  </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+          <Text style={styles.createAccount}>Đăng ký ngay !</Text>
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.socialMedia}>Hoặc Đăng nhập với </Text>
       <SocialMedia testID="socialMediaButtons" />
@@ -67,13 +71,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 70,
     fontWeight: "500",
+    textAlign:'center'
   },
   forgotPassword: {
     marginTop: 10,
     marginBottom: 10,
   },
   createAccount: {
-    marginTop: 20,
+    // marginTop: 20,
     fontWeight: "700",
   },
 
@@ -90,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginScreen;

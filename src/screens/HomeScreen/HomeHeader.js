@@ -13,10 +13,12 @@ import { Avatar } from "react-native-elements";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 import Swiper from "react-native-swiper";
+import { useNavigation } from "@react-navigation/native";
 
 function HomeHeader() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
+  const navigation = useNavigation()
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -26,7 +28,7 @@ function HomeHeader() {
       >
         <Ionicons name="information-circle-outline" size={30} />
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.7}>
+      <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('LoginScreen')}>
         <Avatar
           rounded
           size={40}
