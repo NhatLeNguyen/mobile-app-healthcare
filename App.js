@@ -77,6 +77,7 @@ export default function App() {
           }}
         />
       }
+      warningIcon={<FontAwesome name="warning" size={24} color="#f9e154" />}
       dangerIcon={<FontAwesome name="warning" size={24} color="#f9e154" />}
       offsetTop={30}
       duration={3000}

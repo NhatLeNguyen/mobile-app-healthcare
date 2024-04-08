@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -126,6 +127,19 @@ const RegisterScreen = () => {
       .catch(function (error) {
         console.log(error);
       });
+    const results = (await db).getAllSync(
+      "select * from user where email = ?",
+      [email]
+    );
+    if(results.length !== 0){
+      toast.hide(id)
+      toast.show("Tài khoản đã tồn tại", {
+        type: "warning",
+        animationType: "zoom-in",
+        duration: 2000,
+      });
+      return ;
+    }
     if (status == "valid") {
       toast.hide(id);
       toast.show("Đăng kí thành công", {
@@ -133,6 +147,7 @@ const RegisterScreen = () => {
         animationType: "zoom-in",
         duration: 2000,
       });
+
       setTimeout(() => {
         toast.show("Đăng nhập với tài khoản mới nào !!", {
           type: "success",

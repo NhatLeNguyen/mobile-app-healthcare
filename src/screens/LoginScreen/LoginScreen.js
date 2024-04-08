@@ -6,23 +6,105 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 import * as SQLite from "expo-sqlite/next";
+import { useToast } from "react-native-toast-notifications";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+function validatePassword(password) {
+  const minLength = 8;
+
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(
+    password
+  );
+
+  if (
+    password.length >= minLength &&
+    (hasUpperCase || hasLowerCase) &&
+    hasNumber
+  ) {
+    return true; // Password is valid
+  } else {
+    return false; // Password is invalid
+  }
+}
+
 const LoginScreen = () => {
+  const toast = useToast()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigation = useNavigation();
 
   const handleLogin =async () => {
+    if (email === "" || password === "") {
+      toast.show("Vui lòng điền đầy đủ thông tin", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (validateEmail(email) === false) {
+      toast.hideAll()
+      toast.show("Email không đúng định dạng", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (validatePassword(password) === false) {
+      toast.hideAll()
+      toast.show("Ít nhất 8 kí tự, phải có chữ cái và số", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      toast.show("Mật khẩu không hợp lệ", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+
     const results = (await db).getAllSync(
       "select * from user where email = ?",
       [email]
     );
     if(results.length == 0){
-      
+      toast.hideAll()
+      toast.show("Tài khoản không tồn tại", {
+        type: "warning",
+        animationType: "zoom-in",
+      });
+      return;
     }
-    console.log(results);
+    const results1 = (await db).getAllSync(
+      "select * from user where email = ? and password = ?",
+      [email, password]
+    );
+    if(results1.length == 0){
+      toast.hideAll()
+      toast.show("Mật khẩu không chính xác", {
+        type: "warning",
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    toast.hideAll()
+    toast.show("Đăng nhập thành công", {
+      type: "success",
+      animationType: "zoom-in",
+    });
+    navigation.navigate('MainScreen')
   }
   return (
     <View style={styles.container}>
