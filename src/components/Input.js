@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
     borderRadius: 10,
-    backgroundColor: "rgba(241, 244, 255, 1)",
+    backgroundColor: "#DDE5FF",
   },
   rootFocused: {
     // Add styles for focused state (e.g., border)

@@ -8,10 +8,13 @@ import HomeScreen from "./src/screens/HomeScreen/HomeScreen";
 import HomeNavigator from "./src/screens/HomeScreen/HomeNavigator";
 import UserNavigator from "./src/screens/User/UserNavigator";
 
+import { createNavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import LoginPage from "./src/screens/LoginScreen/LoginPage";
+import RegisterPage from "./src/screens/RegisterScreen/RegisterPage";
 
 const Tab = createBottomTabNavigator();
-
+const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
@@ -115,7 +118,11 @@ export default function App() {
           options={{ headerShown: false }}
         />
       </Tab.Navigator> */}
-      <LoginPage></LoginPage>
+
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginPage} />
+        <Stack.Screen name="Register" component={RegisterPage} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

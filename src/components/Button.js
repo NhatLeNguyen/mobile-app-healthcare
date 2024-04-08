@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 10,
     borderRadius: 10,
-    backgroundColor: "#1F41BB",
+    backgroundColor: "#132A7A",
   },
   rootProperty1Small: {
     paddingTop: 10,

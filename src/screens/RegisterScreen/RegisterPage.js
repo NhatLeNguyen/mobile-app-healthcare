@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
 //components
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 
-const LoginPage = () => {
+const RegisterPage = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigation = useNavigation();
+
+  const handleRegister = () => {
+    // Xử lý logic đăng ký tại đây (gọi API, lưu trữ dữ liệu, v.v.)
+    navigation.navigate("Login");
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Đăng nhập</Text>
+      <Text style={styles.title}>Đăng ký</Text>
       <Text style={styles.welcomeText}>
-        Chào mừng bạn quay lại, hãy cùng tập luyện nào!
+        Tạo một tài khoản để có thể khám phá sức khỏe của bạn !
       </Text>
       <Input testID="emailInput" property1="" placeholder="Email" />
       <Input
@@ -22,20 +33,17 @@ const LoginPage = () => {
         secureTextEntry={true}
         // isPassword={true}
       />
-      <TouchableOpacity
-        onPress={() => {
-          print("Quen mk");
-        }}
-      >
-        <Text style={styles.forgotPassword}>Quên mật khẩu?</Text>
-      </TouchableOpacity>
+      <Input
+        testID="passwordInputConfirm"
+        property1=""
+        placeholder="Nhập lại mật khẩu"
+        secureTextEntry={true}
+        // isPassword={true}
+      />
 
-      <Button testID="loginButton" property1="">
-        Đăng nhập
+      <Button testID="registerButton" property1="">
+        Đăng ký
       </Button>
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.createAccount}>Đăng ký ngay !</Text>
-      </TouchableOpacity>
 
       <Text style={styles.socialMedia}>Hoặc Đăng nhập với </Text>
       <SocialMedia testID="socialMediaButtons" />
@@ -64,13 +72,10 @@ const styles = StyleSheet.create({
     color: "#132A7A",
   },
   welcomeText: {
+    textAlign: "center",
     fontSize: 16,
-    marginBottom: 70,
+    marginBottom: 20,
     fontWeight: "500",
-  },
-  forgotPassword: {
-    marginTop: 10,
-    marginBottom: 10,
   },
   createAccount: {
     marginTop: 20,
@@ -89,5 +94,4 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
 });
-
-export default LoginPage;
+export default RegisterPage;
