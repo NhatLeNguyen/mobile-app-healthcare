@@ -301,7 +301,7 @@ function PracticeScreen() {
   useEffect(() => {
     const interval = setInterval(() => {
       getCurrentLocation();
-    }, 6000);
+    }, 2000);
     return () => clearInterval(interval);
   }, []);
 
