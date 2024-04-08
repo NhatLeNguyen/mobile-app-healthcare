@@ -16,14 +16,14 @@ import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import UserScreen from "./src/screens/User/UserScreen";
 
 const db = SQLite.openDatabase("health-care.db");
-db.transaction(tx => {
+db.transaction((tx) => {
   tx.executeSql(
     "create table if not exists practicehistory (practice_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, start_time TEXT, end_time TEXT, date TEXT, steps INT, distances REAL, practice_time TEXT, caloris REAL, posList TEXT)"
   );
 });
-
 
 const Tab = createBottomTabNavigator();
 SplashScreen.preventAutoHideAsync().then((result) =>
@@ -70,8 +70,8 @@ export default function App() {
               if (route.name === "Home") {
                 iconName = focused ? "information" : "information";
                 return <FontAwesome name="home" size={size} color={color} />;
-                // return (<Image 
-                // style ={{width: 30, height:30}} 
+                // return (<Image
+                // style ={{width: 30, height:30}}
                 // source={{ uri : "https://upload.wikimedia.org/wikipedia/commons/b/bd/Running_animated.gif"}}
                 // />)
               } else if (route.name === "Practice") {
@@ -82,8 +82,8 @@ export default function App() {
                     color={color}
                   />
                 );
-                // return (<Image 
-                //   style ={{width: 31, height:31}} 
+                // return (<Image
+                //   style ={{width: 31, height:31}}
                 //   source={{ uri : "https://cdn-icons-gif.flaticon.com/8756/8756262.gif"}}
                 //   />)
               } else if (route.name === "Empty1") {
@@ -176,7 +176,7 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Tab.Screen name="Empty1" component={HomeScreen} />
-          <Tab.Screen name="User" component={HomeScreen} />
+          <Tab.Screen name="User" component={UserScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </View>
