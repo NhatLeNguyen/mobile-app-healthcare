@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --tunnel",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
@@ -54,15 +54,15 @@
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.5.2",
     "react-navigation": "^5.0.0",
-    "react-native-track-player": "^4.0.1",
     "swiper": "^11.0.7",
+    "react-native-track-player": "^4.0.1",
     "zingmp3-api-full": "^1.0.14",
     "zingmp3-api-full-v3": "^3.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.0",
     "@expo/ngrok": "^4.1.0",
     "@babel/cli": "^7.23.9",
-    "@babel/core": "^7.24.0",
     "@babel/preset-flow": "^7.24.0",
     "eslint": "^8.57.0",
     "eslint-plugin-ft-flow": "^3.0.7",
