@@ -170,6 +170,8 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    implementation 'com.facebook.fresco:animated-gif:2.5.0'
 }
 
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");

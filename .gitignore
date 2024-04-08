@@ -33,3 +33,11 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# server
+/server/node_modules
+/server/.evn
+/server/build
+/server/coverage
+/server/.pnp
+/server/.pnp.js
