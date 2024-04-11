@@ -3,6 +3,7 @@ import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import imagePath from '../../constants/imagePath';
 import { Image } from 'react-native';
+import { GOOGLE_MAP_KEY } from './GOOGLE_MAP_KEY';
 
 function Route({ posList }) {
     const firstPoint = posList.length > 0 ? posList[0] : 0;

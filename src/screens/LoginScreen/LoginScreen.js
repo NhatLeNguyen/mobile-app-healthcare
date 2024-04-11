@@ -7,6 +7,11 @@ import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from "@react-native-google-signin/google-signin";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -37,12 +42,12 @@ function validatePassword(password) {
 }
 
 const LoginScreen = () => {
-  const toast = useToast()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const toast = useToast();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  const handleLogin =async () => {
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       toast.show("Vui lòng điền đầy đủ thông tin", {
         type: "danger",
@@ -52,7 +57,7 @@ const LoginScreen = () => {
       return;
     }
     if (validateEmail(email) === false) {
-      toast.hideAll()
+      toast.hideAll();
       toast.show("Email không đúng định dạng", {
         type: "danger",
         offset: 50,
@@ -61,7 +66,7 @@ const LoginScreen = () => {
       return;
     }
     if (validatePassword(password) === false) {
-      toast.hideAll()
+      toast.hideAll();
       toast.show("Ít nhất 8 kí tự, phải có chữ cái và số", {
         type: "danger",
         offset: 50,
@@ -79,8 +84,8 @@ const LoginScreen = () => {
       "select * from user where email = ?",
       [email]
     );
-    if(results.length == 0){
-      toast.hideAll()
+    if (results.length == 0) {
+      toast.hideAll();
       toast.show("Tài khoản không tồn tại", {
         type: "warning",
         animationType: "zoom-in",
@@ -91,28 +96,33 @@ const LoginScreen = () => {
       "select * from user where email = ? and password = ?",
       [email, password]
     );
-    if(results1.length == 0){
-      toast.hideAll()
+    if (results1.length == 0) {
+      toast.hideAll();
       toast.show("Mật khẩu không chính xác", {
         type: "warning",
         animationType: "zoom-in",
       });
       return;
     }
-    toast.hideAll()
+    toast.hideAll();
     toast.show("Đăng nhập thành công", {
       type: "success",
       animationType: "zoom-in",
     });
-    navigation.navigate('MainScreen')
-  }
+    navigation.navigate("MainScreen");
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Đăng nhập</Text>
       <Text style={styles.welcomeText}>
         Chào mừng bạn quay lại, hãy cùng tập luyện nào!
       </Text>
-      <Input testID="emailInput" property1="" placeholder="Email" onChange={setEmail}/>
+      <Input
+        testID="emailInput"
+        property1=""
+        placeholder="Email"
+        onChange={setEmail}
+      />
       <Input
         testID="passwordInput"
         property1=""
@@ -133,16 +143,21 @@ const LoginScreen = () => {
           Đăng nhập
         </Button>
       </TouchableOpacity>
-      <View style={{flexDirection:'row', marginTop: 20}}>
-        <Text>Bạn chưa có tài khoản?  </Text>
+      <View style={{ flexDirection: "row", marginTop: 20 }}>
+        <Text>Bạn chưa có tài khoản? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
           <Text style={styles.createAccount}>Đăng ký ngay !</Text>
         </TouchableOpacity>
       </View>
-
       <Text style={styles.socialMedia}>Hoặc Đăng nhập với </Text>
+      {/* <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={this._signIn}
+        disabled={this.state.isSigninInProgress}
+      />
+      ; */}
       <SocialMedia testID="socialMediaButtons" />
-
       <TouchableOpacity
         onPress={() => {
           print("hehe");
@@ -170,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 70,
     fontWeight: "500",
-    textAlign:'center'
+    textAlign: "center",
   },
   forgotPassword: {
     marginTop: 10,

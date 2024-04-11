@@ -8,19 +8,141 @@ import {
   Modal,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  SafeAreaView,
 } from "react-native";
 import { Avatar } from "react-native-elements";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import Swiper from "react-native-swiper";
 import { useNavigation } from "@react-navigation/native";
+import Input from "../../components/Input";
+import { useToast } from "react-native-toast-notifications";
 
 function HomeHeader() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
-  const navigation = useNavigation()
+  const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
+  const navigation = useNavigation();
+  const toast = useToast();
+
+  const handleLogout = () => {
+    toast.hideAll();
+    toast.show("Đăng xuất thành công", {
+      type: "success",
+      offset: 50,
+      animationType: "zoom-in",
+    });
+    navigation.navigate("LoginScreen");
+  };
   return (
     <View style={styles.container}>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isAccountModalVisible}
+        // style={{height: 80, flex: 0.5 }}
+        onRequestClose={() => setIsAccountModalVisible(false)}
+      >
+        <SafeAreaView
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+            // backgroundColor: "rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: "60%",
+              padding: 20,
+              borderRadius: 20,
+              // backgroundColor: "rgb(6,6,6)",
+              backgroundColor: "#f5f5f5",
+              // borderWidth: 1,
+              // borderColor: '#bfd474',
+              // borderColor: "white",
+              justifyContent: "center",
+              alignItems: "center",
+              elevation: 5,
+            }}
+          >
+            <Avatar
+              rounded
+              size={100}
+              source={{
+                uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
+              }}
+            />
+            <Text style={styles.welcomeText}>Trần Phúc Khang</Text>
+            <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+              <FontAwesome
+                name="user"
+                size={23}
+                color="#F1F1F1"
+                style={{
+                  position: "absolute",
+                  // left: 10,
+                  left: 0,
+                  borderRightWidth: 2,
+                  borderRightColor: "white",
+                  padding: 10,
+                }}
+              />
+              <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+                Thông tin cá nhân
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+              <FontAwesome
+                name="exchange"
+                size={18}
+                color="#90D5EC"
+                style={{
+                  position: "absolute",
+                  // left: 10,
+                  left: 0,
+                  borderRightWidth: 2,
+                  borderRightColor: "white",
+                  padding: 10,
+                }}
+              />
+              <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+                Đổi mật khẩu
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              // onPress={() => handleLogout()}
+            >
+              <MaterialIcons
+                name="logout"
+                size={18}
+                color="red"
+                style={{
+                  position: "absolute",
+                  // left: 10,
+                  left: 0,
+                  borderRightWidth: 2,
+                  borderRightColor: "white",
+                  padding: 10,
+                }}
+              />
+              <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+                Đăng xuất
+              </Text>
+            </TouchableOpacity>
+            <Pressable
+              style={{ top: 8, right: 8, position: "absolute" }}
+              onPress={() => setIsAccountModalVisible(false)}
+            >
+              <Ionicons name="close" size={25} color="black" />
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </Modal>
       <TouchableOpacity
         style={{ paddingTop: 5, marginRight: 10 }}
         onPress={() => handleModal()}
@@ -28,7 +150,10 @@ function HomeHeader() {
       >
         <Ionicons name="information-circle-outline" size={30} />
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('LoginScreen')}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => setIsAccountModalVisible(true)}
+      >
         <Avatar
           rounded
           size={40}
@@ -222,6 +347,25 @@ const styles = StyleSheet.create({
     fontSize: 17,
     paddingLeft: 3,
     paddingRight: 3,
+  },
+  welcomeText: {
+    fontSize: 18,
+    marginBottom: 100,
+    fontWeight: "500",
+    textAlign: "center",
+    fontFamily: "Inter_500Medium",
+  },
+  button: {
+    width: "80%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderStartColor: "red",
+    borderEndColor: "green",
+    borderRadius: 5,
+    backgroundColor: "black",
+    marginTop: 15,
   },
 });
 
