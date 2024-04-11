@@ -7,6 +7,7 @@ import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
+import { Storage } from 'expo-storage'
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -109,6 +110,14 @@ const LoginScreen = () => {
       type: "success",
       animationType: "zoom-in",
     });
+    await Storage.setItem({
+      key: `email`,
+      value: email
+    })
+    await Storage.setItem({
+      key: `password`,
+      value: password
+    })
     navigation.navigate("MainScreen");
   };
   return (

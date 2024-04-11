@@ -9,21 +9,67 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swiper from "react-native-swiper";
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import { useToast } from "react-native-toast-notifications";
+import { Storage } from "expo-storage";
+import * as SQLite from "expo-sqlite/next";
+
+const db = SQLite.openDatabaseAsync("health-care.db");
+
+function validatePassword(password) {
+  const minLength = 8;
+
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(
+    password
+  );
+
+  if (
+    password.length >= minLength &&
+    (hasUpperCase || hasLowerCase) &&
+    hasNumber
+  ) {
+    return true; // Password is valid
+  } else {
+    return false; // Password is invalid
+  }
+}
 
 function HomeHeader() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
+  const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] =
+    useState(false);
+  const [email, setEmail] = useState("");
+  const [passwordFromStorage, setPasswordFromStorage] = useState("");
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [reNewPassword, setReNewPassword] = useState("");
   const navigation = useNavigation();
   const toast = useToast();
+  useEffect(() => {
+    const loading = async () => {
+      const item = await Storage.getItem({ key: `email` });
+      setEmail(item);
+      const pass = await Storage.getItem({ key: `password` });
+      setPasswordFromStorage(pass);
+    };
+    loading();
+  }, []);
+
+  const handleBlur = () => {
+    Keyboard.dismiss();
+  };
 
   const handleLogout = () => {
     toast.hideAll();
@@ -34,8 +80,133 @@ function HomeHeader() {
     });
     navigation.navigate("LoginScreen");
   };
+  const handleChangePassword =async () => {
+    if (password === "" || newPassword === "" || reNewPassword === "") {
+      toast.hideAll();
+      toast.show("Vui lòng điền đầy đủ thông tin", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (newPassword !== reNewPassword) {
+      toast.hideAll();
+      toast.show("Mật khẩu mới không khớp", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+
+    if (validatePassword(newPassword) === false) {
+      toast.hideAll();
+      toast.show("Ít nhất 8 kí tự, phải có chữ cái và số", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      toast.show("Mật khẩu không hợp lệ", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+
+    if (password !== passwordFromStorage) {
+      toast.hideAll();
+      toast.show("Mật khẩu không chính xác", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    (await db).runAsync(
+      "update user set password = ? where email = ?",
+      [newPassword, email]
+    );
+    await Storage.setItem({
+      key: `password`,
+      value: newPassword
+    })
+    toast.hideAll();
+    toast.show("Đổi mật khẩu thành công", {
+      type: "success",
+      offset: 50,
+      animationType: "zoom-in",
+    });
+    setIsChangePasswordModalVisible(false);
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isChangePasswordModalVisible}
+        onRequestClose={() => setIsAccountModalVisible(false)}
+      >
+        <SafeAreaView
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              height: 350,
+              borderRadius: 10,
+              backgroundColor: "#f5f5f5",
+              justifyContent: "center",
+              alignItems: "center",
+              elevation: 5,
+            }}
+          >
+            <Text style={[styles.welcomeText, { marginBottom: 20 }]}>
+              Đổi mật khẩu
+            </Text>
+            <TextInput
+              placeholder={"Mật khẩu cũ"}
+              // onBlur={handleBlur}
+              style={styles.textInput}
+              onChangeText={setPassword}
+            />
+            <TextInput
+              placeholder={"Mật khẩu mới"}
+              // onBlur={handleBlur}
+              style={styles.textInput}
+              onChangeText={setNewPassword}
+            />
+            <TextInput
+              placeholder={"Nhập lại mật khẩu mới"}
+              // onBlur={handleBlur}
+              style={styles.textInput}
+              onChangeText={setReNewPassword}
+            />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              onPress={() => handleChangePassword()}
+            >
+              <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+                Đổi mật khẩu
+              </Text>
+            </TouchableOpacity>
+            <Pressable
+              style={{ top: 8, right: 8, position: "absolute" }}
+              onPress={() => setIsChangePasswordModalVisible(false)}
+            >
+              <Ionicons name="close" size={25} color="black" />
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </Modal>
       <Modal
         transparent
         animationType="fade"
@@ -55,19 +226,26 @@ function HomeHeader() {
           <View
             style={{
               width: "90%",
-              height: "60%",
-              padding: 20,
+              // height: "70%",
+              height: 470,
               borderRadius: 20,
-              // backgroundColor: "rgb(6,6,6)",
               backgroundColor: "#f5f5f5",
-              // borderWidth: 1,
-              // borderColor: '#bfd474',
-              // borderColor: "white",
               justifyContent: "center",
               alignItems: "center",
               elevation: 5,
             }}
           >
+            <Image
+              source={{
+                uri: "https://wallpaper-house.com/data/out/7/wallpaper2you_152770.jpg",
+              }}
+              style={{
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+                borderRadius: 20,
+              }}
+            />
             <Avatar
               rounded
               size={100}
@@ -87,14 +265,21 @@ function HomeHeader() {
                   left: 0,
                   borderRightWidth: 2,
                   borderRightColor: "white",
-                  padding: 10,
+                  padding: 8,
+                  paddingRight: 14,
                 }}
               />
               <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
                 Thông tin cá nhân
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              onPress={() => {
+                setIsChangePasswordModalVisible(true);
+              }}
+            >
               <FontAwesome
                 name="exchange"
                 size={18}
@@ -115,7 +300,7 @@ function HomeHeader() {
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.button}
-              // onPress={() => handleLogout()}
+              onPress={() => handleLogout()}
             >
               <MaterialIcons
                 name="logout"
@@ -164,7 +349,7 @@ function HomeHeader() {
       </TouchableOpacity>
       <Modal
         transparent
-        animationType="slide"
+        animationType="fade"
         visible={isModalVisible}
         // style={{ height: 150, flex: 0.5 }}
         onRequestClose={() => setIsModalVisible(false)}
@@ -282,7 +467,7 @@ function HomeHeader() {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -360,12 +545,22 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
+    // borderWidth: 2,
     borderStartColor: "red",
     borderEndColor: "green",
     borderRadius: 5,
-    backgroundColor: "black",
+    // backgroundColor: "black",
+    backgroundColor: "#7a7e82",
     marginTop: 15,
+  },
+  textInput: {
+    justifyContent: "center",
+    width: "90%",
+    padding: 10,
+    paddingLeft: 20,
+    borderRadius: 5,
+    backgroundColor: "#DDE5FF",
+    marginBottom: 10,
   },
 });
 

@@ -37,6 +37,7 @@
     "expo-splash-screen": "^0.26.4",
     "expo-sqlite": "^13.4.0",
     "expo-status-bar": "~1.11.1",
+    "expo-storage": "^48.1.0",
     "expo-web-browser": "~12.8.2",
     "firebase": "^10.10.0",
     "moment": "^2.30.1",

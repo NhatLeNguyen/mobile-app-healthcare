@@ -27,7 +27,6 @@ import MusicPlayer from "../../components/MusicPlayer/MusicPlayer";
 import MusicList from "../../components/MusicList/MusicList";
 import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
-import axios from "axios";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import * as SQLite from "expo-sqlite/next";
 
