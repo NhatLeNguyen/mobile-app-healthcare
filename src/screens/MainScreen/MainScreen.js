@@ -16,6 +16,8 @@ import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+import SettingScreen from "../Setting/SettingScreen";
+import EditProfile from "../Setting/EditProfile";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,7 +52,7 @@ export default function MainScreen() {
               return (
                 <FontAwesome name="star-half-empty" size={size} color={color} />
               );
-            } else if (route.name === "User") {
+            } else if (route.name === "Setting") {
               return <FontAwesome name="user" size={size} color={color} />;
             }
           },
@@ -99,7 +101,7 @@ export default function MainScreen() {
                   </Text>
                 );
               }
-            } else if (route.name === "User") {
+            } else if (route.name === "Setting") {
               if (focused) {
                 return (
                   <Text
@@ -109,7 +111,7 @@ export default function MainScreen() {
                       fontWeight: "bold",
                     }}
                   >
-                    Hồ sơ
+                    Setting
                   </Text>
                 );
               }
@@ -132,7 +134,7 @@ export default function MainScreen() {
           options={{ headerShown: false }}
         />
         <Tab.Screen name="Empty1" component={HomeScreen} />
-        <Tab.Screen name="User" component={HomeScreen} />
+        <Tab.Screen name="Setting" component={EditProfile} />
       </Tab.Navigator>
     </View>
   );
