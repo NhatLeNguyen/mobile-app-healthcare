@@ -30,7 +30,7 @@ SplashScreen.preventAutoHideAsync().then((result) =>
   console.log(`SplashScreen preventAutoHideAsync Success ${result}`)
 );
 
-export default function App() {
+export default function MainApp() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   const [fontsLoaded, fontError] = useFonts({

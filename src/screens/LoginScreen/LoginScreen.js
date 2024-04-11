@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Modal, SafeAreaView, TextInput, Pressable} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 //components
 import Input from "../../components/Input";
@@ -8,6 +8,8 @@ import SocialMedia from "../../components/SocialMedia";
 import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from 'expo-storage'
+import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import MailCompose from 'react-native-mail-compose';
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -46,6 +48,8 @@ const LoginScreen = () => {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState("")
+  const [emailGetPass, setEmailGetPass] = useState('')
   const navigation = useNavigation();
 
   const handleLogin = async () => {
@@ -120,8 +124,97 @@ const LoginScreen = () => {
     })
     navigation.navigate("MainScreen");
   };
+
+  // const handleSendEmail =async () => {
+  //   if (emailGetPass === "") {
+  //     toast.show("Vui lòng điền email", {
+  //       type: "danger",
+  //       offset: 50,
+  //       animationType: "zoom-in",
+  //     });
+  //     return;
+  //   }
+  //   if (validateEmail(emailGetPass) === false) {
+  //     toast.hideAll();
+  //     toast.show("Email không đúng định dạng", {
+  //       type: "danger",
+  //       offset: 50,
+  //       animationType: "zoom-in",
+  //     });
+  //     return;
+  //   }
+  //   const results1 = (await db).getAllSync(
+  //     "select password from user where email = ?",
+  //     [emailGetPass]
+  //   );
+  //   console.log(results1);
+  //   const sendMail = async () => {
+  //     try {
+  //       await MailCompose.send({
+  //         toRecipients: [emailGetPass],
+  //         subject: 'Yêu cầu lấy lại mật khẩu',
+  //         text: `Mật khẩu cho tài khoản của bạn là`,
+  //       });
+  //     } catch (e) {
+  //       // e.code may be 'cannotSendMail' || 'cancelled' || 'saved' || 'failed'
+  //       print(e.code)
+  //     }
+  //   }
+  //   // sendMail()
+  // }
   return (
     <View style={styles.container}>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <SafeAreaView
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+          }}
+        >
+          <View
+            style={{
+              width: "80%",
+              height: 200,
+              borderRadius: 10,
+              backgroundColor: "#f5f5f5",
+              justifyContent: "center",
+              alignItems: "center",
+              elevation: 5,
+            }}
+          >
+            <Text style={[styles.welcomeText, { marginBottom: 20 }]}>
+              Quên mật khẩu
+            </Text>
+            <TextInput
+              placeholder={"Email"}
+              style={styles.textInput}
+              onChangeText={setEmailGetPass}
+            />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              onPress={() => handleSendEmail()}
+            >
+              <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+                Gửi về mail
+              </Text>
+            </TouchableOpacity>
+            <Pressable
+              style={{ top: 8, right: 8, position: "absolute" }}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Ionicons name="close" size={25} color="black" />
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </Modal>
       <Text style={styles.title}>Đăng nhập</Text>
       <Text style={styles.welcomeText}>
         Chào mừng bạn quay lại, hãy cùng tập luyện nào!
@@ -142,7 +235,7 @@ const LoginScreen = () => {
       />
       <TouchableOpacity
         onPress={() => {
-          console.log("Quen mk");
+          setIsModalVisible(true);
         }}
       >
         <Text style={styles.forgotPassword}>Quên mật khẩu?</Text>
@@ -215,6 +308,28 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     opacity: 0.5,
+  },
+  textInput: {
+    justifyContent: "center",
+    width: "90%",
+    padding: 10,
+    paddingLeft: 20,
+    borderRadius: 5,
+    backgroundColor: "#DDE5FF",
+    marginBottom: 10,
+  },
+  button: {
+    width: "90%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderWidth: 2,
+    borderStartColor: "red",
+    borderEndColor: "green",
+    borderRadius: 5,
+    // backgroundColor: "black",
+    backgroundColor: "#7a7e82",
+    marginTop: 15,
   },
 });
 
