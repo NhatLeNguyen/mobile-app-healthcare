@@ -58,21 +58,13 @@ export function Input(props) {
 
   return (
     <View style={classes.root} testID={props.testID}>
-      {props.isPassword ? (
-        <MaskedTextInput
-          mask="•" // Replace password characters with dots
-          placeholder={props.placeholder}
-          onBlur={handleBlur}
-          style={styles.textInput}
-        />
-      ) : (
-        <TextInput
-          placeholder={props.placeholder}
-          onBlur={handleBlur}
-          style={styles.textInput}
-          onChangeText={props.onChange}
-        />
-      )}
+      <TextInput
+        placeholder={props.placeholder}
+        onBlur={handleBlur}
+        style={styles.textInput}
+        onChangeText={props.onChange}
+        // secureTextEntry
+      />
     </View>
   );
 }
@@ -113,8 +105,8 @@ const styles = StyleSheet.create({
     // fontSize: 16,
     // flex: 1,
     // backgroundColor:'red',
-    width: '100%',
-    paddingTop: 10, 
+    width: "100%",
+    paddingTop: 10,
     paddingBottom: 10,
   },
 });
