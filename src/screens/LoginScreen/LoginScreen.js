@@ -18,7 +18,7 @@ import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import * as MailComposer from "expo-mail-composer";
+// import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
 // import {
 //   GoogleSignin,
