@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Modal, SafeAreaView, TextInput, Pressable} from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  SafeAreaView,
+  TextInput,
+  Pressable,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 //components
 import Input from "../../components/Input";
@@ -7,9 +16,10 @@ import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
-import { Storage } from 'expo-storage'
+import { Storage } from "expo-storage";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import MailCompose from 'react-native-mail-compose';
+import * as MailComposer from "expo-mail-composer";
+import axios from "axios";
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -48,8 +58,8 @@ const LoginScreen = () => {
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState("")
-  const [emailGetPass, setEmailGetPass] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState("");
+  const [emailGetPass, setEmailGetPass] = useState("");
   const navigation = useNavigation();
 
   const handleLogin = async () => {
@@ -116,52 +126,67 @@ const LoginScreen = () => {
     });
     await Storage.setItem({
       key: `email`,
-      value: email
-    })
+      value: email,
+    });
     await Storage.setItem({
       key: `password`,
-      value: password
-    })
+      value: password,
+    });
     navigation.navigate("MainScreen");
   };
 
-  // const handleSendEmail =async () => {
-  //   if (emailGetPass === "") {
-  //     toast.show("Vui lòng điền email", {
-  //       type: "danger",
-  //       offset: 50,
-  //       animationType: "zoom-in",
-  //     });
-  //     return;
-  //   }
-  //   if (validateEmail(emailGetPass) === false) {
-  //     toast.hideAll();
-  //     toast.show("Email không đúng định dạng", {
-  //       type: "danger",
-  //       offset: 50,
-  //       animationType: "zoom-in",
-  //     });
-  //     return;
-  //   }
-  //   const results1 = (await db).getAllSync(
-  //     "select password from user where email = ?",
-  //     [emailGetPass]
-  //   );
-  //   console.log(results1);
-  //   const sendMail = async () => {
-  //     try {
-  //       await MailCompose.send({
-  //         toRecipients: [emailGetPass],
-  //         subject: 'Yêu cầu lấy lại mật khẩu',
-  //         text: `Mật khẩu cho tài khoản của bạn là`,
-  //       });
-  //     } catch (e) {
-  //       // e.code may be 'cannotSendMail' || 'cancelled' || 'saved' || 'failed'
-  //       print(e.code)
-  //     }
-  //   }
-  //   // sendMail()
-  // }
+  const handleSendEmail = async () => {
+    if (emailGetPass === "") {
+      toast.show("Vui lòng điền email", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (validateEmail(emailGetPass) === false) {
+      toast.hideAll();
+      toast.show("Email không đúng định dạng", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    const results1 = (await db).getAllSync(
+      "select password from user where email = ?",
+      [emailGetPass]
+    );
+    if (results1.length === 0) {
+      toast.hideAll();
+      toast.show("Tài khoản chưa được đăng ký", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    axios
+        .post(`http://192.168.101.5:1510/send-email`, {
+          to: emailGetPass,
+          subject: 'Lấy lại mật khẩu',
+          text: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    // await MailComposer.composeAsync(
+    //   {
+    //     recipients: [emailGetPass],
+    //     body: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`,
+    //     subject: 'Lấy lại mật khẩu',
+    //     isHtml: false
+    //   }
+    // )
+  };
   return (
     <View style={styles.container}>
       <Modal
