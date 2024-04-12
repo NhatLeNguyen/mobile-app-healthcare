@@ -256,7 +256,7 @@ const LoginScreen = () => {
         placeholder="Mật khẩu"
         secureTextEntry={true}
         onChange={setPassword}
-        // isPassword={true}
+        isPassword={true}
       />
       <TouchableOpacity
         onPress={() => {

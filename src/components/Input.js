@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Keyboard,
-  MaskedTextInput,
-} from "react-native";
+import { View, StyleSheet, TextInput, Keyboard } from "react-native";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { MaskedTextInput } from "react-native-mask-text";
 
 const useFocus = () => {
   const [isFocused, setIsFocused] = useState(false);
@@ -33,10 +29,10 @@ const useFocus = () => {
   return { isFocused };
 };
 
-export function Input(props) {
+export default function Input(props) {
   const { isFocused } = useFocus();
   const _property1Active = props.property1 === "Active";
-
+  const [isPassHidden, setIsPassHidden] = useState(true);
   const classes = useMemo(
     () => ({
       root: [
@@ -63,8 +59,27 @@ export function Input(props) {
         onBlur={handleBlur}
         style={styles.textInput}
         onChangeText={props.onChange}
-        // secureTextEntry
+        secureTextEntry={isPassHidden}
       />
+      {props.isPassword && isPassHidden ? (
+        <Ionicons
+          name="eye-off-outline"
+          size={24}
+          color="black"
+          style={{ position: "absolute", right: 20 }}
+          onPress={() => setIsPassHidden(false)}
+        />
+      ) : (
+        props.isPassword && (
+          <Ionicons
+            name="eye-outline"
+            size={24}
+            color="black"
+            style={{ position: "absolute", right: 20 }}
+            onPress={() => setIsPassHidden(true)}
+          />
+        )
+      )}
     </View>
   );
 }
@@ -110,5 +125,3 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
-
-export default Input;

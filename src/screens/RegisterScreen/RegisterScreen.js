@@ -181,7 +181,7 @@ const RegisterScreen = () => {
         placeholder="Mật khẩu"
         secureTextEntry={true}
         onChange={setPassword}
-        // isPassword={true}
+        isPassword={true}
       />
       <Input
         testID="passwordInputConfirm"
@@ -189,7 +189,7 @@ const RegisterScreen = () => {
         placeholder="Nhập lại mật khẩu"
         secureTextEntry={true}
         onChange={setRepassword}
-        // isPassword={true}
+        isPassword={true}
       />
       <TouchableOpacity activeOpacity={0.7} onPress={() => handleRegister()}>
         <Button testID="registerButton" property1="">
