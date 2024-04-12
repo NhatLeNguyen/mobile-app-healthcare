@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { Icon } from "react-native-elements";
-import GOOGLE_MAP_KEY from "./GoogleKeyMap";
+import { GOOGLE_MAP_KEY } from "./GOOGLE_MAP_KEY";
 import * as Location from "expo-location";
 import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../../constants/Constants";
 import Route from "./Route";

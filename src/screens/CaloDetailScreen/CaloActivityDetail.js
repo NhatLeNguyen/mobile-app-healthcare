@@ -87,7 +87,7 @@ function CaloActivityDetail({ route }) {
           </Text>
         </View>
         <View style={styles.infoBlock}>
-          <Text style={styles.headerText}>Step/second:</Text>
+          <Text style={styles.headerText}>Step/minute:</Text>
           <Text style={styles.infoText}>
             {Math.ceil(data.steps / (data.minute * 60 + data.second))}
             <Text style={styles.subText}> steps/s</Text>

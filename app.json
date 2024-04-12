@@ -10,7 +10,14 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "scheme": [
+      "facebookLogin",
+      "fb1143668800122936"
+    ],
+    "android": {
+      "package": "com.anonymous.DemoRN"
+    }
   },
   "name": "DemoRN"
 }

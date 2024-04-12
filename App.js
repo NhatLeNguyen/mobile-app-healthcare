@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { View, StyleSheet, Text, Image, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Ionicons,
   FontAwesome,
@@ -12,10 +11,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
-import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
-import LoginScreen from "./src/screens/LoginScreen/LoginScreen";
-import RegisterScreen from "./src/screens/RegisterScreen/RegisterScreen";
 import MainScreen from "./src/screens/MainScreen/MainScreen";
 import InitialScreen from "./src/screens/InitialScreen/InitialScreen";
 import { ToastProvider } from "react-native-toast-notifications";
