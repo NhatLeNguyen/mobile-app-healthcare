@@ -80,7 +80,7 @@ function HomeHeader() {
     });
     navigation.navigate("LoginScreen");
   };
-  const handleChangePassword =async () => {
+  const handleChangePassword = async () => {
     if (password === "" || newPassword === "" || reNewPassword === "") {
       toast.hideAll();
       toast.show("Vui lòng điền đầy đủ thông tin", {
@@ -124,14 +124,14 @@ function HomeHeader() {
       });
       return;
     }
-    (await db).runAsync(
-      "update user set password = ? where email = ?",
-      [newPassword, email]
-    );
+    (await db).runAsync("update user set password = ? where email = ?", [
+      newPassword,
+      email,
+    ]);
     await Storage.setItem({
       key: `password`,
-      value: newPassword
-    })
+      value: newPassword,
+    });
     toast.hideAll();
     toast.show("Đổi mật khẩu thành công", {
       type: "success",
@@ -171,23 +171,32 @@ function HomeHeader() {
             <Text style={[styles.welcomeText, { marginBottom: 20 }]}>
               Đổi mật khẩu
             </Text>
-            <TextInput
-              placeholder={"Mật khẩu cũ"}
-              // onBlur={handleBlur}
+            <Input
               style={styles.textInput}
-              onChangeText={setPassword}
+              testID="passwordInput"
+              property1=""
+              placeholder="Mật khẩu cũ"
+              secureTextEntry={true}
+              onChange={setPassword}
+              isPassword={true}
             />
-            <TextInput
-              placeholder={"Mật khẩu mới"}
-              // onBlur={handleBlur}
+            <Input
               style={styles.textInput}
-              onChangeText={setNewPassword}
+              testID="passwordInput"
+              property1=""
+              placeholder="Mật khẩu mới"
+              secureTextEntry={true}
+              onChange={setNewPassword}
+              isPassword={true}
             />
-            <TextInput
-              placeholder={"Nhập lại mật khẩu mới"}
-              // onBlur={handleBlur}
+            <Input
               style={styles.textInput}
-              onChangeText={setReNewPassword}
+              testID="passwordInput"
+              property1=""
+              placeholder="Nhập lại mật khẩu mới"
+              secureTextEntry={true}
+              onChange={setReNewPassword}
+              isPassword={true}
             />
             <TouchableOpacity
               activeOpacity={0.7}
@@ -560,7 +569,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     borderRadius: 5,
     backgroundColor: "#DDE5FF",
-    marginBottom: 10,
+    marginBottom: 0,
   },
 });
 

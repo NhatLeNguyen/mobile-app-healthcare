@@ -167,17 +167,17 @@ const LoginScreen = () => {
       return;
     }
     axios
-        .post(`http://192.168.101.5:1510/send-email`, {
-          to: emailGetPass,
-          subject: 'Lấy lại mật khẩu',
-          text: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      .post(`http://192.168.101.5:1510/send-email`, {
+        to: emailGetPass,
+        subject: "Lấy lại mật khẩu",
+        text: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     // await MailComposer.composeAsync(
     //   {
     //     recipients: [emailGetPass],
@@ -245,12 +245,14 @@ const LoginScreen = () => {
         Chào mừng bạn quay lại, hãy cùng tập luyện nào!
       </Text>
       <Input
+        style={styles.add}
         testID="emailInput"
         property1=""
         placeholder="Email"
         onChange={setEmail}
       />
       <Input
+        style={styles.add}
         testID="passwordInput"
         property1=""
         placeholder="Mật khẩu"
@@ -355,6 +357,10 @@ const styles = StyleSheet.create({
     // backgroundColor: "black",
     backgroundColor: "#7a7e82",
     marginTop: 15,
+  },
+  add: {
+    paddingBottom: 10,
+    paddingTop: 10,
   },
 });
 

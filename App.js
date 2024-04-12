@@ -10,7 +10,7 @@ import {
 // Screens
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
-import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
+import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as SQLite from "expo-sqlite";
 import MainScreen from "./src/screens/MainScreen/MainScreen";
 import InitialScreen from "./src/screens/InitialScreen/InitialScreen";
@@ -37,6 +37,7 @@ export default function App() {
   const [isAppReady, setIsAppReady] = useState(false);
 
   const [fontsLoaded, fontError] = useFonts({
+    Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
   });

@@ -32,7 +32,7 @@ const useFocus = () => {
 export default function Input(props) {
   const { isFocused } = useFocus();
   const _property1Active = props.property1 === "Active";
-  const [isPassHidden, setIsPassHidden] = useState(true);
+  const [isPassHidden, setIsPassHidden] = useState(props.isPassword ? true : false);
   const classes = useMemo(
     () => ({
       root: [
@@ -53,7 +53,7 @@ export default function Input(props) {
   };
 
   return (
-    <View style={classes.root} testID={props.testID}>
+    <View style={[classes.root, props.style]} testID={props.testID}>
       <TextInput
         placeholder={props.placeholder}
         onBlur={handleBlur}
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     // backgroundColor:'red',
     width: "100%",
-    paddingTop: 10,
-    paddingBottom: 10,
+    // paddingBottom: 10,
+    // paddingTop: 10
   },
 });
