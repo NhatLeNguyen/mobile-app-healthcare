@@ -8,9 +8,10 @@ function InputWithHeader(props) {
     <View style={[{ width: props.width }, props.style]}>
       <Text
         style={{
-          fontSize: 13,
+          fontSize: 16,
           fontFamily: "Inter_500Medium",
-          color: isPress ? props.color : "black",
+          color: isPress ? props.color : "white",
+          marginBottom: 10
         }}
       >
         {props.header}
@@ -24,20 +25,23 @@ function InputWithHeader(props) {
           />
         </View>
       ) : (
-        <TouchableOpacity activeOpacity={0.7} onPress={() => setIsPress(true)}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => setIsPress(true)} style={{justifyContent:'center'}}>
           <TextInput
             value={props.value}
             placeholder={props.placeholder}
             keyboardType="numeric"
             style={{
+              borderColor: 'white',
               borderWidth: 1,
               padding: 12,
               fontFamily: "Inter_400Regular",
               borderRadius: 5,
-              color: isPress ? props.color : "black",
+              color: isPress ? props.color : "white",
             }}
             onChangeText={props.onChange}
+            onPressOut={props.onPressout}
           />
+          <Text style={{position:'absolute', right: 15, color: 'white'}}>{props.subText}</Text>
         </TouchableOpacity>
       )}
     </View>

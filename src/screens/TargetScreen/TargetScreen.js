@@ -1,33 +1,107 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import InputWithHeader from "../../components/InputWithHeader";
 import { useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import { useToast } from "react-native-toast-notifications";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function TargetScreen() {
-    const [disableButton, setDisableButton] = useState(true)
-    const [steps, setSteps] = useState('0')
-    const [heartStep, setHeartStep] = useState('0')
-    const [weight, setWeight] = useState('0')
-    const [height, setHeight] = useState('0')
-    useEffect(() => {
-      const loading = async () => {
-        const steps_target = await Storage.getItem({ key: `steps_target` });
-        setSteps(steps_target);
-        const heart_target = await Storage.getItem({ key: `heart_target` });
-        setHeartStep(heart_target);
-      }
-      loading()
-    },[])
-    const saveChanges = async () => {
-      (await db).runSync('UPDATE user SET steps_target = ?,heart_target = ? WHERE user = ?', [500, 50, '1'])
+  const toast = useToast();
+  const [disableButton, setDisableButton] = useState(true);
+  const [steps, setSteps] = useState("0");
+  const [heartStep, setHeartStep] = useState("0");
+  const [weight, setWeight] = useState("0");
+  const [height, setHeight] = useState("0");
+  useEffect(() => {
+    const loading = async () => {
+      const steps_target = await Storage.getItem({ key: `steps_target` });
+      setSteps(steps_target);
+      const heart_target = await Storage.getItem({ key: `heart_target` });
+      setHeartStep(heart_target);
+      const weight = await Storage.getItem({ key: `weight` });
+      setWeight(weight);
+      const height = await Storage.getItem({ key: `height` });
+      setHeight(height);
+    };
+    loading();
+  }, []);
+  const saveChanges = async () => {
+    if (steps === "" || heartStep === "" || weight === "" || height === "") {
+      toast.hideAll();
+      toast.show("Vui lòng điền đầy đủ thông tin", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
     }
+    if (parseInt(steps) < 100) {
+      toast.hideAll();
+      toast.show("Số bước không đủ quy định, ít nhất 100", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (parseInt(heartStep) < 30) {
+      toast.hideAll();
+      toast.show("Số nhịp tim không đủ quy định, ít nhất 30", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (parseInt(weight) < 15) {
+      toast.hideAll();
+      toast.show("Cân nặng không đủ quy định, ít nhất 15kg", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+    if (parseInt(height) < 100) {
+      toast.hideAll();
+      toast.show("Chiều cao không đủ quy định, ít nhất 100cm", {
+        type: "danger",
+        offset: 50,
+        animationType: "zoom-in",
+      });
+      return;
+    }
+
+    (await db).runSync(
+      "UPDATE user SET steps_target = ?,heart_target = ?,weight = ? ,height = ? WHERE user_id = ?",
+      [parseInt(steps), parseInt(heartStep),parseInt(weight), parseInt(height),"1"]
+    );
+    setDisableButton(true);
+    toast.hideAll();
+    toast.show("Thay đổi thành công", {
+      type: "success",
+      offset: 50,
+      animationType: "zoom-in",
+    });
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text
-        style={{ fontSize: 30, fontFamily: "Inter_500Medium", paddingLeft: 20 }}
+        style={{
+          fontSize: 40,
+          fontFamily: "Inter_500Medium",
+          paddingLeft: 20,
+          color: "white",
+        }}
       >
         Hồ sơ
       </Text>
@@ -39,7 +113,10 @@ function TargetScreen() {
           header="Bước"
           value={steps}
           color="#1a9be8"
-          onChange={setSteps}
+          onChange={(value) => {
+            setSteps(value);
+            setDisableButton(false);
+          }}
         />
         <InputWithHeader
           style={{ marginLeft: 40 }}
@@ -47,7 +124,10 @@ function TargetScreen() {
           header="Điểm nhịp tim"
           value={heartStep}
           color="green"
-          onChange={setHeartStep}
+          onChange={(value) => {
+            setHeartStep(value);
+            setDisableButton(false);
+          }}
         />
         {/* <InputWithHeader
           isPicker={true}
@@ -68,7 +148,11 @@ function TargetScreen() {
           header="Cân nặng"
           value={weight}
           color="#1a9be8"
-          onChange={setWeight}
+          onChange={(value) => {
+            setWeight(value);
+            setDisableButton(false);
+          }}
+          subText="kg"
         />
         <InputWithHeader
           style={{ marginLeft: 40 }}
@@ -76,36 +160,37 @@ function TargetScreen() {
           header="Chiều cao"
           value={height}
           color="green"
-          onChange={setHeight}
+          onChange={(value) => {
+            setHeight(value);
+            setDisableButton(false);
+          }}
+          subText="cm"
         />
       </View>
       <TouchableOpacity
         activeOpacity={0.7}
-        style={[styles.button,{backgroundColor: disableButton ? '#7a7e82' : "#1a9be8"}]}
+        style={[
+          styles.button,
+          {
+            backgroundColor: disableButton ? "rgba(255,255,255,0.1)" : "white",
+          },
+        ]}
         onPress={() => {
-          // setDisableButton(true);
-          // saveChanges()
+          saveChanges();
         }}
-        // disabled={enableButton}
+        disabled={disableButton}
       >
-        {/* <FontAwesome
-          name="exchange"
-          size={18}
-          color="#90D5EC"
+        <Text
           style={{
-            position: "absolute",
-            // left: 10,
-            left: 0,
-            borderRightWidth: 2,
-            borderRightColor: "white",
-            padding: 10,
+            color: "black",
+            fontFamily: "Inter_500Medium",
+            backgroundColor: "transparent",
           }}
-        /> */}
-        <Text style={{ color: "white", fontFamily: "Inter_500Medium" }}>
+        >
           Lưu thay đổi
         </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -113,32 +198,35 @@ export default TargetScreen;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "black",
     paddingTop: 80,
-    flex: 1
-    // paddingLeft: 20,
+    // marginTop: 80,
+    flex: 1,
   },
   headerText: {
+    color: "white",
     marginTop: 30,
-    fontSize: 14,
+    fontSize: 17,
     fontFamily: "Inter_500Medium",
     paddingLeft: 20,
   },
   lineStyle: {
-    borderBottomColor: "black",
+    borderBottomColor: "white",
     borderBottomWidth: 1,
     marginBottom: 10,
     marginTop: 10,
   },
   button: {
-    position:'absolute',
-    bottom: 50,
-    right: 25,
+    // position: "absolute",
+    // bottom: 50,
+    // right: 25,
     width: 150,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: "#1a9be8",
-
+    marginTop: 190,
+    marginLeft: 208,
   },
 });
