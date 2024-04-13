@@ -22,9 +22,14 @@ db.transaction((tx) => {
     "create table if not exists practicehistory (practice_id INTEGER PRIMARY KEY AUTOINCREMENT, user_id TEXT, start_time TEXT, end_time TEXT, date TEXT, steps INT, distances REAL, practice_time TEXT, caloris REAL, posList TEXT)"
   );
 });
+// db.transaction((tx) => {
+//   tx.executeSql(
+//     "drop table user"
+//   );
+// });
 db.transaction((tx) => {
   tx.executeSql(
-    "create table if not exists user (user_id INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT, name TEXT, phone TEXT, address TEXT, dobirth TEXT, email TEXT, weight INTERGER, height INTERGER, avatar TEXT)"
+    "create table if not exists user (user_id INTEGER PRIMARY KEY AUTOINCREMENT, password TEXT, name TEXT, phone TEXT, address TEXT, dobirth TEXT, email TEXT, weight INTERGER, height INTERGER, avatar TEXT, steps_target INTERGER, heart_target INTERGER, sex TEXT)"
   );
 });
 

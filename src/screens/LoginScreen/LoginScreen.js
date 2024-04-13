@@ -132,6 +132,22 @@ const LoginScreen = () => {
       key: `password`,
       value: password,
     });
+    // await Storage.setItem({
+    //   key: `height`,
+    //   value: results1.height,
+    // });
+    // await Storage.setItem({
+    //   key: `weight`,
+    //   value: results1.weight,
+    // });
+    await Storage.setItem({
+      key: `steps_target`,
+      value: String(results1[0].steps_target),
+    });
+    await Storage.setItem({
+      key: `heart_target`,
+      value: String(results1[0].heart_target),
+    });
     navigation.navigate("MainScreen");
   };
 

@@ -144,30 +144,30 @@ const RegisterScreen = () => {
       });
       return;
     }
-    if (status == "valid") {
-      setIsModalVisible(true);
-    }
     // if (status == "valid") {
-    //   toast.hide(id);
-    //   toast.show("Đăng kí thành công", {
-    //     type: "success",
-    //     animationType: "zoom-in",
-    //     duration: 2000,
-    //   });
-
-    //   setTimeout(() => {
-    //     toast.show("Đăng nhập với tài khoản mới nào !!", {
-    //       type: "success",
-    //       animationType: "zoom-in",
-    //       duration: 2000,
-    //     });
-    //     navigation.navigate("LoginScreen");
-    //   }, 2000);
-    //   (await db).runSync(
-    //     "insert into user(email, password) values(?, ?)",
-    //     [email, password]
-    //   );
+    //   setIsModalVisible(true);
     // }
+    if (status == "valid") {
+      toast.hide(id);
+      toast.show("Đăng kí thành công", {
+        type: "success",
+        animationType: "zoom-in",
+        duration: 2000,
+      });
+
+      setTimeout(() => {
+        toast.show("Đăng nhập với tài khoản mới nào !!", {
+          type: "success",
+          animationType: "zoom-in",
+          duration: 2000,
+        });
+        navigation.navigate("LoginScreen");
+      }, 2000);
+      (await db).runSync(
+        "insert into user(email, password, steps_target, heart_target) values(?, ?, ?, ?)",
+        [email, password, 500, 50]
+      );
+    }
   };
 
   return (

@@ -147,7 +147,7 @@ const EditProfile = ({ navigation }) => {
         <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
       </View>
 
-      <ScrollView>
+      <View>
         <View
           style={{
             alignItems: "center",
@@ -338,7 +338,7 @@ const EditProfile = ({ navigation }) => {
         </TouchableOpacity>
 
         {renderDatePicker()}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

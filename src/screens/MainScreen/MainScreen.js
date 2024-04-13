@@ -18,6 +18,7 @@ import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 import SettingScreen from "../Setting/SettingScreen";
 import EditProfile from "../Setting/EditProfile";
+import TargetScreen from "../TargetScreen/TargetScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -134,7 +135,7 @@ export default function MainScreen() {
           options={{ headerShown: false }}
         />
         <Tab.Screen name="Empty1" component={HomeScreen} />
-        <Tab.Screen name="Setting" component={EditProfile} />
+        <Tab.Screen name="Setting" component={TargetScreen} options={{headerShown: false}}/>
       </Tab.Navigator>
     </View>
   );

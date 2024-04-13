@@ -139,7 +139,7 @@ function PracticeScreen() {
             steps,
             totalDistance,
             minute + ":" + second,
-            5.0,
+            Math.ceil(3 * 60 * totalDistance),
             JSON.stringify(posList)
           ]
         );
@@ -466,8 +466,8 @@ function PracticeScreen() {
         </View>
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>Calories</Text>
-          <Text style={styles.infoText}>
-            580
+          <Text style={styles.infoText}> 
+            {Math.ceil(3 * 60 * totalDistance)}
             <Text style={styles.subText}> kcal</Text>
           </Text>
         </View>

@@ -5,6 +5,7 @@ import ActivityDetail from "../ActivityDetailScreen/ActivityDetail";
 import CaloActivityDetailScreen from "../CaloDetailScreen/CaloActivityDetailScreen";
 import DistanceActivityDetailScreen from "../DistanceDetailScreen/DistanceActivityDetailScreen";
 import TimeActivityDetailScreen from "../TimeDetailScreen/TimeActivityDetailScreen";
+import EditProfile from "../Setting/EditProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,11 @@ function HomeNavigator() {
         name="TimeActivityDetailPerDay"
         component={TimeActivityDetailScreen}
         options={{ title: "Phút vận động", headerShadowVisible: false}}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{ title: "EditProfile", headerShadowVisible: false, headerShown: false}}
       />
     </Stack.Navigator>
   );

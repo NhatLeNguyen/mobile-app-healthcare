@@ -263,7 +263,14 @@ function HomeHeader() {
               }}
             />
             <Text style={styles.welcomeText}>Trần Phúc Khang</Text>
-            <TouchableOpacity activeOpacity={0.7} style={styles.button}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate("EditProfile");
+                setIsAccountModalVisible(false);
+              }}
+            >
               <FontAwesome
                 name="user"
                 size={23}
