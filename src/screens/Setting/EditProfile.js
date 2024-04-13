@@ -130,7 +130,7 @@ const EditProfile = ({ navigation }) => {
           justifyContent: "center",
         }}
       >
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{
             position: "absolute",
@@ -142,7 +142,7 @@ const EditProfile = ({ navigation }) => {
             size={24}
             color={COLORS.black}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
       </View>

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
+import MapView, { Marker, AnimatedRegion, Polyline } from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import imagePath from '../../constants/imagePath';
 import { Image } from 'react-native';
@@ -16,7 +16,7 @@ function Route({ posList }) {
                     <Image source={imagePath.icCurloc} style={{ width: 35, height: 35 }} />
                 </Marker>
             )}
-            {posList.length > 1 &&
+            {/* {posList.length > 1 &&
                 posList.map((item, index) => {
                     let lastPoint = curPoint;
                     curPoint = item;
@@ -30,7 +30,14 @@ function Route({ posList }) {
                             strokeWidth={4}
                         />
                     );
-                })}
+                })} */}
+            { posList.length > 1 && 
+                <Polyline
+                coordinates={posList}
+                strokeColor="#4a80f5" 
+                strokeWidth={3}
+              />
+            }
             {/* {posList.length > 1 && (
                 <Marker coordinate={posList[posList.length - 1]}>
                     <Icon 

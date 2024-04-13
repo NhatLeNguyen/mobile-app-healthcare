@@ -280,7 +280,7 @@ function PracticeScreen() {
             location.coords.longitude
           );
           console.log(distance);
-          if (distance >= 0.03) {
+          if (distance >= 0.01) {
             setTotalDistance((prev) => prev + distance);
             setPosList((lastposList) => [
               ...lastposList,
@@ -300,7 +300,7 @@ function PracticeScreen() {
   useEffect(() => {
     const interval = setInterval(() => {
       getCurrentLocation();
-    }, 2000);
+    }, 1500);
     return () => clearInterval(interval);
   }, []);
 

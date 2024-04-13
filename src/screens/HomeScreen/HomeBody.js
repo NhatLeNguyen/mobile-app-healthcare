@@ -104,7 +104,7 @@ function HomeBody({isRefresh}) {
       </Text>
       <TaskBlock
         heading="Một cách đơn giản để sống khỏe"
-        time=" Chào mừng bạn đến với Fit"
+        time=" Chào mừng bạn đến với LK"
         imageTimeLink="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
         tutorialText="Điểm nhịp tim cho biết hoạt động nào phù hợp nhất với sức khỏe của bạn và bạn đang hoạt động ở mức độ nào theo khuyến nghị của World Health Organization"
         link="https://www.who.int/initiatives/behealthy/physical-activity"
@@ -129,7 +129,7 @@ function HomeBody({isRefresh}) {
       />
 
       <TaskBlock
-        heading="Dữ liệu giấc ngủ của bạn trong Fit"
+        heading="Dữ liệu giấc ngủ của bạn trong LK"
         tutorialText="Sau khi kết nối thiết bị hoặc ứng dụng theo dõi giấc ngủ, bạn sẽ bắt đầu thấy dữ liệu giấc ngủ sau đêm đầu tiên"
         link="https://www.who.int/initiatives/behealthy/physical-activity"
         linkText="Tìm hiểu thêm"

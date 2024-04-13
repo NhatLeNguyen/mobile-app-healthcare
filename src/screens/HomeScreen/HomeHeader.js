@@ -399,7 +399,7 @@ function HomeHeader() {
                       },
                     ]}
                   >
-                    Cùng với tính năng điếm số bước, Fit tính điểm nhịp tim khi
+                    Cùng với tính năng điếm số bước, LK tính điểm nhịp tim khi
                     bạn nỗ lực tập luyện
                   </Text>
                 </View>

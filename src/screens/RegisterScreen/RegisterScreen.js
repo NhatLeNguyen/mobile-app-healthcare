@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
+  Modal,
+  SafeAreaView,
+  Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,8 +17,11 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
 import { useToast } from "react-native-toast-notifications";
+import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import * as SQLite from "expo-sqlite/next";
+import SettingScreen from "../Setting/SettingScreen";
+import EditProfile from "../Setting/EditProfile";
 
 const api_key = "4dbf11735e742379a68418241510cced7bcacc35";
 const db = SQLite.openDatabaseAsync("health-care.db");
@@ -51,9 +57,7 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
-  // console.log('Email: ',email);
-  // console.log('Pass: ', password);
-  // console.log("Repass: ", repassword);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
   const toast = useToast();
 
@@ -131,40 +135,78 @@ const RegisterScreen = () => {
       "select * from user where email = ?",
       [email]
     );
-    if(results.length !== 0){
-      toast.hide(id)
+    if (results.length !== 0) {
+      toast.hide(id);
       toast.show("Tài khoản đã tồn tại", {
         type: "warning",
         animationType: "zoom-in",
         duration: 2000,
       });
-      return ;
+      return;
     }
     if (status == "valid") {
-      toast.hide(id);
-      toast.show("Đăng kí thành công", {
-        type: "success",
-        animationType: "zoom-in",
-        duration: 2000,
-      });
-
-      setTimeout(() => {
-        toast.show("Đăng nhập với tài khoản mới nào !!", {
-          type: "success",
-          animationType: "zoom-in",
-          duration: 2000,
-        });
-        navigation.navigate("LoginScreen");
-      }, 2000);
-      (await db).runSync(
-        "insert into user(email, password) values(?, ?)",
-        [email, password]
-      );
+      setIsModalVisible(true);
     }
+    // if (status == "valid") {
+    //   toast.hide(id);
+    //   toast.show("Đăng kí thành công", {
+    //     type: "success",
+    //     animationType: "zoom-in",
+    //     duration: 2000,
+    //   });
+
+    //   setTimeout(() => {
+    //     toast.show("Đăng nhập với tài khoản mới nào !!", {
+    //       type: "success",
+    //       animationType: "zoom-in",
+    //       duration: 2000,
+    //     });
+    //     navigation.navigate("LoginScreen");
+    //   }, 2000);
+    //   (await db).runSync(
+    //     "insert into user(email, password) values(?, ?)",
+    //     [email, password]
+    //   );
+    // }
   };
 
   return (
     <View style={styles.container}>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <SafeAreaView
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: 500,
+              borderRadius: 10,
+              backgroundColor: "#f5f5f5",
+              justifyContent: "center",
+              alignItems: "center",
+              elevation: 5,
+            }}
+          >
+            <EditProfile />
+            <Pressable
+              style={{ top: 8, right: 8, position: "absolute" }}
+              onPress={() => setIsModalVisible(false)}
+            >
+              <Ionicons name="close" size={25} color="black" />
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </Modal>
       <Text style={styles.title}>Đăng ký</Text>
       <Text style={styles.welcomeText}>
         Tạo một tài khoản để có thể khám phá sức khỏe của bạn !
