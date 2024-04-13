@@ -123,31 +123,7 @@ const EditProfile = ({ navigation }) => {
         paddingHorizontal: 22,
       }}
     >
-      <View
-        style={{
-          marginHorizontal: 12,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{
-            position: "absolute",
-            left: 0,
-          }}
-        >
-          <MaterialIcons
-            name="keyboard-arrow-left"
-            size={24}
-            color={COLORS.black}
-          />
-        </TouchableOpacity>
-
-        <Text style={{ ...FONTS.h3 }}>Edit Profile</Text>
-      </View>
-
-      <ScrollView>
+      <View>
         <View
           style={{
             alignItems: "center",
@@ -338,7 +314,7 @@ const EditProfile = ({ navigation }) => {
         </TouchableOpacity>
 
         {renderDatePicker()}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
