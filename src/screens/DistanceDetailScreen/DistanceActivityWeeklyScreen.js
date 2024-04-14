@@ -19,6 +19,7 @@ import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
+import Storage from "expo-storage";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -76,9 +77,10 @@ function DistanceActivityWeeklyScreen() {
   useEffect(() => {
     const loading = async () => {
       const parts = currentDate.split("/");
+      const id = await Storage.getItem({key: 'user_id'})
       const results = (await db).getAllSync(
-        "SELECT date,sum(distances) as distances FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
-        [getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+        "SELECT date,sum(distances) as distances FROM `practicehistory` WHERE user_id = ? and date BETWEEN ? AND ? GROUP BY date",
+        [id, getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
       );
       console.log(results);
       let chartDataReturned = {

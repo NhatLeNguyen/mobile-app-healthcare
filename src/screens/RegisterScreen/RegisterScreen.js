@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Image,
-  Modal,
   SafeAreaView,
   Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -28,6 +30,7 @@ import { FONTS, COLORS } from "../../constants/setting";
 import { MaterialIcons } from "@expo/vector-icons";
 import SettingScreen from "../Setting/SettingScreen";
 import EditProfile from "../Setting/EditProfile";
+import InputWithHeader from "../../components/InputWithHeader";
 
 const api_key = "4dbf11735e742379a68418241510cced7bcacc35";
 const db = SQLite.openDatabaseAsync("health-care.db");
@@ -68,9 +71,9 @@ const RegisterScreen = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [dobirth, setDobirth] = useState("");
-  const [sex, setSex] = useState("");
-  const [stepsTarget, setStepsTarget] = useState(0);
-  const [heartTarget, setHeartTarget] = useState(0);
+  const [sex, setSex] = useState("Nam");
+  const [weight, setWeight] = useState(0);
+  const [height, setHeight] = useState(0);
   const [selectedImage, setSelectedImage] = useState(imagesDataURL[0]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
@@ -159,30 +162,60 @@ const RegisterScreen = () => {
       });
       return;
     }
-    // if (status == "valid") {
-    //   setIsModalVisible(true);
-    // }
     if (status == "valid") {
-      toast.hide(id);
-      toast.show("Đăng kí thành công", {
-        type: "success",
-        animationType: "zoom-in",
-        duration: 2000,
-      });
-
       setTimeout(() => {
-        toast.show("Đăng nhập với tài khoản mới nào !!", {
+        setShowModal(true);
+        toast.show("Vui lòng điền thông tin cá nhân", {
           type: "success",
           animationType: "zoom-in",
-          duration: 2000,
         });
-        setShowModal(true);
       }, 2000);
-      (await db).runSync("insert into user(email, password, steps_target, heart_target) values(?, ?, ?, ?)", [
-        email,
-        password, 500, 50,
-      ]);
+      // (await db).runSync("insert into user(email, password, steps_target, heart_target) values(?, ?, ?, ?)", [
+      //   email,
+      //   password, 500, 50,
+      // ]);
     }
+  };
+  const handleLastSubmit = async () => {
+    // if (
+    //   name === "" ||
+    //   phone === "" ||
+    //   address === "" ||
+    //   dobirth === "" ||
+    //   sex === "" ||
+    //   weight === "" ||
+    //   height === ""
+    // ) {
+    //   console.log('vll');
+    //   toast.hideAll()
+    //   toast.show("Vui lòng điền đầy đủ thông tin", {
+    //     type: "danger",
+    //     offset: 50,
+    //     animationType: "zoom-in",
+    //   });
+    //   return;
+    // }
+    let image = selectedImage !== 'https://i.ibb.co/W29btXp/profile.jpg' ? selectedImage: 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'
+    console.log('image: ', image);
+
+    (await db).runSync(
+      "insert into user(password, name, phone, address, dobirth, email, weight, height, avatar, steps_target, heart_target, sex) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [password, name, phone, address, dobirth, email, parseInt(weight), parseInt(height), image, 500, 50, sex]
+    );
+    setShowModal(false)
+    toast.hideAll();
+    toast.show("Đăng nhập với tài khoản mới nào !!", {
+      type: "success",
+      animationType: "zoom-in",
+      duration: 4000,
+    });
+    toast.show("Đăng kí thành công", {
+      type: "success",
+      animationType: "zoom-in",
+      duration: 4000,
+    });
+    navigation.navigate("LoginScreen");
+
   };
 
   const handleImageSelection = async () => {
@@ -202,7 +235,7 @@ const RegisterScreen = () => {
 
   const ModalContent = (
     <View style={styles.modalContainer}>
-      <Text>Điền thông tin cá nhân để tiếp tục !</Text>
+      {/* <Text>Điền thông tin cá nhân để tiếp tục !</Text> */}
       <View
         style={{
           alignItems: "center",
@@ -249,6 +282,7 @@ const RegisterScreen = () => {
         property1=""
         placeholder="Số điện thoại"
         onChange={setPhone}
+        isNumberic={true}
       />
       <Input
         testID="addressInput"
@@ -262,42 +296,75 @@ const RegisterScreen = () => {
         placeholder="Ngày sinh"
         onChange={setDobirth}
       />
-      <Input
+      {/* <Input
         testID="sexInput"
         property1=""
         placeholder="Giới tính"
         onChange={setSex}
+      /> */}
+      <InputWithHeader
+        isPicker={true}
+        value="Nam"
+        width={150}
+        items={[
+          { label: "Nam", value: "Nam" },
+          { label: "Nữ", value: "Nữ" },
+        ]}
+        style={{
+          width: "100%",
+          backgroundColor: "#DDE5FF",
+          borderRadius: 10,
+          marginTop: 10,
+          marginBottom: 10,
+        }}
+        textProps={{ color: "gray" }}
+        onChange={setSex}
       />
       <Input
-        testID="stepsTargetInput"
+        testID="weightInput"
         property1=""
-        placeholder="Mục tiêu số bước"
-        onChange={(value) => setStepsTarget(parseInt(value))}
+        placeholder="Chiều cao (cm)"
+        onChange={(value) => setHeight(parseInt(value))}
+        isNumberic={true}
       />
       <Input
-        testID="heartTargetInput"
+        testID="heightInput"
         property1=""
-        placeholder="Mục tiêu nhịp tim"
-        onChange={(value) => setHeartTarget(parseInt(value))}
+        placeholder="Cân nặng (kg)"
+        onChange={(value) => setWeight(parseInt(value))}
+        isNumberic={true}
       />
       <TouchableOpacity
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#132A7A",
+          borderRadius: 15,
+          // marginLeft: 130,
+          // marginRight: 130,
+        }}
         onPress={() => {
-          console.log("Name:", name);
-          console.log("Phone:", phone);
-          console.log("Address:", address);
-          console.log("Date of Birth:", dobirth);
-          console.log("Steps Target:", stepsTarget);
-          console.log("Heart Target:", heartTarget);
-          console.log("Sex:", sex);
-          navigation.navigate("LoginScreen");
+          handleLastSubmit();
         }}
       >
-        <Text>Save</Text>
+        <Text
+          style={{
+            fontSize: 17,
+            fontFamily: "Inter_600SemiBold",
+            padding: 10,
+            color: "white",
+          }}
+        >
+          Lưu
+        </Text>
       </TouchableOpacity>
     </View>
   );
   return (
-    <View style={styles.container}>
+    <View
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Modal
         transparent
         animationType="fade"

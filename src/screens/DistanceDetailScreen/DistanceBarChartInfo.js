@@ -24,6 +24,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LogBox } from "react-native";
 import * as SQLite from "expo-sqlite/next";
 import DistanceDetail from "./DistanceDetail";
+import Storage from "expo-storage";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -81,13 +82,14 @@ function DistanceBarChartInfo({ route }) {
   const [sumSteps, setSumSteps] = useState(0);
   useEffect(() => {
     const loading = async () => {
+      let id = await Storage.getItem({key : 'user_id'})
       // Change format
       let parts = selectedDate.split("/");
       console.log(parts.join("-"));
       // Getting data
       const results = (await db).getAllSync(
         "select * from practicehistory where user_id = ? and date = ?",
-        ["1", parts.join("-")]
+        [id, parts.join("-")]
       );
 
       let stepDataReturned = { labels: ["0:00"], datasets: [{ data: [0] }] };

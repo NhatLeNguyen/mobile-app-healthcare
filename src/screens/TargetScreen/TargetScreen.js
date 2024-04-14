@@ -21,6 +21,7 @@ function TargetScreen() {
   const [heartStep, setHeartStep] = useState("0");
   const [weight, setWeight] = useState("0");
   const [height, setHeight] = useState("0");
+  const [user_id ,setUserId] = useState('1')
   useEffect(() => {
     const loading = async () => {
       const steps_target = await Storage.getItem({ key: `steps_target` });
@@ -31,6 +32,8 @@ function TargetScreen() {
       setWeight(weight);
       const height = await Storage.getItem({ key: `height` });
       setHeight(height);
+      const id = await Storage.getItem({ key: `user_id` });
+      setUserId(id);
     };
     loading();
   }, []);
@@ -80,11 +83,26 @@ function TargetScreen() {
       });
       return;
     }
-
     (await db).runSync(
       "UPDATE user SET steps_target = ?,heart_target = ?,weight = ? ,height = ? WHERE user_id = ?",
-      [parseInt(steps), parseInt(heartStep),parseInt(weight), parseInt(height),"1"]
+      [parseInt(steps), parseInt(heartStep),parseInt(weight), parseInt(height),user_id]
     );
+    await Storage.setItem({
+      key: 'steps_target',
+      value: steps,
+    });
+    await Storage.setItem({
+      key: 'heart_target',
+      value: heartStep,
+    });
+    await Storage.setItem({
+      key: 'weight',
+      value: weight,
+    });
+    await Storage.setItem({
+      key: 'height',
+      value: height,
+    });
     setDisableButton(true);
     toast.hideAll();
     toast.show("Thay đổi thành công", {

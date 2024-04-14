@@ -18,17 +18,21 @@ import Fonts from "../../constants/Fonts";
 import * as SQLite from 'expo-sqlite/next'
 import { getFormatedDate } from "react-native-modern-datepicker";
 import { useNavigation } from "@react-navigation/native";
+import Storage from "expo-storage";
 
 const db = SQLite.openDatabaseAsync('health-care.db')
 
 function HomeBody({isRefresh}) {
   const navigation = useNavigation()
   const [dayCompleteGoal, setDayCompleteGoal] = useState(0);
+  const [steps_target, setStepsTarget] = useState(50)
   const [today, setToday] = useState(new Date());
   const [calo, setCalo] = useState(0)
 
   useEffect(() => {
     const loading = async () => {
+      const st = await Storage.getItem({ key: `steps_target` });
+      setStepsTarget(parseInt(st));
       let day_complete = 0;
       const [year, month, day] = getFormatedDate(today, "YYYY/MM/DD")
         .split("/")
@@ -46,16 +50,18 @@ function HomeBody({isRefresh}) {
       //     getFormatedDate(today, "YYYY-MM-DD"),
       //   ]
       // );
+      const id = await Storage.getItem({key: 'user_id'})
       const results = (await db).getAllSync(
-        "SELECT sum(steps) as steps, sum(caloris) as caloris FROM `practicehistory` WHERE date BETWEEN ? AND ? GROUP BY date",
+        "SELECT sum(steps) as steps, sum(caloris) as caloris FROM `practicehistory` WHERE user_id = ? and date BETWEEN ? AND ? GROUP BY date",
         [
+          id,
           getFormatedDate(startDate, "YYYY-MM-DD"),
           getFormatedDate(today, "YYYY-MM-DD"),
         ]
       );
       let totalCalo = 0;
       for (const row of results){
-        if(row.steps > 50){
+        if(row.steps > st){
           day_complete = day_complete + 1;
         }
         totalCalo = row.caloris

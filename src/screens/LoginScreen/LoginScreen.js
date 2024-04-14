@@ -124,30 +124,38 @@ const LoginScreen = () => {
       type: "success",
       animationType: "zoom-in",
     });
-    await Storage.setItem({
-      key: `email`,
-      value: email,
-    });
-    await Storage.setItem({
-      key: `password`,
-      value: password,
-    });
-    await Storage.setItem({
-      key: `height`,
-      value: String(results1[0].height),
-    });
-    await Storage.setItem({
-      key: `weight`,
-      value: String(results1[0].weight),
-    });
-    await Storage.setItem({
-      key: `steps_target`,
-      value: String(results1[0].steps_target),
-    });
-    await Storage.setItem({
-      key: `heart_target`,
-      value: String(results1[0].heart_target),
-    });
+    console.log(results1);
+    for (let key of Object.keys(results1[0])) {
+      await Storage.setItem({
+        key: key,
+        value: String(results1[0][key]),
+      });
+    }
+    // await Storage.setItem({
+    //   key: `email`,
+    //   value: email,
+    // });
+    // await Storage.setItem({
+    //   key: `password`,
+    //   value: password,
+    // });
+    // await Storage.setItem({
+    //   key: `height`,
+    //   value: String(results1[0].height),
+    // });
+    // await Storage.setItem({
+    //   key: `weight`,
+    //   value: String(results1[0].weight),
+    // });
+    // await Storage.setItem({
+    //   key: `steps_target`,
+    //   value: String(results1[0].steps_target),
+    // });
+    // await Storage.setItem({
+    //   key: `heart_target`,
+    //   value: String(results1[0].heart_target),
+    // });
+
     navigation.navigate("MainScreen");
   };
 

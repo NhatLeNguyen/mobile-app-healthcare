@@ -60,6 +60,7 @@ export default function Input(props) {
         style={styles.textInput}
         onChangeText={props.onChange}
         secureTextEntry={isPassHidden}
+        keyboardType={props.isNumberic ? 'numeric' : 'default'}
       />
       {props.isPassword && isPassHidden ? (
         <Ionicons

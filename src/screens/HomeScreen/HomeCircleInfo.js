@@ -14,6 +14,7 @@ import Fonts from "../../constants/Fonts";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
 import { getFormatedDate } from "react-native-modern-datepicker";
+import Storage from "expo-storage";
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function HomeCircleInfo({ isRefresh }) {
@@ -23,21 +24,30 @@ function HomeCircleInfo({ isRefresh }) {
   const [isPressedDistance, setIsPressDistance] = useState(false);
   const [isPressedTime, setIsPressTime] = useState(false);
   const [today, setToday] = useState(new Date());
+  const [steps_target, setStepsTarget] = useState(0);
   const [stepsToday, setStepsToday] = useState(0);
   const [distanceToday, setDistanceToday] = useState(0);
   const [calorisToday, setCalorisToday] = useState(0);
   const [practiceTime, setPracticeTime] = useState(0);
+  useEffect(() => {
+    const loading = async () => {
+      const st = await Storage.getItem({ key: `steps_target` });
+      setStepsTarget(parseInt(st));
+    };
+    loading();
+  }, [isRefresh]);
 
   useEffect(() => {
     const loading = async () => {
+      const id = await Storage.getItem({key: 'user_id'})
       let secondTime = 0;
       const results = (await db).getAllSync(
-        "SELECT sum(steps) as steps, sum(distances) as distances,sum(caloris) as caloris FROM `practicehistory` WHERE date = ? GROUP BY DATE",
-        [getFormatedDate(today, "YYYY-MM-DD")]
+        "SELECT sum(steps) as steps, sum(distances) as distances,sum(caloris) as caloris FROM `practicehistory` WHERE user_id = ? and date = ? GROUP BY DATE",
+        [id, getFormatedDate(today, "YYYY-MM-DD")]
       );
       const results1 = (await db).getAllSync(
-        "SELECT practice_time FROM `practicehistory` WHERE date = ?",
-        [getFormatedDate(today, "YYYY-MM-DD")]
+        "SELECT practice_time FROM `practicehistory` WHERE user_id = ? and date = ?",
+        [id, getFormatedDate(today, "YYYY-MM-DD")]
       );
       // console.log(results1);
       for (const row of results1) {
@@ -72,7 +82,7 @@ function HomeCircleInfo({ isRefresh }) {
         color="#184ea6"
         restColor="#dfe7f3"
         value={stepsToday}
-        MAX_VALUE={500}
+        MAX_VALUE={steps_target}
         paddingCircle={20}
         paddingText={95}
         textSize={28}

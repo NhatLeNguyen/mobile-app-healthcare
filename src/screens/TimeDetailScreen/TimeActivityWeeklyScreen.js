@@ -19,6 +19,7 @@ import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
+import Storage from "expo-storage";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -76,9 +77,10 @@ function TimeActivityWeeklyScreen() {
   useEffect(() => {
     const loading = async () => {
       const parts = currentDate.split("/");
+      const id = await Storage.getItem({key: 'user_id'})
       const results1 = (await db).getAllSync(
-        "SELECT date,practice_time as time FROM `practicehistory` WHERE date BETWEEN ? AND ?",
-        [getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+        "SELECT date,practice_time as time FROM `practicehistory` WHERE user_id = ? and date BETWEEN ? AND ?",
+        [id, getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
       );
       let rowDate = 0
       let totalTime = 0;

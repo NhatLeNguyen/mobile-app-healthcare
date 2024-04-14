@@ -46,6 +46,8 @@ function validatePassword(password) {
 
 function HomeHeader() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [avatar, setAvatar] = useState('https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg')
+  const [name, setName] = useState('')
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
   const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] =
@@ -63,6 +65,10 @@ function HomeHeader() {
       setEmail(item);
       const pass = await Storage.getItem({ key: `password` });
       setPasswordFromStorage(pass);
+      const ava = await Storage.getItem({ key: `avatar` });
+      setAvatar(ava);
+      const na = await Storage.getItem({key : 'name'})
+      setName(na)
     };
     loading();
   }, []);
@@ -246,7 +252,7 @@ function HomeHeader() {
           >
             <Image
               source={{
-                uri: "https://wallpaper-house.com/data/out/7/wallpaper2you_152770.jpg",
+                uri: "https://i.pinimg.com/736x/20/e7/64/20e7642e572035ade813047037592cb5.jpg",
               }}
               style={{
                 position: "absolute",
@@ -259,10 +265,11 @@ function HomeHeader() {
               rounded
               size={100}
               source={{
-                uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
+                // uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
+                uri: avatar
               }}
             />
-            <Text style={styles.welcomeText}>Trần Phúc Khang</Text>
+            <Text style={styles.welcomeText}>{name}</Text>
             <TouchableOpacity
               activeOpacity={0.7}
               style={styles.button}
@@ -359,7 +366,7 @@ function HomeHeader() {
           rounded
           size={40}
           source={{
-            uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
+            uri: avatar,
           }}
         />
       </TouchableOpacity>
@@ -376,7 +383,7 @@ function HomeHeader() {
               <View style={styles.slide1}>
                 <View>
                   <Text style={styles.textHeader}>
-                    Theo dõi hoạt động bằng Google Fit
+                    Theo dõi hoạt động bằng LK
                   </Text>
                 </View>
                 <View style={styles.body}>

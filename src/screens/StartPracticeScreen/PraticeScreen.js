@@ -29,6 +29,7 @@ import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import * as SQLite from "expo-sqlite/next";
+import Storage from "expo-storage";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -116,6 +117,7 @@ function PracticeScreen() {
     if (isFirstLocated) {
       let now = new Date();
       const loading = async () => {
+        let id = await Storage.getItem({key : 'user_id'})
         // console.log("Saving...");
         console.log([
           "1",
@@ -132,7 +134,7 @@ function PracticeScreen() {
         (await db).runSync(
           "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
           [
-            "1",
+            id,
             ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
             ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
             getFormatedDate(date, "YYYY-MM-DD"),
