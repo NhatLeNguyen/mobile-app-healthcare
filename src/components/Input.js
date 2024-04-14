@@ -74,9 +74,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 357,
     // padding: 20,
-    paddingTop: 10,
+    paddingTop: 5,
     paddingLeft: 20,
-    paddingBottom: 10,
+    paddingBottom: 5,
     alignItems: "center",
     marginVertical: 10,
     borderRadius: 10,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   placeholderProperty1Active: {
-    color: "rgba(255, 0, 0, 1)", // Example color for active state
+    color: "rgba(255, 0, 0, 1)",
   },
   textInput: {
     // fontSize: 16,

@@ -175,8 +175,8 @@ const EditProfile = ({ navigation }) => {
                 borderWidth: 1,
                 borderRadius: 4,
                 marginVertical: 6,
-                justifyContent: "center",
                 paddingLeft: 8,
+                justifyContent: "center",
               }}
             >
               <TextInput
