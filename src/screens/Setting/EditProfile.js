@@ -339,6 +339,7 @@ const EditProfile = ({ navigation }) => {
 
         {renderDatePicker()}
       </View>
+      </View>
     </SafeAreaView>
   );
 };
