@@ -61,7 +61,7 @@ function HomeBody({isRefresh}) {
       );
       let totalCalo = 0;
       for (const row of results){
-        if(row.steps > st){
+        if(row.steps >= st){
           day_complete = day_complete + 1;
         }
         totalCalo = row.caloris
@@ -111,7 +111,7 @@ function HomeBody({isRefresh}) {
       <TaskBlock
         heading="Một cách đơn giản để sống khỏe"
         time=" Chào mừng bạn đến với LK"
-        imageTimeLink="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
+        // imageTimeLink="https://gstatic.com/images/branding/product/1x/gfit_512dp.png"
         tutorialText="Điểm nhịp tim cho biết hoạt động nào phù hợp nhất với sức khỏe của bạn và bạn đang hoạt động ở mức độ nào theo khuyến nghị của World Health Organization"
         link="https://www.who.int/initiatives/behealthy/physical-activity"
         linkText="Xem khuyến nghị"

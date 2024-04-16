@@ -32,7 +32,7 @@ import SettingScreen from "../Setting/SettingScreen";
 import EditProfile from "../Setting/EditProfile";
 import InputWithHeader from "../../components/InputWithHeader";
 
-const api_key = "4dbf11735e742379a68418241510cced7bcacc35";
+const api_key = "fce0fdaca315e959bb801ec7aade8f433b9e6def";
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function validateEmail(email) {
@@ -117,7 +117,7 @@ const RegisterScreen = () => {
       });
       return;
     }
-    let status = "invalid";
+    let status = "valid";
     let id = toast.show("", {
       animationType: "zoom-in",
       icon: (
@@ -131,24 +131,24 @@ const RegisterScreen = () => {
       normalColor: "none",
       placement: "center",
     });
-    await axios
-      .get(
-        `https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${api_key}`
-      )
-      .then(function (response) {
-        status = response.data.data.status;
-        if (status === "invalid") {
-          toast.hide(id);
-          toast.show("Email không tồn tại", {
-            type: "danger",
-            animationType: "zoom-in",
-          });
-          return;
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // await axios
+    //   .get(
+    //     `https://api.hunter.io/v2/email-verifier?email=${email}&api_key=${api_key}`
+    //   )
+    //   .then(function (response) {
+    //     status = response.data.data.status;
+    //     if (status === "invalid") {
+    //       toast.hide(id);
+    //       toast.show("Email không tồn tại", {
+    //         type: "danger",
+    //         animationType: "zoom-in",
+    //       });
+    //       return;
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
     const results = (await db).getAllSync(
       "select * from user where email = ?",
       [email]

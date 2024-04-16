@@ -118,7 +118,7 @@ function TargetScreen() {
           fontSize: 40,
           fontFamily: "Inter_500Medium",
           paddingLeft: 20,
-          color: "white",
+          color: "black",
         }}
       >
         Hồ sơ
@@ -190,7 +190,7 @@ function TargetScreen() {
         style={[
           styles.button,
           {
-            backgroundColor: disableButton ? "rgba(255,255,255,0.1)" : "white",
+            backgroundColor: disableButton ? "rgba(0,0,0,0.1)" : "black",
           },
         ]}
         onPress={() => {
@@ -200,7 +200,7 @@ function TargetScreen() {
       >
         <Text
           style={{
-            color: "black",
+            color: "white",
             fontFamily: "Inter_500Medium",
             backgroundColor: "transparent",
           }}
@@ -216,23 +216,23 @@ export default TargetScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black",
+    backgroundColor: "white",
     paddingTop: 80,
     // marginTop: 80,
     flex: 1,
   },
   headerText: {
-    color: "white",
+    color: "black",
     marginTop: 30,
     fontSize: 17,
     fontFamily: "Inter_500Medium",
     paddingLeft: 20,
   },
   lineStyle: {
-    borderBottomColor: "white",
+    borderBottomColor: "black",
     borderBottomWidth: 1,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 10,  
   },
   button: {
     // position: "absolute",

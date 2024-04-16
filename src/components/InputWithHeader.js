@@ -17,7 +17,7 @@ function InputWithHeader(props) {
           style={{
             fontSize: 16,
             fontFamily: "Inter_500Medium",
-            color: isPress ? props.color : "white",
+            color: isPress ? props.color : "black",
             marginBottom: 10,
           }}
         >
@@ -44,17 +44,17 @@ function InputWithHeader(props) {
             placeholder={props.placeholder}
             keyboardType="numeric"
             style={{
-              borderColor: "white",
+              borderColor: "black",
               borderWidth: 1,
               padding: 12,
               fontFamily: "Inter_400Regular",
               borderRadius: 5,
-              color: isPress ? props.color : "white",
+              color: isPress ? props.color : "black",
             }}
             onChangeText={props.onChange}
             onPressOut={props.onPressout}
           />
-          <Text style={{ position: "absolute", right: 15, color: "white" }}>
+          <Text style={{ position: "absolute", right: 15, color: "black" }}>
             {props.subText}
           </Text>
         </TouchableOpacity>

@@ -6,6 +6,7 @@ import CaloActivityDetailScreen from "../CaloDetailScreen/CaloActivityDetailScre
 import DistanceActivityDetailScreen from "../DistanceDetailScreen/DistanceActivityDetailScreen";
 import TimeActivityDetailScreen from "../TimeDetailScreen/TimeActivityDetailScreen";
 import EditProfile from "../Setting/EditProfile";
+import ModalContent from "../RegisterScreen/ModelContent";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +46,7 @@ function HomeNavigator() {
       <Stack.Screen
         name="EditProfile"
         component={EditProfile}
-        options={{ title: "EditProfile", headerShadowVisible: false, headerShown: false}}
+        options={{ title: "Thông tin cá nhân", headerShadowVisible: false}}
       />
     </Stack.Navigator>
   );

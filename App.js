@@ -15,6 +15,18 @@ import * as SQLite from "expo-sqlite";
 import MainScreen from "./src/screens/MainScreen/MainScreen";
 import InitialScreen from "./src/screens/InitialScreen/InitialScreen";
 import { ToastProvider } from "react-native-toast-notifications";
+import messaging from '@react-native-firebase/messaging';
+
+// import * as Device from 'expo-device';
+// import * as Notifications from 'expo-notifications';
+
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 
 const db = SQLite.openDatabase("health-care.db");
 db.transaction((tx) => {
@@ -46,6 +58,8 @@ export default function App() {
     Inter_500Medium,
     Inter_600SemiBold,
   });
+ 
+
   const onLayoutRoot = useCallback(async () => {
     if (fontsLoaded) {
       console.log("Load font successfully");
