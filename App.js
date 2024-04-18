@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, createContext, useMemo} from "react";
 import { View, StyleSheet, Text, Image, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -46,6 +46,7 @@ db.transaction((tx) => {
 });
 
 const Stack = createNativeStackNavigator();
+
 SplashScreen.preventAutoHideAsync().then((result) =>
   console.log(`SplashScreen preventAutoHideAsync Success ${result}`)
 );

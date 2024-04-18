@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  useMemo,
+  createContext,
+} from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -16,14 +23,14 @@ import { useFonts } from "expo-font";
 import { Inter_500Medium, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import * as FileSystem from "expo-file-system";
 import * as SQLite from "expo-sqlite";
-import SettingScreen from "../Setting/SettingScreen";
-import EditProfile from "../Setting/EditProfile";
 import TargetScreen from "../TargetScreen/TargetScreen";
+import { ThemeContext } from "./ThemeProvider";
+import ThemeProvider from "./ThemeProvider";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
-  return (
+   const Screen = (
     <View style={styles.container}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -135,10 +142,15 @@ export default function MainScreen() {
           options={{ headerShown: false }}
         />
         <Tab.Screen name="Empty1" component={HomeScreen} />
-        <Tab.Screen name="Setting" component={TargetScreen} options={{headerShown: false}}/>
+        <Tab.Screen
+          name="Setting"
+          component={TargetScreen}
+          options={{ headerShown: false }}
+        />
       </Tab.Navigator>
     </View>
   );
+  return (<ThemeProvider chidren={Screen}></ThemeProvider>)
 }
 
 const styles = StyleSheet.create({

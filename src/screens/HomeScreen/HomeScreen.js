@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView, RefreshControl } from "react-native";
 import CircleWithPercentage from "../../components/CircleWithPercentage";
 import HomeHeader from "./HomeHeader";
@@ -7,8 +7,12 @@ import HomeCircleInfo from "./HomeCircleInfo";
 import HomeBody from "./HomeBody";
 import { useState,useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 const LIST = "ABCDEFGHIJKLMNOPURSTUVWXYZ0123456789"
+
 function HomeScreen() {
+  const contextValue = useContext(ThemeContext);
+  const isDarkMode = contextValue.isDarkMode
   const navigation = useNavigation()
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
@@ -20,7 +24,7 @@ function HomeScreen() {
   }, []);
   console.log('Refresh');
   return (
-    <ScrollView style={styles.container} refreshControl={
+    <ScrollView style={[styles.container, {backgroundColor: isDarkMode ? '#202125': '#f2f2f2'}]} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
     }>
       <HomeHeader />
@@ -30,7 +34,10 @@ function HomeScreen() {
   );
 }
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // backgroundColor:'#f2f2f2',
+    // backgroundColor:'black'
+  },
   circleContainer: {
     marginTop: 60,
     alignItems: "center",

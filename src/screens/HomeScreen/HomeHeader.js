@@ -13,13 +13,14 @@ import {
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Swiper from "react-native-swiper";
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
 import * as SQLite from "expo-sqlite/next";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -45,6 +46,7 @@ function validatePassword(password) {
 }
 
 function HomeHeader() {
+  const themeValue = useContext(ThemeContext)
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [avatar, setAvatar] = useState('https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg')
   const [name, setName] = useState('')
@@ -356,7 +358,7 @@ function HomeHeader() {
         onPress={() => handleModal()}
         activeOpacity={0.5}
       >
-        <Ionicons name="information-circle-outline" size={30} />
+        <Ionicons name="information-circle-outline" size={30} color={themeValue.isDarkMode ? 'white' : 'black'} />
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.7}

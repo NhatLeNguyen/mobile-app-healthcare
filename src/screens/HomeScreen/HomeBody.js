@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import TaskBlock from "../../components/TaskBlock";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
@@ -19,10 +19,13 @@ import * as SQLite from 'expo-sqlite/next'
 import { getFormatedDate } from "react-native-modern-datepicker";
 import { useNavigation } from "@react-navigation/native";
 import Storage from "expo-storage";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync('health-care.db')
 
 function HomeBody({isRefresh}) {
+  const themeValue = useContext(ThemeContext);
+  const [isPressed, setIsPress] = useState(false)
   const navigation = useNavigation()
   const [dayCompleteGoal, setDayCompleteGoal] = useState(0);
   const [steps_target, setStepsTarget] = useState(50)
@@ -93,7 +96,7 @@ function HomeBody({isRefresh}) {
         imageRightBot='https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/WHO_logo.svg/1991px-WHO_logo.svg.png'
         pressedFunction={() => {console.log("Hehe");}}
       />
-      <Text style={styles.heading}>
+      <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
         XU HƯỚNG
       </Text>
       <TaskBlock
@@ -105,7 +108,7 @@ function HomeBody({isRefresh}) {
         targetColor="#fdbd40"
         pressedFunction={() => {navigation.navigate('CaloActivityDetail', {name: 'calo_week'})}}
       />
-      <Text style={styles.heading}>
+      <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
         KHÁM PHÁ
       </Text>
       <TaskBlock
@@ -130,7 +133,7 @@ function HomeBody({isRefresh}) {
         tutorialText="Sải bước theo điệu nhạc để biến những bước đi bộ thành một cách tập thể dục đơn giản mà hiệu quả."
         link="https://www.who.int/initiatives/behealthy/physical-activity"
         linkText="Thử đi bộ nhanh"
-        imageRightBot="https://w7.pngwing.com/pngs/101/850/png-transparent-computer-icons-symbol-font-walk-miscellaneous-blue-text.png"
+        imageRightBot="https://cdn-icons-png.freepik.com/512/1173/1173414.png"
         pressedFunction={() => {console.log("Hehe");}}
       />
 
@@ -139,7 +142,7 @@ function HomeBody({isRefresh}) {
         tutorialText="Sau khi kết nối thiết bị hoặc ứng dụng theo dõi giấc ngủ, bạn sẽ bắt đầu thấy dữ liệu giấc ngủ sau đêm đầu tiên"
         link="https://www.who.int/initiatives/behealthy/physical-activity"
         linkText="Tìm hiểu thêm"
-        imageRightBot="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqzmVNf9vivpZD5utnT1B4Bbpji-LLd_2ulA&usqp=CAU"
+        imageRightBot="https://cdn-icons-png.flaticon.com/512/1251/1251835.png"
         pressedFunction={() => {console.log("Hehe");}}
       />
     </View>

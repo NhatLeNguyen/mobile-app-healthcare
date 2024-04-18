@@ -131,30 +131,10 @@ const LoginScreen = () => {
         value: String(results1[0][key]),
       });
     }
-    // await Storage.setItem({
-    //   key: `email`,
-    //   value: email,
-    // });
-    // await Storage.setItem({
-    //   key: `password`,
-    //   value: password,
-    // });
-    // await Storage.setItem({
-    //   key: `height`,
-    //   value: String(results1[0].height),
-    // });
-    // await Storage.setItem({
-    //   key: `weight`,
-    //   value: String(results1[0].weight),
-    // });
-    // await Storage.setItem({
-    //   key: `steps_target`,
-    //   value: String(results1[0].steps_target),
-    // });
-    // await Storage.setItem({
-    //   key: `heart_target`,
-    //   value: String(results1[0].heart_target),
-    // });
+    await Storage.setItem({
+      key: 'isDarkMode',
+      value: 'false',
+    });
 
     navigation.navigate("MainScreen");
   };

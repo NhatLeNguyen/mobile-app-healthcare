@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,9 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import Storage from "expo-storage";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
+
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function HomeCircleInfo({ isRefresh }) {
+  const themeValue = useContext(ThemeContext);
   const [isPressedHeart, setIsPressHeart] = useState(false);
   const [isPressedStep, setIsPressStep] = useState(false);
   const [isPressedCalo, setIsPressCalo] = useState(false);
@@ -79,7 +82,7 @@ function HomeCircleInfo({ isRefresh }) {
       />
       <CircleWithPercentage
         diameter={180}
-        color="#184ea6"
+        color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}
         restColor="#dfe7f3"
         value={stepsToday}
         MAX_VALUE={steps_target}
@@ -101,12 +104,13 @@ function HomeCircleInfo({ isRefresh }) {
           onPressIn={() => setIsPressHeart(true)}
           onPressOut={() => setIsPressHeart(false)}
         >
-          <FontAwesome name="heartbeat" size={16} color={"green"} />
+          <FontAwesome name="heartbeat" size={16} color={"#21c0a4"} />
           <Text
             style={{
               marginLeft: 5,
               fontSize: 16,
               fontFamily: "Inter_500Medium",
+              color: themeValue.isDarkMode ? '#e2e3e7' : 'black'
             }}
           >
             Điểm nhịp tim
@@ -127,12 +131,13 @@ function HomeCircleInfo({ isRefresh }) {
           onPressIn={() => setIsPressStep(true)}
           onPressOut={() => setIsPressStep(false)}
         >
-          <Ionicons name="footsteps" size={16} color={"blue"} />
+          <Ionicons name="footsteps" size={16} color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"} />
           <Text
             style={{
               marginLeft: 5,
               fontSize: 16,
               fontFamily: "Inter_500Medium",
+              color: themeValue.isDarkMode ? '#e2e3e7' : 'black'
             }}
           >
             Bước
@@ -147,10 +152,10 @@ function HomeCircleInfo({ isRefresh }) {
           onPressIn={() => setIsPressCalo(true)}
           onPressOut={() => setIsPressCalo(false)}
         >
-          <Text style={styles.number}>
+          <Text style={[styles.number, {color: themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}]}>
             {calorisToday > 1000 ? calorisToday / 1000 : calorisToday}
           </Text>
-          <Text style={styles.subText}>Calo</Text>
+          <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Calo</Text>
         </Pressable>
 
         <Pressable
@@ -159,8 +164,8 @@ function HomeCircleInfo({ isRefresh }) {
           onPressIn={() => setIsPressDistance(true)}
           onPressOut={() => setIsPressDistance(false)}
         >
-          <Text style={styles.number}>{distanceToday.toFixed(2)}</Text>
-          <Text style={styles.subText}>Km</Text>
+          <Text style={[styles.number, {color: themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}]}>{distanceToday.toFixed(2)}</Text>
+          <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Km</Text>
         </Pressable>
 
         <Pressable
@@ -169,8 +174,8 @@ function HomeCircleInfo({ isRefresh }) {
           onPressIn={() => setIsPressTime(true)}
           onPressOut={() => setIsPressTime(false)}
         >
-          <Text style={styles.number}>{practiceTime}</Text>
-          <Text style={styles.subText}>Phút vận động</Text>
+          <Text style={[styles.number, {color: themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}]}>{practiceTime}</Text>
+          <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Phút vận động</Text>
         </Pressable>
       </View>
     </View>

@@ -11,7 +11,8 @@ import {
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import Fonts from "../constants/Fonts";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ThemeContext } from "../screens/MainScreen/ThemeProvider";
 
 function TaskBlock({
   heading,
@@ -35,19 +36,20 @@ function TaskBlock({
   // if (!fontsLoaded) {
   //   console.log("Loading...");
   // }
+  const themeValue = useContext(ThemeContext);
   const [isPressed, setIsPress] = useState(false)
   return (
     <Pressable 
-      style={[styles.container, isPressed && styles.pressedContainer]}
+      style={[styles.container, isPressed && styles.pressedContainer,themeValue.isDarkMode && {backgroundColor: '#2a2b2f'}]}
       onPress={() => {setIsPress(true); pressedFunction()}}
       onPressOut={() => setIsPress(false)}
     >
       <Ionicons
         name="arrow-redo-outline"
         size={20}
-        style={{ top: 15, right: 10, position: "absolute" }}
+        style={{ top: 15, right: 10, position: "absolute", color: themeValue.isDarkMode ? '#e2e3e7' : 'black' }}
       />
-      <Text style={styles.heading}>{heading}</Text>
+      <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>{heading}</Text>
       {(time || imageTimeLink)&& (
         <Text style={styles.time}>
           {imageTimeLink && (

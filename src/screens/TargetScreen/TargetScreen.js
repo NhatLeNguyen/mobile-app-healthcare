@@ -5,23 +5,40 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Switch,
 } from "react-native";
 import InputWithHeader from "../../components/InputWithHeader";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
 import { useToast } from "react-native-toast-notifications";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 function TargetScreen() {
+  // const [isDarkMode, setIsDarkMode] = useState("false");
+  const themeValue = useContext(ThemeContext)
   const toast = useToast();
   const [disableButton, setDisableButton] = useState(true);
   const [steps, setSteps] = useState("0");
   const [heartStep, setHeartStep] = useState("0");
   const [weight, setWeight] = useState("0");
   const [height, setHeight] = useState("0");
-  const [user_id ,setUserId] = useState('1')
+  const [user_id, setUserId] = useState("1");
+  const handleChangeMode = async () => {
+    themeValue.setIsDarkMode((prev) => !prev)
+    // await Storage.setItem({ key: "isDarkMode", value: check });
+    // setIsDarkMode(check);
+  };
+
+  // useEffect(() => {
+  //   const loading = async () => {
+  //     const idm = await Storage.getItem({ key: "isDarkMode" });
+  //     setIsDarkMode(idm);
+  //   };
+  //   loading();
+  // }, []);
   useEffect(() => {
     const loading = async () => {
       const steps_target = await Storage.getItem({ key: `steps_target` });
@@ -85,22 +102,28 @@ function TargetScreen() {
     }
     (await db).runSync(
       "UPDATE user SET steps_target = ?,heart_target = ?,weight = ? ,height = ? WHERE user_id = ?",
-      [parseInt(steps), parseInt(heartStep),parseInt(weight), parseInt(height),user_id]
+      [
+        parseInt(steps),
+        parseInt(heartStep),
+        parseInt(weight),
+        parseInt(height),
+        user_id,
+      ]
     );
     await Storage.setItem({
-      key: 'steps_target',
+      key: "steps_target",
       value: steps,
     });
     await Storage.setItem({
-      key: 'heart_target',
+      key: "heart_target",
       value: heartStep,
     });
     await Storage.setItem({
-      key: 'weight',
+      key: "weight",
       value: weight,
     });
     await Storage.setItem({
-      key: 'height',
+      key: "height",
       value: height,
     });
     setDisableButton(true);
@@ -112,25 +135,26 @@ function TargetScreen() {
     });
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, {backgroundColor: themeValue.isDarkMode === false ? 'white' : 'black'}]}>
       <Text
         style={{
           fontSize: 40,
           fontFamily: "Inter_500Medium",
           paddingLeft: 20,
-          color: "black",
+          color: themeValue.isDarkMode === false ? 'black' : '#e2e3e7',
         }}
       >
         Hồ sơ
       </Text>
-      <Text style={styles.headerText}>Mục tiêu hoạt động</Text>
-      <View style={styles.lineStyle} />
+      <Text style={[styles.headerText, {color: themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}]}>Mục tiêu hoạt động</Text>
+      <View style={[styles.lineStyle, {borderBottomColor:themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}]} />
       <View style={{ paddingLeft: 20, flexDirection: "row" }}>
         <InputWithHeader
           width={150}
           header="Bước"
           value={steps}
-          color="#1a9be8"
+          headerColor={themeValue.isDarkMode === false ? 'black' : '#727377'}
+          color={themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}
           onChange={(value) => {
             setSteps(value);
             setDisableButton(false);
@@ -141,7 +165,8 @@ function TargetScreen() {
           width={150}
           header="Điểm nhịp tim"
           value={heartStep}
-          color="green"
+          headerColor={themeValue.isDarkMode === false ? 'black' : '#727377'}
+          color={themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}
           onChange={(value) => {
             setHeartStep(value);
             setDisableButton(false);
@@ -158,14 +183,15 @@ function TargetScreen() {
           ]}
         /> */}
       </View>
-      <Text style={styles.headerText}>Thông tin của bạn</Text>
-      <View style={styles.lineStyle} />
+      <Text style={[styles.headerText, {color: themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}]}>Thông tin của bạn</Text>
+      <View style={[styles.lineStyle, {borderBottomColor:themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}]} />
       <View style={{ paddingLeft: 20, flexDirection: "row" }}>
         <InputWithHeader
           width={150}
           header="Cân nặng"
           value={weight}
-          color="#1a9be8"
+          headerColor={themeValue.isDarkMode === false ? 'black' : '#727377'}
+          color={themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}
           onChange={(value) => {
             setWeight(value);
             setDisableButton(false);
@@ -177,12 +203,37 @@ function TargetScreen() {
           width={150}
           header="Chiều cao"
           value={height}
-          color="green"
+          headerColor={themeValue.isDarkMode === false ? 'black' : '#727377'}
+          color={themeValue.isDarkMode === false ? 'black' : '#e2e3e7'}
           onChange={(value) => {
             setHeight(value);
             setDisableButton(false);
           }}
           subText="cm"
+        />
+      </View>
+      <View
+        style={{
+          paddingLeft: 20,
+          marginTop: 30,
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            fontFamily: "Inter_500Medium",
+            color: themeValue.isDarkMode === false ? 'black' : '#e2e3e7'
+          }}
+        >
+          Dark Mode
+        </Text>
+        <Switch
+          trackColor={{ false: "black", true: "#e2e3e7" }}
+          thumbColor={themeValue.isDarkMode === false ? "gray" : "#f2f2f2"}
+          value={themeValue.isDarkMode}
+          onValueChange={() => handleChangeMode()}
         />
       </View>
       <TouchableOpacity
@@ -200,7 +251,7 @@ function TargetScreen() {
       >
         <Text
           style={{
-            color: "white",
+            color: "#e2e3e7",
             fontFamily: "Inter_500Medium",
             backgroundColor: "transparent",
           }}
@@ -216,7 +267,7 @@ export default TargetScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: "#e2e3e7",
     paddingTop: 80,
     // marginTop: 80,
     flex: 1,
@@ -232,7 +283,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "black",
     borderBottomWidth: 1,
     marginBottom: 10,
-    marginTop: 10,  
+    marginTop: 10,
   },
   button: {
     // position: "absolute",
