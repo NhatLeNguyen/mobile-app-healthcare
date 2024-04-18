@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 // import Slider from '@react-native-community/slider';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import BarChartInfo from "./BarChartInfo";
 import ActivityWeeklyScreen from "./ActivityWeeklyScreen";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
 
 const ActivityDetailScreen = ({route}) => {
+  const themeValue = useContext(ThemeContext)
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
@@ -23,7 +25,7 @@ const ActivityDetailScreen = ({route}) => {
             height: 40,
             elevation: 2,
             // alignItems:'center'
-            // backgroundColor:'white'
+            backgroundColor: themeValue.isDarkMode ? '#202125': 'white'
         },
         tabBarIndicatorContainerStyle: {
           
@@ -40,12 +42,13 @@ const ActivityDetailScreen = ({route}) => {
       <Tab.Screen
         name="day"
         component={BarChartInfo}
-        options={{ title: "Ngày" }}
+        options={{ title: "Ngày", tabBarActiveTintColor:themeValue.isDarkMode ? '#e2e3e7' : 'black'}}
+      
       />
       <Tab.Screen
         name="week"
         component={ActivityWeeklyScreen}
-        options={{ title: "Tuần" }}
+        options={{ title: "Tuần", tabBarActiveTintColor:themeValue.isDarkMode ? '#e2e3e7' : 'black'}}
       />
     </Tab.Navigator>
   );

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -23,6 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LogBox } from "react-native";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -30,20 +31,20 @@ LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);
 
-const chartConfig = {
-  backgroundGradientFrom: "white",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "white",
-  backgroundGradientToOpacity: 0.5,
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#1a9be8",
-  strokeWidth: 1, // optional, default 3
-  decimalPlaces: 0,
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false,
-};
-
 function BarChartInfo({ route }) {
+  const themeValue = useContext(ThemeContext);
+  const chartConfig = {
+    backgroundGradientFrom:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientToOpacity: 0.5,
+    //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: () => "#1a9be8",
+    strokeWidth: 1, // optional, default 3
+    decimalPlaces: 0,
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  };
   const choosedDate = route.params ? route.params.prop : undefined;
   const navigation = useNavigation();
   const today = new Date();
@@ -135,20 +136,20 @@ function BarChartInfo({ route }) {
     navigation.navigate("ActivityDetailPerDay", { data });
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeValue.isDarkMode && {backgroundColor: '#202125', marginTop: 0}]}>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
-          <Text style={styles.dateTimeText}>
+          <Text style={[styles.dateTimeText,themeValue.isDarkMode && {color:'#e2e3e7'}]}>
             {dayOfWeek}, {day} tháng {month}
           </Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} />{" "}
+        <Text style={[{ fontSize: 13, marginTop: 5}, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
+          <Ionicons name="footsteps" size={16} color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"} />{" "}
           {sumSteps > 1000 ? sumSteps / 1000 : sumSteps} bước
         </Text>
       </View>
       <BarChart
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 20}}
         data={stepData}
         width={Dimensions.get("screen").width}
         height={220}
@@ -203,6 +204,8 @@ function BarChartInfo({ route }) {
               startTime={item.start_time}
               totalTime={item.practice_time}
               stepCount={item.steps}
+              stepColor={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}
+              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}
             />
           </TouchableOpacity>
         ))}

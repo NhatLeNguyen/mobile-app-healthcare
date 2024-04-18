@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text, Pressable, TouchableOpacity } from "react-native";
 import {Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-function StepDetail({ startTime, totalTime, stepCount }) {
+function StepDetail({ startTime, totalTime, stepCount, stepColor, titleColor}) {
   const [hourStart, minuteStart] = startTime.split(':')
   const title = parseInt(hourStart) <= 10 ? "Đi bộ buổi sáng" : parseInt(hourStart) <= 18 ? 'Đi bộ buổi chiều' : "Đi bộ buổi tối"
   const [minutePractice, secondPractice] = totalTime.split(':');
@@ -12,12 +12,12 @@ function StepDetail({ startTime, totalTime, stepCount }) {
         <Text style={{ paddingLeft: 10, color: "gray" }}>{startTime}</Text>
       </View>
       <View>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, {color: titleColor}]}>{title}</Text>
       </View>
       <View style={{marginTop: 5, flexDirection: 'row', alignItems:'center'}}>
         <Text style={{color:'gray'}}>{minutePractice}ph {secondPractice}giây   |   </Text>
-        <Ionicons name="footsteps" size={15} color={"blue"} />
-        <Text style={{color:'gray', marginLeft: 5}}>{stepCount} bước</Text>
+        <Ionicons name="footsteps" size={15} color={stepColor} />
+        <Text style={[{color:'gray', marginLeft: 5}]}>{stepCount} bước</Text>
       </View>
     </View>
   );

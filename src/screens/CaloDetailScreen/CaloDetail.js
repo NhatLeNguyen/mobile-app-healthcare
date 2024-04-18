@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-function CaloDetail({ startTime, totalTime, stepCount }) {
+function CaloDetail({ startTime, totalTime, stepCount, titleColor }) {
   const [hourStart, minuteStart] = startTime.split(":");
   const title =
     parseInt(hourStart) <= 10
@@ -24,7 +24,7 @@ function CaloDetail({ startTime, totalTime, stepCount }) {
         <Text style={{ paddingLeft: 10, color: "gray" }}>{startTime}</Text>
       </View>
       <View>
-        <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, {color: titleColor}]}>{title}</Text>
       </View>
       <View
         style={{ marginTop: 5, flexDirection: "row", alignItems: "center" }}

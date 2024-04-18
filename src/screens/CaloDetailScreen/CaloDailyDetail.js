@@ -4,7 +4,7 @@ import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../../constants/Fonts";
 import { getFormatedDate } from "react-native-modern-datepicker";
 
-function CaloDailyDetail({ date, stepCount}) {
+function CaloDailyDetail({ date, stepCount, stepColor}) {
   const daysOfWeek = [
     "Chủ Nhật",
     "Thứ Hai",
@@ -24,7 +24,7 @@ function CaloDailyDetail({ date, stepCount}) {
         <Text style={styles.time}>{day}, {dayInMonth} tháng {month}</Text>
       </View>
       <View>
-        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6}}>{stepCount} calo</Text>
+        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6, color: stepColor}}>{stepCount} calo</Text>
       </View>
     </View>
   );

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -19,23 +19,24 @@ import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
-const chartConfig = {
-  backgroundGradientFrom: "white",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "white",
-  backgroundGradientToOpacity: 0.5,
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#1a9be8",
-  strokeWidth: 1, // optional, default 3
-  decimalPlaces: 0,
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false,
-};
-
 function ActivityWeeklyScreen() {
+  const themeValue = useContext(ThemeContext);
+  const chartConfig = {
+    backgroundGradientFrom:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientToOpacity: 0.5,
+    //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: () => "#1a9be8",
+    strokeWidth: 1, // optional, default 3
+    decimalPlaces: 0,
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  };
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
@@ -163,10 +164,10 @@ function ActivityWeeklyScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeValue.isDarkMode && {backgroundColor: '#202125', marginTop: 0}]}>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
-          <Text style={styles.dateTimeText}>
+          <Text style={[styles.dateTimeText, themeValue.isDarkMode && {color:'#e2e3e7'}]}>
             Ngày {startDate.getDate()}
             {startDate.getMonth() !== endDate.getMonth() && (
               <Text> tháng {startDate.getMonth() + 1}</Text>
@@ -177,8 +178,8 @@ function ActivityWeeklyScreen() {
             </Text>
           </Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 13, marginTop: 5 }}>
-          <Ionicons name="footsteps" size={16} color={"blue"} /> {totalSteps > 1000 ? totalSteps / 1000 : totalSteps}{" "}
+        <Text style={[{ fontSize: 13, marginTop: 5 }, themeValue.isDarkMode && {color:'#e2e3e7'}]}>
+          <Ionicons name="footsteps" size={16} color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"} /> {totalSteps > 1000 ? totalSteps / 1000 : totalSteps}{" "}
           bước
         </Text>
       </View>
@@ -237,7 +238,7 @@ function ActivityWeeklyScreen() {
                 })
               }
             >
-              <StepDailyDetail date={item.date} stepCount={item.steps} />
+              <StepDailyDetail date={item.date} stepCount={item.steps} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}/>
             </TouchableOpacity>
           );
         })}
