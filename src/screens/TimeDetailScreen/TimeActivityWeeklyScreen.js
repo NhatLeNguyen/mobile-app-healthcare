@@ -20,23 +20,25 @@ import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import { useContext } from "react";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
-const chartConfig = {
-  backgroundGradientFrom: "white",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "white",
-  backgroundGradientToOpacity: 0.5,
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#a0dac3",
-  strokeWidth: 1, // optional, default 3
-  decimalPlaces: 0,
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false,
-};
-
 function TimeActivityWeeklyScreen() {
+  const themeValue = useContext(ThemeContext);
+  const chartConfig = {
+    backgroundGradientFrom:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientToOpacity: 0.5,
+    //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: () => "#1a9be8",
+    strokeWidth: 1, // optional, default 3
+    decimalPlaces: 0,
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  };
   const navigation = useNavigation();
   const today = new Date();
   const currentDate = getFormatedDate(today, "YYYY/MM/DD");
@@ -149,10 +151,10 @@ function TimeActivityWeeklyScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeValue.isDarkMode && {backgroundColor: '#202125', marginTop: 0}]}>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
-          <Text style={styles.dateTimeText}>
+        <Text style={[styles.dateTimeText, themeValue.isDarkMode && {color:'#e2e3e7'}]}>
             Ngày {startDate.getDate()}
             {startDate.getMonth() !== endDate.getMonth() && (
               <Text> tháng {startDate.getMonth() + 1}</Text>
@@ -163,7 +165,7 @@ function TimeActivityWeeklyScreen() {
             </Text>
           </Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 13, marginTop: 5 }}>
+        <Text style={[{ fontSize: 13, marginTop: 5 }, themeValue.isDarkMode && {color:'#e2e3e7'}]}>
           <Image
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/2102/2102627.png",
@@ -227,7 +229,7 @@ function TimeActivityWeeklyScreen() {
                 })
               }
             >
-              <DistanceDailyDetail date={item.date} stepCount={item.distances} />
+              <DistanceDailyDetail date={item.date} stepCount={item.distances} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}/>
             </TouchableOpacity>
           );
         })}

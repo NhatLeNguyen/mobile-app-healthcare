@@ -238,7 +238,7 @@ function ActivityWeeklyScreen() {
                 })
               }
             >
-              <StepDailyDetail date={item.date} stepCount={item.steps} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}/>
+              <StepDailyDetail date={item.date} stepCount={item.steps} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}/>
             </TouchableOpacity>
           );
         })}

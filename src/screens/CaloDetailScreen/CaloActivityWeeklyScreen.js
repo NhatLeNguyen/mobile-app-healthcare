@@ -209,7 +209,7 @@ function CaloActivityWeeklyScreen() {
                 })
               }
             >
-              <CaloDailyDetail date={item.date} stepCount={item.caloris} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}/>
+              <CaloDailyDetail date={item.date} stepCount={item.caloris} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}/>
             </TouchableOpacity>
           );
         })}

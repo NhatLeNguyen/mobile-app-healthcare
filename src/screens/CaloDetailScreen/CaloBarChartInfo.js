@@ -211,7 +211,7 @@ function CaloBarChartInfo({ route }) {
               startTime={item.start_time}
               totalTime={item.practice_time}
               stepCount={item.calories}
-              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}
+              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}
             />
           </TouchableOpacity>
         ))}

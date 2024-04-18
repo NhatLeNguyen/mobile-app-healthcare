@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Dimensions } from "react-native";
 // import Slider from '@react-native-community/slider';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import DistanceBarChartInfo from "./TimeBarChartInfo";
 import DistanceActivityWeeklyScreen from "./TimeActivityWeeklyScreen";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const Tab = createMaterialTopTabNavigator();
 const tabIndicatorWidth = 35
 
 const TimeActivityDetailScreen = ({route}) => {
+  const themeValue = useContext(ThemeContext)
   const paddingLeft = (Dimensions.get('screen').width / 2 - tabIndicatorWidth) /2
   return (
     <Tab.Navigator
@@ -24,6 +26,7 @@ const TimeActivityDetailScreen = ({route}) => {
             elevation: 2,
             // alignItems:'center'
             // backgroundColor:'white'
+            backgroundColor: themeValue.isDarkMode ? '#202125': 'white'
         },
         tabBarIndicatorContainerStyle: {
           
@@ -40,12 +43,12 @@ const TimeActivityDetailScreen = ({route}) => {
       <Tab.Screen
         name="time_day"
         component={DistanceBarChartInfo}
-        options={{ title: "Ngày" }}
+        options={{ title: "Ngày", tabBarActiveTintColor:themeValue.isDarkMode ? '#e2e3e7' : 'black'}}
       />
       <Tab.Screen
         name="time_week"
         component={DistanceActivityWeeklyScreen}
-        options={{ title: "Tuần" }}
+        options={{ title: "Tuần", tabBarActiveTintColor:themeValue.isDarkMode ? '#e2e3e7' : 'black'}}
       />
     </Tab.Navigator>
   );

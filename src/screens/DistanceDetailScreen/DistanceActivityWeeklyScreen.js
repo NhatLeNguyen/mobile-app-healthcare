@@ -204,7 +204,7 @@ function DistanceActivityWeeklyScreen() {
                 })
               }
             >
-              <DistanceDailyDetail date={item.date} stepCount={item.distances} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}/>
+              <DistanceDailyDetail date={item.date} stepCount={item.distances} stepColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}/>
             </TouchableOpacity>
           );
         })}

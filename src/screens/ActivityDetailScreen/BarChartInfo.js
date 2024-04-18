@@ -205,7 +205,7 @@ function BarChartInfo({ route }) {
               totalTime={item.practice_time}
               stepCount={item.steps}
               stepColor={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}
-              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}
+              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}
             />
           </TouchableOpacity>
         ))}

@@ -212,7 +212,7 @@ function DistanceBarChartInfo({ route }) {
               startTime={item.start_time}
               totalTime={item.practice_time}
               stepCount={item.totalDistance}
-              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}
+              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'black'}
             />
           </TouchableOpacity>
         ))}
