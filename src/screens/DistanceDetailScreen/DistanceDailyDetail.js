@@ -4,7 +4,7 @@ import { useFonts } from "@expo-google-fonts/inter";
 import Fonts from "../../constants/Fonts";
 import { getFormatedDate } from "react-native-modern-datepicker";
 
-function DistanceDailyDetail({ date, stepCount}) {
+function DistanceDailyDetail({ date, stepCount, stepColor}) {
   const daysOfWeek = [
     "Chủ Nhật",
     "Thứ Hai",
@@ -24,7 +24,7 @@ function DistanceDailyDetail({ date, stepCount}) {
         <Text style={styles.time}>{day}, {dayInMonth} tháng {month}</Text>
       </View>
       <View>
-        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6}}>{stepCount} km</Text>
+        <Text style={{fontFamily:'Inter_500Medium', fontSize: 15, marginTop: 6, color: stepColor}}>{stepCount} km</Text>
       </View>
     </View>
   );

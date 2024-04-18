@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Modal,
   StyleSheet,
@@ -25,6 +25,7 @@ import { LogBox } from "react-native";
 import * as SQLite from "expo-sqlite/next";
 import DistanceDetail from "./DistanceDetail";
 import Storage from "expo-storage";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -32,20 +33,21 @@ LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);
 
-const chartConfig = {
-  backgroundGradientFrom: "white",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "white",
-  backgroundGradientToOpacity: 0.5,
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  color: () => "#ff4a73",
-  strokeWidth: 1, // optional, default 3
-  decimalPlaces: 0,
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false,
-};
 
 function DistanceBarChartInfo({ route }) {
+  const themeValue = useContext(ThemeContext);
+  const chartConfig = {
+    backgroundGradientFrom:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo:themeValue.isDarkMode ? "black" : "white",
+    backgroundGradientToOpacity: 0.5,
+    //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: () => "#1a9be8",
+    strokeWidth: 1, // optional, default 3
+    decimalPlaces: 0,
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  };
   const choosedDate = route.params ? route.params.prop : undefined;
   const navigation = useNavigation();
   const today = new Date();
@@ -137,14 +139,14 @@ function DistanceBarChartInfo({ route }) {
     navigation.navigate("ActivityDetailPerDay", { data });
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, themeValue.isDarkMode && {backgroundColor: '#202125', marginTop: 0}]}>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={() => setOpenChooseDate(true)}>
-          <Text style={styles.dateTimeText}>
+        <Text style={[styles.dateTimeText,themeValue.isDarkMode && {color:'#e2e3e7'}]}>
             {dayOfWeek}, {day} tháng {month}
           </Text>
         </TouchableOpacity>
-        <Text style={{ fontSize: 13, marginTop: 5 }}>
+        <Text style={[{ fontSize: 13, marginTop: 5}, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
           <Image
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/6194/6194839.png",
@@ -210,6 +212,7 @@ function DistanceBarChartInfo({ route }) {
               startTime={item.start_time}
               totalTime={item.practice_time}
               stepCount={item.totalDistance}
+              titleColor={themeValue.isDarkMode ? '#e2e3e7' : 'gray'}
             />
           </TouchableOpacity>
         ))}
