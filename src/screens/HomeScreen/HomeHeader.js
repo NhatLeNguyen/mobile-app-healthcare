@@ -46,10 +46,12 @@ function validatePassword(password) {
 }
 
 function HomeHeader() {
-  const themeValue = useContext(ThemeContext)
+  const themeValue = useContext(ThemeContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [avatar, setAvatar] = useState('https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg')
-  const [name, setName] = useState('')
+  const [avatar, setAvatar] = useState(
+    "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+  );
+  const [name, setName] = useState("");
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
   const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] =
@@ -69,8 +71,8 @@ function HomeHeader() {
       setPasswordFromStorage(pass);
       const ava = await Storage.getItem({ key: `avatar` });
       setAvatar(ava);
-      const na = await Storage.getItem({key : 'name'})
-      setName(na)
+      const na = await Storage.getItem({ key: "name" });
+      setName(na);
     };
     loading();
   }, []);
@@ -268,7 +270,7 @@ function HomeHeader() {
               size={100}
               source={{
                 // uri: "https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg?size=626&ext=jpg&ga=GA1.1.1395880969.1709424000&semt=sph",
-                uri: avatar
+                uri: avatar,
               }}
             />
             <Text style={styles.welcomeText}>{name}</Text>
@@ -358,7 +360,11 @@ function HomeHeader() {
         onPress={() => handleModal()}
         activeOpacity={0.5}
       >
-        <Ionicons name="information-circle-outline" size={30} color={themeValue.isDarkMode ? 'white' : 'black'} />
+        <Ionicons
+          name="information-circle-outline"
+          size={30}
+          color={themeValue.isDarkMode ? "white" : "black"}
+        />
       </TouchableOpacity>
       <TouchableOpacity
         activeOpacity={0.7}
@@ -379,18 +385,38 @@ function HomeHeader() {
         // style={{ height: 150, flex: 0.5 }}
         onRequestClose={() => setIsModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContent}>
+        <View
+          style={[
+            styles.modalBackground,
+            themeValue.isDarkMode && { backgroundColor: "rgba(0,0,0,0.5)" },
+          ]}
+        >
+          <View
+            style={[
+              styles.modalContent,
+              themeValue.isDarkMode && { backgroundColor: "black" },
+            ]}
+          >
             <Swiper style={styles.wrapper} showsButtons={false}>
               <View style={styles.slide1}>
                 <View>
-                  <Text style={styles.textHeader}>
+                  <Text
+                    style={[
+                      styles.textHeader,
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
+                    ]}
+                  >
                     Theo dõi hoạt động bằng LK
                   </Text>
                 </View>
                 <View style={styles.body}>
                   <FontAwesome name="heartbeat" size={30} color={"green"} />
-                  <Text style={{ fontWeight: "bold", fontSize: 17 }}>
+                  <Text
+                    style={[
+                      { fontWeight: "bold", fontSize: 17 },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
+                    ]}
+                  >
                     Điểm nhịp tim
                   </Text>
                   <Text style={styles.bodyText}>
@@ -400,10 +426,17 @@ function HomeHeader() {
                   <Ionicons
                     name="footsteps"
                     size={30}
-                    color={"blue"}
+                    color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}
                     style={{ paddingTop: 25 }}
                   />
-                  <Text style={{ fontWeight: "bold", fontSize: 17 }}>Bước</Text>
+                  <Text
+                    style={[
+                      { fontWeight: "bold", fontSize: 17 },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
+                    ]}
+                  >
+                    Bước
+                  </Text>
                   <Text style={styles.bodyText}>
                     Hãy chăm chỉ vận động để đạt được mục tiêu này
                   </Text>
@@ -413,6 +446,7 @@ function HomeHeader() {
                       {
                         marginTop: 25,
                       },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
                     ]}
                   >
                     Cùng với tính năng điếm số bước, LK tính điểm nhịp tim khi
@@ -423,7 +457,14 @@ function HomeHeader() {
 
               <View style={styles.slide2}>
                 <View>
-                  <Text style={styles.textHeader}>Cách ghi điểm nhịp tim</Text>
+                  <Text
+                    style={[
+                      styles.textHeader,
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
+                    ]}
+                  >
+                    Cách ghi điểm nhịp tim
+                  </Text>
                 </View>
                 <View style={styles.body}>
                   <FontAwesome
@@ -438,6 +479,7 @@ function HomeHeader() {
                       {
                         marginTop: 70,
                       },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
                     ]}
                   >
                     Ghi điểm cho hoạt động làm tăng nhịp tim như đi bộ nhanh,
@@ -447,7 +489,12 @@ function HomeHeader() {
               </View>
               <View style={styles.slide3}>
                 <View>
-                  <Text style={styles.textHeader}>
+                  <Text
+                    style={[
+                      styles.textHeader,
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
+                    ]}
+                  >
                     Một cách đơn giản để sống khỏe
                   </Text>
                 </View>
@@ -464,6 +511,7 @@ function HomeHeader() {
                       {
                         marginTop: 30,
                       },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
                     ]}
                   >
                     Mục tiêu hàng tuần của bạn được đưa ra được dựa trên mức độ
@@ -475,6 +523,7 @@ function HomeHeader() {
                       {
                         marginTop: 20,
                       },
+                      themeValue.isDarkMode && { color: "#e2e3e7" },
                     ]}
                   >
                     Khi đạt 150 Điểm nhịp tim mỗi tuần, bạn có thể ngủ ngon hơn,

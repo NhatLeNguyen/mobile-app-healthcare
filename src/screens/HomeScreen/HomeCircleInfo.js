@@ -73,7 +73,7 @@ function HomeCircleInfo({ isRefresh }) {
       <CircleWithPercentage
         diameter={220}
         color="#00c3a6"
-        restColor="#c8f2ec"
+        restColor={themeValue.isDarkMode ? "#1f3938" : "#c8f2ec"}
         value={50}
         MAX_VALUE={1000}
         paddingCircle={0}
@@ -83,7 +83,7 @@ function HomeCircleInfo({ isRefresh }) {
       <CircleWithPercentage
         diameter={180}
         color={themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}
-        restColor="#dfe7f3"
+        restColor={themeValue.isDarkMode ? "#293241" : "#dfe7f3"}
         value={stepsToday}
         MAX_VALUE={steps_target}
         paddingCircle={20}
@@ -117,7 +117,7 @@ function HomeCircleInfo({ isRefresh }) {
           </Text>
         </Pressable>
 
-        <Pressable
+        <TouchableOpacity
           style={[
             {
               flexDirection: "row",
@@ -142,11 +142,11 @@ function HomeCircleInfo({ isRefresh }) {
           >
             Bước
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View style={{ flexDirection: "row" }}>
-        <Pressable
+        <TouchableOpacity
           style={[styles.pressAble, isPressedCalo && styles.pressedButton]}
           onPress={() => navigation.navigate("CaloActivityDetail")}
           onPressIn={() => setIsPressCalo(true)}
@@ -156,9 +156,9 @@ function HomeCircleInfo({ isRefresh }) {
             {calorisToday > 1000 ? calorisToday / 1000 : calorisToday}
           </Text>
           <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Calo</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={[styles.pressAble, isPressedDistance && styles.pressedButton]}
           onPress={() => navigation.navigate("DistanceActivityDetailPerDay")}
           onPressIn={() => setIsPressDistance(true)}
@@ -166,9 +166,9 @@ function HomeCircleInfo({ isRefresh }) {
         >
           <Text style={[styles.number, {color: themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}]}>{distanceToday.toFixed(2)}</Text>
           <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Km</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={[styles.pressAble, isPressedTime && styles.pressedButton]}
           onPress={() => navigation.navigate("TimeActivityDetailPerDay")}
           onPressIn={() => setIsPressTime(true)}
@@ -176,7 +176,7 @@ function HomeCircleInfo({ isRefresh }) {
         >
           <Text style={[styles.number, {color: themeValue.isDarkMode ? "#68a0f3" : "#1a9be8"}]}>{practiceTime}</Text>
           <Text style={[styles.subText, {color: themeValue.isDarkMode ? '#e2e3e7' : '#3c4043'}]}>Phút vận động</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
