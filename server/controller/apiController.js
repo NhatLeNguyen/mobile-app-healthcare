@@ -66,8 +66,20 @@ let getWeeklyPracticeDetail = async (req, res) => {
   }
 }
 
+let getChallenge = async (req, res) => {
+  try{
+    let data = await pool.execute('SELECT * from challenge')
+    console.log(data[0]);
+    return res.status(200).send({data: data[0]})
+  } catch(err){
+    console.log(err);
+    return res.status(400).send('Failed')
+  }
+}
+
 export default {
   savePracticeHistory,
   getDailyPracticeDetail,
-  getWeeklyPracticeDetail
+  getWeeklyPracticeDetail,
+  getChallenge
 };

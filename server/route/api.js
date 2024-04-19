@@ -5,6 +5,7 @@ const initAPIRoute = (app) => {
   router.post('/savePracticeHistory', apiController.savePracticeHistory);
   router.get('/getDailyPracticeDetail', apiController.getDailyPracticeDetail)
   router.get('/getWeeklyPracticeDetail', apiController.getWeeklyPracticeDetail)
+  router.get('/getChallenge', apiController.getChallenge)
   return app.use('/', router);
 };
 

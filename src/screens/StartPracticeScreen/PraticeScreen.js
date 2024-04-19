@@ -74,7 +74,7 @@ function PracticeScreen() {
   useEffect(() => {
     if (isLoadedMusicList == 0) {
       console.log("vllll");
-      NhacCuaTui.getTop100("m3liaiy6vVsF").then(async (response) => {
+      NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
         for (let i = 0; i < response.playlist.songs.length; i++) {
           let info = response.playlist.songs[i];
           let key = info["key"];
