@@ -28,6 +28,7 @@ import TargetScreen from "../TargetScreen/TargetScreen";
 import { ThemeContext } from "./ThemeProvider";
 import ThemeProvider from "./ThemeProvider";
 import ChallengeScreen from "../ChallengeScreen/ChallengeScreen";
+import ChallengeMap from "../ChallengeScreen/ChallengeMap";
 
 const Tab = createBottomTabNavigator();
 
@@ -145,7 +146,7 @@ export default function MainScreen() {
           component={StartPracticeScreenNavigator}
           options={{ headerShown: false }}
         />
-        <Tab.Screen name="Together" component={ChallengeScreen} options={{headerShown: false}}/>
+        <Tab.Screen name="Together" component={ChallengeMap} options={{headerShown: false}}/>
         <Tab.Screen
           name="Setting"
           component={TargetScreen}
