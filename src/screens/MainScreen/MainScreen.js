@@ -13,6 +13,7 @@ import {
   Ionicons,
   FontAwesome,
   MaterialCommunityIcons,
+  Feather
 } from "@expo/vector-icons";
 // Screens
 import HomeScreen from "../HomeScreen/HomeScreen";
@@ -26,6 +27,7 @@ import * as SQLite from "expo-sqlite";
 import TargetScreen from "../TargetScreen/TargetScreen";
 import { ThemeContext } from "./ThemeProvider";
 import ThemeProvider from "./ThemeProvider";
+import ChallengeScreen from "../ChallengeScreen/ChallengeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,9 +58,9 @@ export default function MainScreen() {
               //   style ={{width: 31, height:31}}
               //   source={{ uri : "https://cdn-icons-gif.flaticon.com/8756/8756262.gif"}}
               //   />)
-            } else if (route.name === "Empty1") {
+            } else if (route.name === "Together") {
               return (
-                <FontAwesome name="star-half-empty" size={size} color={color} />
+                <Ionicons name="flag" size={size} color={color} />
               );
             } else if (route.name === "Setting") {
               return <FontAwesome name="user" size={size} color={color} />;
@@ -95,7 +97,7 @@ export default function MainScreen() {
                   </Text>
                 );
               }
-            } else if (route.name === "Empty1") {
+            } else if (route.name === "Together") {
               if (focused) {
                 return (
                   <Text
@@ -105,7 +107,7 @@ export default function MainScreen() {
                       fontWeight: "bold",
                     }}
                   >
-                    Practice1
+                    Together
                   </Text>
                 );
               }
@@ -127,7 +129,9 @@ export default function MainScreen() {
             return null;
           },
           tabBarStyle: {
-            backgroundColor: "#F8F8F8", // Màu nền của tabBar
+            backgroundColor: "#F8F8F8"
+            // backgroundColor:themeValue.isDarkMode ? 'black' : "#F8F8F8",
+            // borderTopColor:'black'
           },
         })}
       >
@@ -141,7 +145,7 @@ export default function MainScreen() {
           component={StartPracticeScreenNavigator}
           options={{ headerShown: false }}
         />
-        <Tab.Screen name="Empty1" component={HomeScreen} />
+        <Tab.Screen name="Together" component={ChallengeScreen} options={{headerShown: false}}/>
         <Tab.Screen
           name="Setting"
           component={TargetScreen}
