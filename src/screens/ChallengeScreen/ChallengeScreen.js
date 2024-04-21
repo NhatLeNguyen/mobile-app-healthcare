@@ -8,11 +8,11 @@ import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 
 function ChallengeScreen() {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [avatar, setAvatar] = useState(
     "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821_1280.jpg"
   );
-  const [challengeData, setChallengeData] = useState([])
+  const [challengeData, setChallengeData] = useState([]);
   useEffect(() => {
     const loading = async () => {
       const ava = await Storage.getItem({ key: "avatar" });
@@ -21,53 +21,77 @@ function ChallengeScreen() {
     loading();
   }, []);
   useEffect(() => {
-    const loading =async () => {
-    await axios
-      .get(`http://${IP}:1510/getChallenge`, {
-      })
-      .then(function (response) {
-        const data = response.data.data;
-        console.log(data);
-        setChallengeData(data)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    loading()
-  }, [])
+    const loading = async () => {
+      await axios
+        .get(`http://${IP}:1510/getChallenge`, {})
+        .then(function (response) {
+          const data = response.data.data;
+          setChallengeData(data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+    loading();
+  }, []);
   useEffect(() => {
     const saveInfo = async (key, value) => {
-      await Storage.setItem({key: key, value: value})
-    }
-    const loading =async () => {
-    await axios
-      .get(`http://${IP}:1510/getChallenge`, {
-      })
-      .then(function (response) {
-        const data = response.data.data;
-        setChallengeData(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      await Storage.setItem({ key: key, value: value });
+    };
+    const loading = async () => {
       await axios
-      .get(`http://${IP}:1510/getChallengeMap`, {
-      })
-      .then(function (response) {
-        const data = response.data.data;
-        
-        for(let i = 0 ; i < data.length ; i++){
-          saveInfo(key=`line_map${data[i]['challenge_id']}`, value=JSON.stringify(data[i]["line_map"]))
-          saveInfo(key=`url_map${data[i]['challenge_id']}`, value=data[i]["url_map"])
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
-    loading()
-  }, [])
+        .get(`http://${IP}:1510/getChallenge`, {})
+        .then(async (response) => {
+          const user_id = await Storage.getItem({ key: "user_id" });
+          let data = response.data.data;
+          for (let i = 0; i < data.length; i++) {
+            let challenge_user_step = await Storage.getItem({
+              key: `challenge_user_step${data[i].id}`,
+            });
+            let user_step_obj = JSON.parse(challenge_user_step);
+            let totalUserSteps = 0;
+            for (let j = 0; j < user_step_obj.length; j++) {
+              if (user_step_obj[j]["user_id"] === user_id) {
+                totalUserSteps = user_step_obj[j]["totalUserSteps"];
+                break;
+              }
+            }
+            data[i]["user_step"] = totalUserSteps;
+          }
+          setChallengeData(data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      await axios
+        .get(`http://${IP}:1510/getChallengeMap`, {})
+        .then(function (response) {
+          const data = response.data.data;
+          for (let i = 0; i < data.length; i++) {
+            saveInfo(
+              (key = `line_map${data[i]["challenge_id"]}`),
+              (value = JSON.stringify(data[i]["line_map"]))
+            );
+            saveInfo(
+              (key = `url_map${data[i]["challenge_id"]}`),
+              (value = data[i]["url_map"])
+            );
+            saveInfo(
+              (key = `line_width_list_map${data[i]["challenge_id"]}`),
+              (value = data[i]["line_width_list"])
+            );
+            saveInfo(
+              (key = `total_line_length${data[i]["challenge_id"]}`),
+              (value = toString(data[i]["total_line_length"]))
+            );
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+    loading();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={{ paddingTop: 60 }}>
@@ -150,16 +174,23 @@ function ChallengeScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         {challengeData.map((data, index) => (
-          <ChallengeBlock 
+          <ChallengeBlock
             key={data.id}
             name={data.name}
-            steps={500}
+            steps={data.user_step ? parseInt(data.user_step) : 0}
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
-            onPress={() => navigation.navigate('ChallengeMap', {'challenge_id': data.id})}
+            onPress={() =>
+              navigation.navigate("ChallengeMap", {
+                challenge_id: data.id,
+                user_step: data.user_step ? parseInt(data.user_step) : 0,
+                target: data.target,
+                total_line_length: data.total_line_length
+              })
+            }
           />
         ))}
         {/* <ChallengeBlock

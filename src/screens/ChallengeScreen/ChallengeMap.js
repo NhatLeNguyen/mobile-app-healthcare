@@ -53,6 +53,15 @@ const LINE_MAP = [
 function ChallengeMap({ route }) {
   const [line_map, setMapInfo] = useState([]);
   const [url_map, setUrlMap] = useState();
+  const [lineWidthList, setLineWidthList] = useState([]);
+  const [steps, setSteps] = useState(0);
+  const [target, setTarget] = useState(1);
+  const [totalLineLength, setTotalLineLength] = useState(0);
+  const [processLineMap, setProcessLineMap] = useState([]);
+  const [topAvatar, setTopAvatar] = useState(0)
+  const [leftAvatar, setLeftAvatar] = useState(0)
+  const [isOddStop, setIsOddStop] = useState(true)
+  let iter = 0;
   useEffect(() => {
     const loading = async () => {
       const linMap = await Storage.getItem({
@@ -61,11 +70,44 @@ function ChallengeMap({ route }) {
       const url = await Storage.getItem({
         key: `url_map${route.params["challenge_id"]}`,
       });
+      const lineList = await Storage.getItem({
+        key: `line_width_list_map${route.params["challenge_id"]}`,
+      });
       // console.log(linMap);
-      let linMapClean = linMap.replace(/\\/g, '')
-      linMapClean = linMapClean.slice(1, -1)
-      setMapInfo(JSON.parse(linMapClean))
+      let linMapClean = linMap.replace(/\\/g, "");
+      linMapClean = linMapClean.slice(1, -1);
+      let linMapParse = JSON.parse(linMapClean);
+      setMapInfo(linMapParse);
       setUrlMap(url);
+      const lineListParse = JSON.parse(lineList);
+      setLineWidthList(lineListParse);
+      setSteps(route.params["user_step"]);
+      setTarget(route.params["target"]);
+      setTotalLineLength(route.params["total_line_length"]);
+      let curPos = Math.floor((route.params["user_step"] / route.params["target"]) * route.params["total_line_length"]);
+      let processMap = [];
+      for (let i = 0; i < lineListParse.length; i++) {
+        if (lineListParse[i] >= curPos) {
+          if (i % 2 == 0) {
+            processMap.push({ ...linMapParse[i], width: curPos });
+            setTopAvatar(linMapParse[i].top)
+            setLeftAvatar(linMapParse[i].left + curPos)
+            setIsOddStop(0)
+            break;
+          } else {
+            processMap.push({ ...linMapParse[i], height: curPos });
+            setTopAvatar(linMapParse[i].top + curPos)
+            setLeftAvatar(linMapParse[i].left)
+            setIsOddStop(1)
+            break;
+          }
+        } else {
+          processMap.push(linMapParse[i]);
+          curPos -= lineListParse[i];
+        }
+      }
+      console.log(processMap);
+      setProcessLineMap(processMap);
     };
     loading();
   }, []);
@@ -81,27 +123,31 @@ function ChallengeMap({ route }) {
         {line_map.map((props, index) => (
           <View key={index} style={[styles.line, props]}></View>
         ))}
-
-        <View
+        {processLineMap.map((props, index) => (
+          <View key={index} style={[styles.process_line, props]}></View>
+        ))}
+        {/* <View
           style={[
             styles.process_line,
             {
-              width: 200,
+              width: 150,
               height: LINE_HEIGHT,
               top: 40,
               left: 50,
               borderLeftWidth: 2,
             },
           ]}
-        ></View>
+        ></View> */}
         <Image
           source={{
             uri: "https://cdn-icons-png.flaticon.com/512/3228/3228655.png",
           }}
           style={{
             position: "absolute",
-            top: 40 - 50 + LINE_HEIGHT / 2,
-            left: 50 + 200 - 50 / 2,
+            top:isOddStop === 1 ? topAvatar - 50 : topAvatar - 25 + LINE_HEIGHT / 2,
+            // top: 40 - 50 + LINE_HEIGHT / 2,
+            // left: 50 + 200 - 50 / 2,
+            left:isOddStop === 1 ? leftAvatar - 25 + LINE_HEIGHT / 2 : leftAvatar - 50,
             width: 50,
             height: 50,
           }}
@@ -112,16 +158,13 @@ function ChallengeMap({ route }) {
           }}
           style={{
             position: "absolute",
-            top: 40 - 50 + LINE_HEIGHT / 2 + 4,
-            left: 50 + 200 - 50 / 2 + 9,
+            top: isOddStop === 1 ? topAvatar - 50 + 4 : topAvatar - 25 + LINE_HEIGHT / 2 + 4,
+            left: isOddStop === 1 ? leftAvatar - 25 + LINE_HEIGHT / 2 + 8 : leftAvatar - 50 + 9,
             width: 33,
             height: 33,
             borderRadius: 90,
           }}
         />
-        {/* https://cdn-icons-png.flaticon.com/512/3228/3228655.png */}
-        {/* https://cdn-icons-png.flaticon.com/512/1607/1607158.png */}
-        {/* https://cdn-icons-png.flaticon.com/512/2282/2282432.png */}
       </View>
       <View
         style={{
@@ -150,7 +193,7 @@ function ChallengeMap({ route }) {
               fontSize: 18,
             }}
           >
-            7.618
+            {steps > 1000 ? steps / 1000 : steps}
           </Text>
         </View>
         <View

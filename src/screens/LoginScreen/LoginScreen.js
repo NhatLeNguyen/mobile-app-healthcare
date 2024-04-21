@@ -18,8 +18,10 @@ import * as SQLite from "expo-sqlite/next";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { getFormatedDate } from "react-native-modern-datepicker";
 // import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
+import { IP } from "../../constants/Constants";
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -119,12 +121,35 @@ const LoginScreen = () => {
       });
       return;
     }
+    let challenge_data = []
+    await axios
+      .get(`http://${IP}:1510/getChallenge`, {
+      })
+      .then(function (response) {
+        const data = response.data.data;
+        challenge_data = data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    for(let i = 0; i < challenge_data.length ; i++){
+      var startDate = new Date(challenge_data[i]['start_date'])
+      var endDate = new Date(challenge_data[i]['end_date'])
+      const userSteps = (await db).getAllSync(
+        "select user_id,sum(steps) as totalUserSteps from practicehistory where date between ? and ? group by user_id order by totalUserSteps desc",
+        [getFormatedDate(startDate,'YYYY-MM-DD'), getFormatedDate(endDate, 'YYYY-MM-DD')]
+      );
+      await Storage.setItem({key: `challenge_user_step${challenge_data[i]['id']}`, value: JSON.stringify(userSteps)})
+      // await Storage.setItem({key: `challenge_target${challenge_data[i]['id']}`, value: toString(challenge_data[i]['target'])})
+      // await Storage.setItem({key: `challenge_milestone${challenge_data[i]['id']}`, value: toString(challenge_data[i]['milestone'])})
+    }
+
     toast.hideAll();
     toast.show("Đăng nhập thành công", {
       type: "success",
       animationType: "zoom-in",
     });
-    console.log(results1);
+    // console.log(results1);
     for (let key of Object.keys(results1[0])) {
       await Storage.setItem({
         key: key,
