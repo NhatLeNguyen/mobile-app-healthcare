@@ -5,8 +5,10 @@ import { Avatar, Button } from "react-native-elements";
 import ChallengeBlock from "./ChallengeBlock";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
+import { useNavigation } from "@react-navigation/native";
 
 function ChallengeScreen() {
+  const navigation = useNavigation()
   const [avatar, setAvatar] = useState(
     "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821_1280.jpg"
   );
@@ -27,6 +29,38 @@ function ChallengeScreen() {
         const data = response.data.data;
         console.log(data);
         setChallengeData(data)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    loading()
+  }, [])
+  useEffect(() => {
+    const saveInfo = async (key, value) => {
+      await Storage.setItem({key: key, value: value})
+    }
+    const loading =async () => {
+    await axios
+      .get(`http://${IP}:1510/getChallenge`, {
+      })
+      .then(function (response) {
+        const data = response.data.data;
+        setChallengeData(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      await axios
+      .get(`http://${IP}:1510/getChallengeMap`, {
+      })
+      .then(function (response) {
+        const data = response.data.data;
+        
+        for(let i = 0 ; i < data.length ; i++){
+          saveInfo(key=`line_map${data[i]['challenge_id']}`, value=JSON.stringify(data[i]["line_map"]))
+          saveInfo(key=`url_map${data[i]['challenge_id']}`, value=data[i]["url_map"])
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -119,12 +153,13 @@ function ChallengeScreen() {
       <View style={{flex: 1}}>
         {challengeData.map((data, index) => (
           <ChallengeBlock 
-            key={index}
+            key={data.id}
             name={data.name}
             steps={500}
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
+            onPress={() => navigation.navigate('ChallengeMap', {'challenge_id': data.id})}
           />
         ))}
         {/* <ChallengeBlock

@@ -131,6 +131,7 @@ const LoginScreen = () => {
         value: String(results1[0][key]),
       });
     }
+    // Loading map
     await Storage.setItem({
       key: 'isDarkMode',
       value: 'false',

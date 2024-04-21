@@ -6,6 +6,7 @@ const initAPIRoute = (app) => {
   router.get('/getDailyPracticeDetail', apiController.getDailyPracticeDetail)
   router.get('/getWeeklyPracticeDetail', apiController.getWeeklyPracticeDetail)
   router.get('/getChallenge', apiController.getChallenge)
+  router.get('/getChallengeMap', apiController.getChallengeMap)
   return app.use('/', router);
 };
 

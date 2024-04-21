@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 const THUMB_IMAGE_SIZE = 25;
 const SLIDER_WIDTH = 150;
 
-function ChallengeBlock({ name, steps, target ,image_url, thumbIcon}) {
+function ChallengeBlock({ name, steps, target ,image_url, thumbIcon, onPress}) {
   return (
     <TouchableOpacity
     activeOpacity={0.8}
@@ -14,6 +14,7 @@ function ChallengeBlock({ name, steps, target ,image_url, thumbIcon}) {
         // padding: 25,
         borderRadius: 25,
       }}
+      onPress={onPress}
     >
       <Image
         source={{ uri: image_url }}

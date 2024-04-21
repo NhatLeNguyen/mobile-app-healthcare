@@ -77,9 +77,21 @@ let getChallenge = async (req, res) => {
   }
 }
 
+let getChallengeMap = async (req, res) => {
+  try{
+    let data = await pool.execute('SELECT * from challenge_map')
+    console.log(data[0]);
+    return res.status(200).send({data: data[0]})
+  } catch(err){
+    console.log(err);
+    return res.status(400).send('Failed')
+  }
+}
+
 export default {
   savePracticeHistory,
   getDailyPracticeDetail,
   getWeeklyPracticeDetail,
-  getChallenge
+  getChallenge,
+  getChallengeMap
 };
