@@ -50,13 +50,15 @@ function ChallengeScreen() {
             });
             let user_step_obj = JSON.parse(challenge_user_step);
             let totalUserSteps = 0;
+            console.log(user_step_obj);
             for (let j = 0; j < user_step_obj.length; j++) {
               if (user_step_obj[j]["user_id"] === user_id) {
                 totalUserSteps = user_step_obj[j]["totalUserSteps"];
                 break;
               }
             }
-            data[i]["user_step"] = totalUserSteps;
+            data[i]["current_user_step"] = totalUserSteps;
+            data[i]['all_user_step'] = user_step_obj
           }
           setChallengeData(data);
         })
@@ -83,6 +85,10 @@ function ChallengeScreen() {
             saveInfo(
               (key = `total_line_length${data[i]["challenge_id"]}`),
               (value = toString(data[i]["total_line_length"]))
+            );
+            saveInfo(
+              (key = `mile_stone_map${data[i]["challenge_id"]}`),
+              (value = JSON.stringify(data[i]["mile_stone_map"]))
             );
           }
         })
@@ -179,16 +185,18 @@ function ChallengeScreen() {
           <ChallengeBlock
             key={data.id}
             name={data.name}
-            steps={data.user_step ? parseInt(data.user_step) : 0}
+            steps={data["current_user_step"] ? parseInt(data["current_user_step"]) : 0}
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
             onPress={() =>
               navigation.navigate("ChallengeMap", {
                 challenge_id: data.id,
-                user_step: data.user_step ? parseInt(data.user_step) : 0,
+                user_step: data["current_user_step"] ? parseInt(data["current_user_step"]) : 0,
                 target: data.target,
-                total_line_length: data.total_line_length
+                milestone: data.milestone,
+                total_line_length: data.total_line_length, 
+                all_user_step: data.all_user_step ? data.all_user_step : []
               })
             }
           />

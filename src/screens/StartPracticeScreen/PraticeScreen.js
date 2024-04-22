@@ -532,7 +532,7 @@ function PracticeScreen() {
           size={40}
           color="white"
           onPress={() => {
-            sound.unloadAsync();
+            // sound.unloadAsync();
             navigation.navigate("TapLuyen");
             handleCompletePractice();
           }}

@@ -139,6 +139,14 @@ const LoginScreen = () => {
         "select user_id,sum(steps) as totalUserSteps from practicehistory where date between ? and ? group by user_id order by totalUserSteps desc",
         [getFormatedDate(startDate,'YYYY-MM-DD'), getFormatedDate(endDate, 'YYYY-MM-DD')]
       );
+      for(let j = 0 ; j < userSteps.length ; j++){
+        const url = (await db).getAllSync(
+          "select avatar from user where user_id = ?",
+          [userSteps[j]['user_id']]
+        );
+        userSteps[j]['avatar'] = url[0]['avatar']
+      }
+      // console.log(userSteps);
       await Storage.setItem({key: `challenge_user_step${challenge_data[i]['id']}`, value: JSON.stringify(userSteps)})
       // await Storage.setItem({key: `challenge_target${challenge_data[i]['id']}`, value: toString(challenge_data[i]['target'])})
       // await Storage.setItem({key: `challenge_milestone${challenge_data[i]['id']}`, value: toString(challenge_data[i]['milestone'])})

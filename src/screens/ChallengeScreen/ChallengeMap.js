@@ -1,6 +1,8 @@
 import Storage from "expo-storage";
 import { useEffect, useState } from "react";
 import { Image, View, Text, StyleSheet } from "react-native";
+import DrawAvatar from "./DrawAvatar";
+import DrawMileStone from "./DrawMileStone";
 
 const LINE_HEIGHT = 20;
 
@@ -53,14 +55,18 @@ const LINE_MAP = [
 function ChallengeMap({ route }) {
   const [line_map, setMapInfo] = useState([]);
   const [url_map, setUrlMap] = useState();
+  const [mileStoneMap, setMileStoneMap] = useState([])
   const [lineWidthList, setLineWidthList] = useState([]);
+  const [mile, setMile] = useState(0)
   const [steps, setSteps] = useState(0);
   const [target, setTarget] = useState(1);
   const [totalLineLength, setTotalLineLength] = useState(0);
   const [processLineMap, setProcessLineMap] = useState([]);
-  const [topAvatar, setTopAvatar] = useState(0)
-  const [leftAvatar, setLeftAvatar] = useState(0)
-  const [isOddStop, setIsOddStop] = useState(true)
+  const [topAvatar, setTopAvatar] = useState(0);
+  const [leftAvatar, setLeftAvatar] = useState(0);
+  const [isOddStop, setIsOddStop] = useState(true);
+  const [avatarList, setAvatarList] = useState([]);
+  const [rank , setRank] = useState(1)
   let iter = 0;
   useEffect(() => {
     const loading = async () => {
@@ -73,7 +79,9 @@ function ChallengeMap({ route }) {
       const lineList = await Storage.getItem({
         key: `line_width_list_map${route.params["challenge_id"]}`,
       });
-      // console.log(linMap);
+      const user_id = await Storage.getItem({
+        key: `user_id`,
+      });
       let linMapClean = linMap.replace(/\\/g, "");
       linMapClean = linMapClean.slice(1, -1);
       let linMapParse = JSON.parse(linMapClean);
@@ -84,21 +92,25 @@ function ChallengeMap({ route }) {
       setSteps(route.params["user_step"]);
       setTarget(route.params["target"]);
       setTotalLineLength(route.params["total_line_length"]);
-      let curPos = Math.floor((route.params["user_step"] / route.params["target"]) * route.params["total_line_length"]);
+
+      let curPos = Math.floor(
+        (route.params["user_step"] / route.params["target"]) *
+          route.params["total_line_length"]
+      );
       let processMap = [];
       for (let i = 0; i < lineListParse.length; i++) {
         if (lineListParse[i] >= curPos) {
           if (i % 2 == 0) {
             processMap.push({ ...linMapParse[i], width: curPos });
-            setTopAvatar(linMapParse[i].top)
-            setLeftAvatar(linMapParse[i].left + curPos)
-            setIsOddStop(0)
+            setTopAvatar(linMapParse[i].top);
+            setLeftAvatar(linMapParse[i].left + curPos);
+            setIsOddStop(0);
             break;
           } else {
             processMap.push({ ...linMapParse[i], height: curPos });
-            setTopAvatar(linMapParse[i].top + curPos)
-            setLeftAvatar(linMapParse[i].left)
-            setIsOddStop(1)
+            setTopAvatar(linMapParse[i].top + curPos);
+            setLeftAvatar(linMapParse[i].left);
+            setIsOddStop(1);
             break;
           }
         } else {
@@ -106,7 +118,47 @@ function ChallengeMap({ route }) {
           curPos -= lineListParse[i];
         }
       }
-      console.log(processMap);
+
+      let all_user_step = route.params["all_user_step"];
+      let avtList = [];
+      for (let i = 0; i < all_user_step.length; i++) {
+        if(all_user_step[i]['user_id'] === user_id){
+          setRank(i + 1)
+        }
+        let curPos = Math.floor(
+          (all_user_step[i]['totalUserSteps'] / route.params["target"]) *
+            route.params["total_line_length"]
+        );
+        let top = 0;
+        let left = 0;
+        let isOdd = 1;
+        for (let i = 0; i < lineListParse.length; i++) {
+          if (lineListParse[i] >= curPos) {
+            if (i % 2 == 0) {
+              top = linMapParse[i].top;
+              left = linMapParse[i].left + curPos
+              isOdd = 0
+              break;
+            } else {
+              top = linMapParse[i].top + curPos;
+              left = linMapParse[i].left
+              isOdd = 1
+              break;
+            }
+          } else {
+            curPos -= lineListParse[i];
+          }
+        }
+        avtList.push({top: top, left: left, avatar: all_user_step[i]['avatar'], isOddStop: isOdd})
+      }
+      const mileMap = await Storage.getItem({
+        key: `mile_stone_map${route.params["challenge_id"]}`,
+      });
+      let mileMapClean = mileMap.replace(/\\/g, "");
+      mileMapClean = mileMapClean.slice(1, -1);
+      let mileMapParse = JSON.parse(mileMapClean);
+      setMileStoneMap(mileMapParse)
+      setAvatarList(avtList)
       setProcessLineMap(processMap);
     };
     loading();
@@ -126,45 +178,13 @@ function ChallengeMap({ route }) {
         {processLineMap.map((props, index) => (
           <View key={index} style={[styles.process_line, props]}></View>
         ))}
-        {/* <View
-          style={[
-            styles.process_line,
-            {
-              width: 150,
-              height: LINE_HEIGHT,
-              top: 40,
-              left: 50,
-              borderLeftWidth: 2,
-            },
-          ]}
-        ></View> */}
-        <Image
-          source={{
-            uri: "https://cdn-icons-png.flaticon.com/512/3228/3228655.png",
-          }}
-          style={{
-            position: "absolute",
-            top:isOddStop === 1 ? topAvatar - 50 : topAvatar - 25 + LINE_HEIGHT / 2,
-            // top: 40 - 50 + LINE_HEIGHT / 2,
-            // left: 50 + 200 - 50 / 2,
-            left:isOddStop === 1 ? leftAvatar - 25 + LINE_HEIGHT / 2 : leftAvatar - 50,
-            width: 50,
-            height: 50,
-          }}
-        />
-        <Image
-          source={{
-            uri: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg?fbclid=IwZXh0bgNhZW0CMTAAAR3o2rWt7aqbvnqfxT2wIYMWpNmChMiqqT7zcSFE1-H6haAuUjcSTtOrwXU_aem_AYgCBlL7V5Yj8JtbMdVPXAtPRB_rM3J_ugGCDgziCKVTwuP6L5qynx-n8aIMj1nydXinq8c9fzHNtW-BZIGaOwkp",
-          }}
-          style={{
-            position: "absolute",
-            top: isOddStop === 1 ? topAvatar - 50 + 4 : topAvatar - 25 + LINE_HEIGHT / 2 + 4,
-            left: isOddStop === 1 ? leftAvatar - 25 + LINE_HEIGHT / 2 + 8 : leftAvatar - 50 + 9,
-            width: 33,
-            height: 33,
-            borderRadius: 90,
-          }}
-        />
+        {mileStoneMap.map((props, index) => (
+          <DrawMileStone key={index} top={props.top} left={props.left} isOddStop={props.isOddStop} number={props.number}/>
+        ))}
+        {avatarList.map((props, index) => (
+          <DrawAvatar key={index} topAvatar={props.top} leftAvatar={props.left} isOddStop={props.isOddStop} avatar={props.avatar}/>
+        ))} 
+        {/* <View style={{backgroundColor:'red', position:'absolute', left: 100, top: 40, width: 5, height: LINE_HEIGHT}}/> */}
       </View>
       <View
         style={{
@@ -179,6 +199,7 @@ function ChallengeMap({ route }) {
           style={{ flex: 0.5, justifyContent: "center", alignItems: "center" }}
         >
           <Text style={{ color: "white", fontSize: 15 }}>Thành tích</Text>
+          <Text>{}</Text>
           <Image
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/1246/1246381.png",
@@ -215,7 +236,7 @@ function ChallengeMap({ route }) {
               fontSize: 18,
             }}
           >
-            7.618
+            {rank}
           </Text>
         </View>
       </View>
