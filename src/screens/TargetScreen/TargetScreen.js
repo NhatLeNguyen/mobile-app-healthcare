@@ -218,6 +218,7 @@ function TargetScreen() {
           marginTop: 30,
           alignItems: "center",
           flexDirection: "row",
+          
         }}
       >
         <Text
@@ -243,6 +244,9 @@ function TargetScreen() {
           {
             backgroundColor: disableButton ? "rgba(0,0,0,0.1)" : "black",
           },
+          themeValue.isDarkMode && {
+            backgroundColor: disableButton ? "rgba(255,255,255, 0.2)" : "white",
+          }
         ]}
         onPress={() => {
           saveChanges();
@@ -250,11 +254,14 @@ function TargetScreen() {
         disabled={disableButton}
       >
         <Text
-          style={{
-            color: "#e2e3e7",
+          style={[{
+            color: disableButton ? "rgba(255,255,255,0.9)" : "white",
+            // color:'black',
             fontFamily: "Inter_500Medium",
             backgroundColor: "transparent",
-          }}
+          }, themeValue.isDarkMode && {
+              color: disableButton ? "rgba(255,255,255, 0.3)" : "black",
+          }]}
         >
           Lưu thay đổi
         </Text>
@@ -295,7 +302,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     backgroundColor: "#1a9be8",
-    marginTop: 190,
+    marginTop: 110,
     marginLeft: 208,
   },
 });

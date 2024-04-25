@@ -16,14 +16,15 @@ function DrawMileStone({ top, left, isOddStop, number }) {
       /> */}
       <Image
         source={{
-          uri: "https://cdn-icons-png.flaticon.com/512/1246/1246381.png",
+          // uri: "https://cdn-icons-png.flaticon.com/512/1246/1246381.png",
+          uri: "https://cdn2.iconfinder.com/data/icons/greenline/512/star-512.png"
         }}
         style={{
-          width: 30,
-          height: 30,
+          width: 25,
+          height: 25,
           position: "absolute",
-          left: left - 10,
-          top: top - 10,
+          left: left - 2,
+          top: top -3,
         }}
       />
 
@@ -31,10 +32,11 @@ function DrawMileStone({ top, left, isOddStop, number }) {
         style={{
           fontSize: 15,
           fontFamily: "Inter_600SemiBold",
-          color: "#444444",
+          color: 'gray',
+          // color: "#444444",
           // borderWidth: 1,
           position: "absolute",
-          left: left - 5,
+          left: left - 7,
           top: top + 20,
         }}
       >

@@ -7,48 +7,48 @@ import DrawMileStone from "./DrawMileStone";
 const LINE_HEIGHT = 20;
 
 const LINE_MAP = [
-  { width: 270, height: LINE_HEIGHT, top: 40, left: 0 },
+  { width: 100, height: LINE_HEIGHT, top: 40, left: 0 },
   {
     width: LINE_HEIGHT,
-    height: 100,
+    height: 300,
     top: 40,
-    left: 270,
+    left: 100,
     borderTopRightRadius: 30,
-  },
-  {
-    width: 200,
-    height: LINE_HEIGHT,
-    top: 140,
-    left: 70 + LINE_HEIGHT,
-    borderBottomRightRadius: 30,
-  },
-  {
-    width: LINE_HEIGHT,
-    height: 250,
-    top: 140,
-    left: 70,
-    borderTopLeftRadius: 30,
   },
   {
     width: 100,
     height: LINE_HEIGHT,
-    top: 390,
-    left: 70,
+    top: 340,
+    left: 100,
     borderBottomLeftRadius: 30,
   },
   {
     width: LINE_HEIGHT,
-    height: 120,
-    top: 390 - 120 + LINE_HEIGHT,
-    left: 170,
+    height: 200,
+    top: 160,
+    left: 200,
     borderBottomRightRadius: 30,
   },
   {
-    width: 250,
+    width: 100,
     height: LINE_HEIGHT,
-    top: 390 - 119,
-    left: 170,
+    top: 140,
+    left: 200,
     borderTopLeftRadius: 30,
+  },
+  {
+    width: LINE_HEIGHT,
+    height: 120,
+    top: 140,
+    left: 300,
+    borderTopRightRadius: 30,
+  },
+  {
+    width: 100,
+    height: LINE_HEIGHT,
+    top: 260,
+    left: 300,
+    borderBottomLeftRadius: 30,
   },
 ];
 

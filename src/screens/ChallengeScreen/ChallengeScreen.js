@@ -1,13 +1,15 @@
 import Storage from "expo-storage";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import ChallengeBlock from "./ChallengeBlock";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
+import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 function ChallengeScreen() {
+  const themeValue = useContext(ThemeContext);
   const navigation = useNavigation();
   const [avatar, setAvatar] = useState(
     "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821_1280.jpg"
@@ -58,7 +60,7 @@ function ChallengeScreen() {
               }
             }
             data[i]["current_user_step"] = totalUserSteps;
-            data[i]['all_user_step'] = user_step_obj
+            data[i]["all_user_step"] = user_step_obj;
           }
           setChallengeData(data);
         })
@@ -99,7 +101,9 @@ function ChallengeScreen() {
     loading();
   }, []);
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,themeValue.isDarkMode && {
+      backgroundColor: '#202125'
+    }]}>
       <View style={{ paddingTop: 60 }}>
         <Text
           style={[
@@ -109,7 +113,10 @@ function ChallengeScreen() {
               fontFamily: "Inter_600SemiBold",
               paddingLeft: 35,
             },
-            styles.whiteColor,
+            styles.blackColor,
+            themeValue.isDarkMode && {
+              color: "#e2e3e7",
+            },
           ]}
         >
           Together
@@ -133,22 +140,46 @@ function ChallengeScreen() {
               }}
             />
             <View style={{ marginLeft: 50, alignItems: "center" }}>
-              <Text style={styles.whiteColor}>Sơ cấp</Text>
               <Text
                 style={[
-                  styles.whiteColor,
+                  styles.blackColor,
+                  themeValue.isDarkMode && {
+                    color: "#e2e3e7",
+                  },
+                ]}
+              >
+                Sơ cấp
+              </Text>
+              <Text
+                style={[
+                  styles.blackColor,
                   { fontFamily: "Inter_600SemiBold", fontSize: 18 },
+                  themeValue.isDarkMode && {
+                    color: "#e2e3e7",
+                  },
                 ]}
               >
                 Cấp 1
               </Text>
             </View>
             <View style={{ marginLeft: 50, alignItems: "center" }}>
-              <Text style={styles.whiteColor}>Bạn bè</Text>
               <Text
                 style={[
-                  styles.whiteColor,
+                  styles.blackColor,
+                  themeValue.isDarkMode && {
+                    color: "#e2e3e7",
+                  },
+                ]}
+              >
+                Bạn bè
+              </Text>
+              <Text
+                style={[
+                  styles.blackColor,
                   { fontFamily: "Inter_600SemiBold", fontSize: 18 },
+                  themeValue.isDarkMode && {
+                    color: "#e2e3e7",
+                  },
                 ]}
               >
                 0
@@ -157,23 +188,34 @@ function ChallengeScreen() {
           </View>
           <TouchableOpacity
             activeOpacity={0.8}
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              backgroundColor: "#2d2d2f",
-              marginLeft: 40,
-              marginRight: 40,
-              borderRadius: 30,
-              marginTop: 20,
-            }}
+            style={[
+              {
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgb(255,255,255)",
+                marginLeft: 40,
+                marginRight: 40,
+                borderRadius: 30,
+                marginTop: 20,
+                elevation: 4
+              },
+              themeValue.isDarkMode && {
+                backgroundColor: '#2d2d2f',
+              },
+            ]}
           >
             <Text
-              style={{
-                fontSize: 16,
-                fontFamily: "Inter_500Medium",
-                color: "white",
-                padding: 10,
-              }}
+              style={[
+                {
+                  fontSize: 16,
+                  fontFamily: "Inter_500Medium",
+                  color: "black",
+                  padding: 10,
+                },
+                themeValue.isDarkMode && {
+                  color: "white",
+                },
+              ]}
             >
               Tạo thử thách
             </Text>
@@ -183,20 +225,27 @@ function ChallengeScreen() {
       <View style={{ flex: 1 }}>
         {challengeData.map((data, index) => (
           <ChallengeBlock
+            isDarkMode={themeValue.isDarkMode}
             key={data.id}
             name={data.name}
-            steps={data["current_user_step"] ? parseInt(data["current_user_step"]) : 0}
+            steps={
+              data["current_user_step"]
+                ? parseInt(data["current_user_step"])
+                : 0
+            }
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
             onPress={() =>
               navigation.navigate("ChallengeMap", {
                 challenge_id: data.id,
-                user_step: data["current_user_step"] ? parseInt(data["current_user_step"]) : 0,
+                user_step: data["current_user_step"]
+                  ? parseInt(data["current_user_step"])
+                  : 0,
                 target: data.target,
                 milestone: data.milestone,
-                total_line_length: data.total_line_length, 
-                all_user_step: data.all_user_step ? data.all_user_step : []
+                total_line_length: data.total_line_length,
+                all_user_step: data.all_user_step ? data.all_user_step : [],
               })
             }
           />
@@ -217,10 +266,10 @@ export default ChallengeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "black",
+    backgroundColor: "#f2f2f2",
     flex: 1,
   },
-  whiteColor: {
-    color: "white",
+  blackColor: {
+    color: "black",
   },
 });
