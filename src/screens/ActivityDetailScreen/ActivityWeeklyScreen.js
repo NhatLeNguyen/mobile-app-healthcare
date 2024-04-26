@@ -43,7 +43,6 @@ function ActivityWeeklyScreen() {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [openChooseDate, setOpenChooseDate] = useState(false);
   const [totalSteps , setTotalSteps ]= useState(0);
-
   const [year, month, day] = selectedDate.split("/").map(Number);
   const date = new Date(year, month - 1, day);
   const daysOfWeek = [
@@ -66,23 +65,27 @@ function ActivityWeeklyScreen() {
     ],
   });
   const [detailData, setDetailData] = useState([]);
-  const startDate = new Date();
-  startDate.setDate(
-    date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1)
-  );
-  const endDate = new Date();
-  endDate.setDate(
-    date.getDate() + (7 - (date.getDay() === 0 ? 7 : date.getDay()))
-  );
+  const startDate = new Date(date);
+  while (startDate.getDay() !== 1) {
+    startDate.setDate(startDate.getDate() - 1);
+  }
+  const endDate = new Date(date);
+  while (endDate.getDay() !== 0) {
+    endDate.setDate(endDate.getDate() + 1);
+  }
+  if(getFormatedDate(endDate,'YYYY-MM-DD') > currentDate){
+    endDate = new Date()
+  }
   useEffect(() => {
     const loading = async () => {
       const parts = currentDate.split("/");
       const id = await Storage.getItem({key: 'user_id'})
       const results = (await db).getAllSync(
         "SELECT date,sum(steps) as steps FROM `practicehistory` WHERE user_id = ? and date BETWEEN ? AND ? GROUP BY date",
-        [id, getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+        [id, getFormatedDate(startDate, "YYYY-MM-DD"),currentDate < endDate ? parts.join("-") : getFormatedDate(endDate, "YYYY-MM-DD")]
       );
-      console.log(results);
+      console.log(getFormatedDate(startDate, "YYYY-MM-DD"));
+      console.log("Results: ",results);
       let chartDataReturned = {
         labels: ["Th 2", "Th 3", "Th 4", "Th 5", "Th 6", "Th 7", "CN"],
         datasets: [
@@ -94,6 +97,7 @@ function ActivityWeeklyScreen() {
       let detailDataReturned = [];
       let ttSteps = 0;
       for (var i = 0; i < results.length; i++) {
+        console.log(results[i]);
         let cur_date = new Date(results[i].date);
         chartDataReturned.datasets[0].data[
           cur_date.getDay() == 0 ? 6 : cur_date.getDay() - 1
@@ -102,14 +106,10 @@ function ActivityWeeklyScreen() {
       }
       setChartData(chartDataReturned);
       setTotalSteps(ttSteps)
-      console.log('EndDate: ', endDate);
-      console.log('Today: ', today);
-      console.log('Subb: ', endDate > today);
       let dateRange = new Date(endDate - startDate).getDate()
       if(endDate > today){
         dateRange = new Date(today - startDate).getDate()
       }
-      console.log('Date Range: ', dateRange);
       for (var j = 0; j < dateRange; j++) {
         let d = new Date(startDate);
         d.setDate(d.getDate() + j);

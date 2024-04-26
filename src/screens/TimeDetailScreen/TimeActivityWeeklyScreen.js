@@ -68,21 +68,24 @@ function TimeActivityWeeklyScreen() {
     ],
   });
   const [detailData, setDetailData] = useState([]);
-  const startDate = new Date();
-  startDate.setDate(
-    date.getDate() - (date.getDay() === 0 ? 6 : date.getDay() - 1)
-  );
-  const endDate = new Date();
-  endDate.setDate(
-    date.getDate() + (7 - (date.getDay() === 0 ? 7 : date.getDay()))
-  );
+  const startDate = new Date(date);
+  while (startDate.getDay() !== 1) {
+    startDate.setDate(startDate.getDate() - 1);
+  }
+  const endDate = new Date(date);
+  while (endDate.getDay() !== 0) {
+    endDate.setDate(endDate.getDate() + 1);
+  }
+  if(getFormatedDate(endDate,'YYYY-MM-DD') > currentDate){
+    endDate = new Date()
+  }
   useEffect(() => {
     const loading = async () => {
       const parts = currentDate.split("/");
       const id = await Storage.getItem({key: 'user_id'})
       const results1 = (await db).getAllSync(
         "SELECT date,practice_time as time FROM `practicehistory` WHERE user_id = ? and date BETWEEN ? AND ?",
-        [id, getFormatedDate(startDate, "YYYY-MM-DD"), parts.join("-")]
+        [id, getFormatedDate(startDate, "YYYY-MM-DD"),currentDate < endDate ? parts.join("-") : getFormatedDate(endDate, "YYYY-MM-DD")]
       );
       let rowDate = 0
       let totalTime = 0;
