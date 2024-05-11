@@ -22,7 +22,7 @@ import { CameraView } from "expo-camera/next";
 import { Video } from "expo-av";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import * as FileSystem from "expo-file-system";
-import { RNCamera } from "react-native-camera";
+// import { RNCamera } from "react-native-camera";
 
 // // Function to compute brightness from video frames
 // function computeBrightness(videoFrames) {

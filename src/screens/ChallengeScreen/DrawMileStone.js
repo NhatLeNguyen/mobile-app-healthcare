@@ -32,12 +32,15 @@ function DrawMileStone({ top, left, isOddStop, number }) {
         style={{
           fontSize: 15,
           fontFamily: "Inter_600SemiBold",
-          color: 'gray',
-          // color: "#444444",
-          // borderWidth: 1,
+          color: '#90EE90',
+          borderWidth: 1,
+          borderColor: '#90EE90',
+          borderRadius: 5,
+          padding: 3,
+          backgroundColor: 'rgba(0,0,0,0.4)',
           position: "absolute",
-          left: left - 7,
-          top: top + 20,
+          left: left - 12,
+          top: top + 22,
         }}
       >
         {number ? number : 0}

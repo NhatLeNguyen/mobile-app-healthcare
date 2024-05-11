@@ -1,6 +1,6 @@
 import Storage from "expo-storage";
 import { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import ChallengeBlock from "./ChallengeBlock";
 import axios from "axios";
@@ -28,9 +28,9 @@ function ChallengeScreen() {
       await axios
         .get(`http://${IP}:1510/getChallenge`, {})
         .then(function (response) {
-          const data = response.data.data;
+          var data = response.data.data;
           // const today = new Date()
-          for(let i = 0 ; i < data.length ; i++){
+          // for(let i = 0 ; i < data.length ; i++){
             // const startDate = new Date(data['start_date'])
             // const endDate = new Date()
             // 0 : Sap ra mat
@@ -45,8 +45,11 @@ function ChallengeScreen() {
             // else{
             //   data[i]['status'] = 2
             // }
-          }
-          console.log(data);
+          // }
+          data.sort(function(a, b) {
+            return new Date(b.end_date) - new Date(a.end_date);
+          });
+          // console.log(data);
           setChallengeData(data);
         })
         .catch(function (error) {
@@ -80,6 +83,9 @@ function ChallengeScreen() {
             data[i]["current_user_step"] = totalUserSteps;
             data[i]["all_user_step"] = user_step_obj;
           }
+          data.sort(function(a, b) {
+            return new Date(b.end_date) - new Date(a.end_date);
+          });
           setChallengeData(data);
         })
         .catch(function (error) {
@@ -118,8 +124,9 @@ function ChallengeScreen() {
     };
     loading();
   }, []);
+  console.log(challengeData);
   return (
-    <View style={[styles.container,themeValue.isDarkMode && {
+    <ScrollView style={[styles.container,themeValue.isDarkMode && {
       backgroundColor: '#202125'
     }]}>
       <View style={{ paddingTop: 60 }}>
@@ -244,7 +251,7 @@ function ChallengeScreen() {
         {challengeData.map((data, index) => (
           <ChallengeBlock
             isDarkMode={themeValue.isDarkMode}
-            key={data.id}
+            key={index}
             name={data.name}
             steps={
               data["current_user_step"]
@@ -278,7 +285,7 @@ function ChallengeScreen() {
           }
         /> */}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -288,6 +295,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f2f2f2",
     flex: 1,
+    paddingBottom: 30
     // alignItems: 'center'
   },
   blackColor: {
