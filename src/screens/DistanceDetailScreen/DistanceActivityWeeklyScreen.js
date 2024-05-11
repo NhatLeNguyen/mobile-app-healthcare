@@ -32,7 +32,7 @@ function DistanceActivityWeeklyScreen() {
     backgroundGradientTo:themeValue.isDarkMode ? "black" : "white",
     backgroundGradientToOpacity: 0.5,
     //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    color: () => "#1a9be8",
+    color: () => "#ff4a73",
     strokeWidth: 1, // optional, default 3
     decimalPlaces: 0,
     barPercentage: 0.5,

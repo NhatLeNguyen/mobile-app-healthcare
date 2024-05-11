@@ -70,50 +70,49 @@ function PracticeScreen() {
   const [musicSearched, setMusicSearched] = useState([]);
 
   const [date, setDate] = useState(new Date());
-  // cosnt [startTime, setStartTime] = useState(new Date())
-  // console.log(choosenSong);
-  // useEffect(() => {
-  //   if (isLoadedMusicList == 0) {
-  //     console.log("vllll");
-  //     NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
-  //       for (let i = 0; i < response.playlist.songs.length; i++) {
-  //         let info = response.playlist.songs[i];
-  //         let key = info["key"];
-  //         let name = info["title"];
-  //         let thumbnail = info["thumbnail"];
-  //         let artists = "";
-  //         for (let j = 0; j < info.artists.length; j++) {
-  //           artists += info.artists[j].name;
-  //           if (j < info.artists.length - 1) {
-  //             artists += ", ";
-  //           }
-  //         }
-  //         let song_url = "";
-  //         await NhacCuaTui.getSong(key).then((data) => {
-  //           if (data.song.streamUrls.length > 0) {
-  //             song_url = data.song.streamUrls[0].streamUrl;
-  //           }
-  //         });
-  //         if (song_url !== "") {
-  //           setMusicList((prev) => [
-  //             ...prev,
-  //             {
-  //               key: key,
-  //               name: name,
-  //               thumbnail: thumbnail,
-  //               artists: artists,
-  //               url: song_url,
-  //             },
-  //           ]);
-  //         }
-  //         if( i == 1 & song_url !== ""){
-  //           setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
-  //         }
-  //       }
-  //     });
-  //     setIsLoadedMusicList(1);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isLoadedMusicList == 0) {
+      console.log("vllll");
+      NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
+        // console.log(response);
+        for (let i = 0; i < response.playlist.songs.length; i++) {
+          let info = response.playlist.songs[i];
+          let key = info["key"];
+          let name = info["title"];
+          let thumbnail = info["thumbnail"];
+          let artists = "";
+          for (let j = 0; j < info.artists.length; j++) {
+            artists += info.artists[j].name;
+            if (j < info.artists.length - 1) {
+              artists += ", ";
+            }
+          }
+          let song_url = "";
+          await NhacCuaTui.getSong(key).then((data) => {
+            if (data.song.streamUrls.length > 0) {
+              song_url = data.song.streamUrls[0].streamUrl;
+            }
+          });
+          if (song_url !== "") {
+            setMusicList((prev) => [
+              ...prev,
+              {
+                key: key,
+                name: name,
+                thumbnail: thumbnail,
+                artists: artists,
+                url: song_url,
+              },
+            ]);
+          }
+          if( i == 1 & song_url !== ""){
+            setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
+          }
+        }
+      });
+      setIsLoadedMusicList(1);
+    }
+  }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
       let now = new Date();
@@ -132,21 +131,21 @@ function PracticeScreen() {
           5.0,
           JSON.stringify(posList)
         ]);
-        (await db).runSync(
-          "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            id,
-            ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
-            ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
-            getFormatedDate(date, "YYYY-MM-DD"),
-            steps,
-            totalDistance,
-            minute + ":" + second,
-            Math.ceil(3 * 60 * totalDistance),
-            JSON.stringify(posList)
-          ]
-        );
-        console.log("Saving successfully");
+        // (await db).runSync(
+        //   "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        //   [
+        //     id,
+        //     ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
+        //     ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
+        //     getFormatedDate(date, "YYYY-MM-DD"),
+        //     steps,
+        //     totalDistance,
+        //     minute + ":" + second,
+        //     Math.ceil(3 * 60 * totalDistance),
+        //     JSON.stringify(posList)
+        //   ]
+        // );
+        // console.log("Saving successfully");
       };
 
       loading();
