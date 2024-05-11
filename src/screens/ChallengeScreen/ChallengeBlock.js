@@ -1,5 +1,6 @@
 import { BlurView } from "expo-blur";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { getFormatedDate } from "react-native-modern-datepicker";
 
 const THUMB_IMAGE_SIZE = 25;
 const SLIDER_WIDTH = 150;
@@ -12,9 +13,21 @@ function ChallengeBlock({
   image_url,
   thumbIcon,
   onPress,
+  startDate,
+  endDate,
 }) {
+  let status = 0;
+  const today = new Date();
+  if (getFormatedDate(today, "YYYY-MM-DD") < startDate) {
+    status = 0;
+  } else if (getFormatedDate(today, "YYYY-MM-DD") <= endDate) {
+    status = 1;
+  } else {
+    status = 2;
+  }
   return (
     <TouchableOpacity
+      disabled={status == 0 || status == 2}
       activeOpacity={0.8}
       style={{
         height: 170,
@@ -35,12 +48,21 @@ function ChallengeBlock({
           borderRadius: 20,
         }}
       />
-      {/* </BlurView> */}
-      <View style={{ padding: 25 }}>
+      <View
+        style={{
+          padding: 25,
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+        }}
+      >
         <Text
           style={[
             styles.whiteColor,
             { fontFamily: "Inter_600SemiBold", fontSize: 18 },
+            isDarkMode && {
+              color: "white",
+            },
           ]}
         >
           {name}
@@ -49,6 +71,9 @@ function ChallengeBlock({
           style={[
             styles.whiteColor,
             { fontFamily: "Inter_500Medium", fontSize: 15, marginTop: 15 },
+            isDarkMode && {
+              color: "white",
+            },
           ]}
         >
           Tổng số bước
@@ -57,6 +82,9 @@ function ChallengeBlock({
           style={[
             styles.whiteColor,
             { fontFamily: "Inter_600SemiBold", fontSize: 22 },
+            isDarkMode && {
+              color: "white",
+            },
           ]}
         >
           {steps > 1000 ? Math.floor(steps / 1000) : steps}
@@ -98,6 +126,51 @@ function ChallengeBlock({
           />
         </View>
       </View>
+      {status == 2 && (
+        <View
+          style={{
+            height: "100%",
+            width: "100%",
+            backgroundColor: "rgba(0,0,0,0.8)",
+            borderRadius: 20,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Inter_500Medium",
+              fontSize: 20,
+              color: "#add8e6",
+            }}
+          >
+            Đã kết thúc
+          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 18, color: "gray" }}>Rank : </Text>
+            { /* top 3 https://cdn-icons-png.flaticon.com/512/1910/1910542.png */}
+            {/* top 2 https://cdn-icons-png.flaticon.com/512/1910/1910534.png */}
+            {/* https://cdn-icons-png.flaticon.com/512/3239/3239096.png */}
+            <Image
+              source={{ uri: 'https://cdn-icons-png.flaticon.com/256/6394/6394616.png' }}
+              style={{
+                height: 40,
+                width: 40
+              }}
+            />
+            {/* <Text style={{ fontSize: 18, color: "gray" }}>15th</Text> */}
+          </View>
+          <Text style={{ fontSize: 18, color: "gray" }}>
+            Tổng số bước : {steps}
+          </Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -106,6 +179,6 @@ export default ChallengeBlock;
 
 const styles = StyleSheet.create({
   whiteColor: {
-    color: "white",
+    color: "gray",
   },
 });

@@ -59,11 +59,12 @@ function PracticeScreen() {
   const [second, setSecond] = useState(1);
   const [minute, setMinute] = useState(0);
   const [isMusicModalVisible, setIsMusicModalVisible] = useState(false);
-  const [choosenSong, setChoosenSong] = useState();
+  const [choosenSong, setChoosenSong] = useState(musicData[0]);
   const [isChangedMusic, setIsChangedMusic] = useState(false);
   const [sound, setSound] = useState();
   const [musicTextInput, setMusicTextInput] = useState("");
-  const [musicList, setMusicList] = useState([]);
+  // const [musicList, setMusicList] = useState([]);
+  const [musicList, setMusicList] = useState(musicData);
   const [isLoadedMusicList, setIsLoadedMusicList] = useState(0);
   const navigation = useNavigation();
   const [musicSearched, setMusicSearched] = useState([]);
@@ -71,48 +72,48 @@ function PracticeScreen() {
   const [date, setDate] = useState(new Date());
   // cosnt [startTime, setStartTime] = useState(new Date())
   // console.log(choosenSong);
-  useEffect(() => {
-    if (isLoadedMusicList == 0) {
-      console.log("vllll");
-      NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
-        for (let i = 0; i < response.playlist.songs.length; i++) {
-          let info = response.playlist.songs[i];
-          let key = info["key"];
-          let name = info["title"];
-          let thumbnail = info["thumbnail"];
-          let artists = "";
-          for (let j = 0; j < info.artists.length; j++) {
-            artists += info.artists[j].name;
-            if (j < info.artists.length - 1) {
-              artists += ", ";
-            }
-          }
-          let song_url = "";
-          await NhacCuaTui.getSong(key).then((data) => {
-            if (data.song.streamUrls.length > 0) {
-              song_url = data.song.streamUrls[0].streamUrl;
-            }
-          });
-          if (song_url !== "") {
-            setMusicList((prev) => [
-              ...prev,
-              {
-                key: key,
-                name: name,
-                thumbnail: thumbnail,
-                artists: artists,
-                url: song_url,
-              },
-            ]);
-          }
-          if( i == 1 & song_url !== ""){
-            setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
-          }
-        }
-      });
-      setIsLoadedMusicList(1);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isLoadedMusicList == 0) {
+  //     console.log("vllll");
+  //     NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
+  //       for (let i = 0; i < response.playlist.songs.length; i++) {
+  //         let info = response.playlist.songs[i];
+  //         let key = info["key"];
+  //         let name = info["title"];
+  //         let thumbnail = info["thumbnail"];
+  //         let artists = "";
+  //         for (let j = 0; j < info.artists.length; j++) {
+  //           artists += info.artists[j].name;
+  //           if (j < info.artists.length - 1) {
+  //             artists += ", ";
+  //           }
+  //         }
+  //         let song_url = "";
+  //         await NhacCuaTui.getSong(key).then((data) => {
+  //           if (data.song.streamUrls.length > 0) {
+  //             song_url = data.song.streamUrls[0].streamUrl;
+  //           }
+  //         });
+  //         if (song_url !== "") {
+  //           setMusicList((prev) => [
+  //             ...prev,
+  //             {
+  //               key: key,
+  //               name: name,
+  //               thumbnail: thumbnail,
+  //               artists: artists,
+  //               url: song_url,
+  //             },
+  //           ]);
+  //         }
+  //         if( i == 1 & song_url !== ""){
+  //           setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
+  //         }
+  //       }
+  //     });
+  //     setIsLoadedMusicList(1);
+  //   }
+  // }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
       let now = new Date();
@@ -386,9 +387,10 @@ function PracticeScreen() {
             </View>
             <MusicList
               listMusic={
-                musicSearched.length != 0
-                  ? musicSearched.slice(0, 25)
-                  : musicList.slice(0, 25)
+                // musicSearched.length != 0
+                //   ? musicSearched.slice(0, 25)
+                //   : musicList.slice(0, 25)
+                musicList
               }
               onChange={setChoosenSong}
               onClose={setIsMusicModalVisible}
@@ -532,7 +534,7 @@ function PracticeScreen() {
           size={40}
           color="white"
           onPress={() => {
-            // sound.unloadAsync();
+            sound.unloadAsync();
             navigation.navigate("TapLuyen");
             handleCompletePractice();
           }}

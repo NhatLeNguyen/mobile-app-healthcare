@@ -22,6 +22,7 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 // import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
+import CameraComponent from "../../components/camera/CameraComponent";
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -205,7 +206,7 @@ const LoginScreen = () => {
       return;
     }
     axios
-      .post(`http://192.168.101.5:1510/send-email`, {
+      .post(`http://${IP}:1510/send-email`, {
         to: emailGetPass,
         subject: "Lấy lại mật khẩu",
         text: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`,

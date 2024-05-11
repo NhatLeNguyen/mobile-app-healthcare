@@ -7,6 +7,7 @@ import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../MainScreen/ThemeProvider";
+import { getFormatedDate } from "react-native-modern-datepicker";
 
 function ChallengeScreen() {
   const themeValue = useContext(ThemeContext);
@@ -28,6 +29,24 @@ function ChallengeScreen() {
         .get(`http://${IP}:1510/getChallenge`, {})
         .then(function (response) {
           const data = response.data.data;
+          // const today = new Date()
+          for(let i = 0 ; i < data.length ; i++){
+            // const startDate = new Date(data['start_date'])
+            // const endDate = new Date()
+            // 0 : Sap ra mat
+            // 1 : Dang dien ra
+            // 2 : Da ket thuc
+            // if(getFormatedDate(today, 'YYYY-MM-YY') < data[i]['start_date']){
+            //   data[i]['status'] = 0
+            // }
+            // else if(getFormatedDate(today, 'YYYY-MM-YY') <= data[i]['end_date']){
+            //   data[i]['status'] = 1
+            // }
+            // else{
+            //   data[i]['status'] = 2
+            // }
+          }
+          console.log(data);
           setChallengeData(data);
         })
         .catch(function (error) {
@@ -52,7 +71,6 @@ function ChallengeScreen() {
             });
             let user_step_obj = JSON.parse(challenge_user_step);
             let totalUserSteps = 0;
-            console.log(user_step_obj);
             for (let j = 0; j < user_step_obj.length; j++) {
               if (user_step_obj[j]["user_id"] === user_id) {
                 totalUserSteps = user_step_obj[j]["totalUserSteps"];
@@ -236,6 +254,8 @@ function ChallengeScreen() {
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
+            startDate={data['start_date']}
+            endDate={data['end_date']}
             onPress={() =>
               navigation.navigate("ChallengeMap", {
                 challenge_id: data.id,
@@ -268,6 +288,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f2f2f2",
     flex: 1,
+    // alignItems: 'center'
   },
   blackColor: {
     color: "black",

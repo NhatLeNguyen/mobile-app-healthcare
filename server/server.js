@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import session from 'express-session';
 import auth from './middleware/auth.js';
 import jwt from 'jsonwebtoken';
-import { IP } from './configs/ip.js';
+import { IP } from './configs/IP.js';
 import nodemailer from "nodemailer";
 
 dotenv.config();

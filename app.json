@@ -3,6 +3,10 @@
     "name": "DemoRN",
     "slug": "DemoRN",
     "version": "1.0.0",
+    "permissions": [
+      "CAMERA",
+      "RECORD_AUDIO"
+    ],
     "splash": {
       "image": "./src/assets/images/practice.jpg",
       "resizeMode": "cover",
