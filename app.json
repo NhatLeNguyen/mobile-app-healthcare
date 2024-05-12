@@ -21,7 +21,11 @@
     ],
     "android": {
       "package": "com.anonymous.DemoRN"
-    }
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font"
+    ]
   },
   "name": "DemoRN"
 }
