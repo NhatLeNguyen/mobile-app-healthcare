@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "DemoRN",
-    "slug": "DemoRN",
+    "name": "HealthCare App",
+    "slug": "HealthCare App",
     "version": "1.0.0",
     "permissions": [
       "CAMERA",

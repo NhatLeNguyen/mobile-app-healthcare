@@ -22,7 +22,8 @@ import SocialMedia from "../../components/SocialMedia";
 import { useToast } from "react-native-toast-notifications";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 
 import * as ImagePicker from "expo-image-picker";
 import { imagesDataURL } from "../../constants/setting/data";

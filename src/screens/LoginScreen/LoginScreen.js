@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,8 @@ import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import SocialMedia from "../../components/SocialMedia";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
@@ -23,6 +24,8 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import CameraComponent from "../../components/camera/CameraComponent";
+// import * as Nhaccuatui from 'nhaccuatui-api'
+
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -64,6 +67,27 @@ const LoginScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState("");
   const [emailGetPass, setEmailGetPass] = useState("");
   const navigation = useNavigation();
+  useEffect(() => {
+    const loading = async () => {
+      const options = {
+        method: 'GET',
+        url: 'https://deezerdevs-deezer.p.rapidapi.com/track/2468405595',
+        headers: {
+          'X-RapidAPI-Key': 'b079ba438emsh692e7774aa79897p1c07bcjsn5f7c36f38020',
+          'X-RapidAPI-Host': 'deezerdevs-deezer.p.rapidapi.com'
+        }
+      };
+      
+      try {
+        const response = await axios.request(options);
+        console.log('\n\n\n\n',response.data);
+      } catch (error) {
+        console.error(error);
+      }
+      
+    }
+    loading();
+  }, []);
 
   const handleLogin = async () => {
     if (email === "" || password === "") {
@@ -122,33 +146,38 @@ const LoginScreen = () => {
       });
       return;
     }
-    let challenge_data = []
+    let challenge_data = [];
     await axios
-      .get(`http://${IP}:1510/getChallenge`, {
-      })
+      .get(`http://${IP}:1510/getChallenge`, {})
       .then(function (response) {
         const data = response.data.data;
-        challenge_data = data
+        challenge_data = data;
       })
       .catch(function (error) {
         console.log(error);
       });
-    for(let i = 0; i < challenge_data.length ; i++){
-      var startDate = new Date(challenge_data[i]['start_date'])
-      var endDate = new Date(challenge_data[i]['end_date'])
+    for (let i = 0; i < challenge_data.length; i++) {
+      var startDate = new Date(challenge_data[i]["start_date"]);
+      var endDate = new Date(challenge_data[i]["end_date"]);
       const userSteps = (await db).getAllSync(
         "select user_id,sum(steps) as totalUserSteps from practicehistory where date between ? and ? group by user_id order by totalUserSteps desc",
-        [getFormatedDate(startDate,'YYYY-MM-DD'), getFormatedDate(endDate, 'YYYY-MM-DD')]
+        [
+          getFormatedDate(startDate, "YYYY-MM-DD"),
+          getFormatedDate(endDate, "YYYY-MM-DD"),
+        ]
       );
-      for(let j = 0 ; j < userSteps.length ; j++){
+      for (let j = 0; j < userSteps.length; j++) {
         const url = (await db).getAllSync(
           "select avatar from user where user_id = ?",
-          [userSteps[j]['user_id']]
+          [userSteps[j]["user_id"]]
         );
-        userSteps[j]['avatar'] = url[0]['avatar']
+        userSteps[j]["avatar"] = url[0]["avatar"];
       }
       // console.log(userSteps);
-      await Storage.setItem({key: `challenge_user_step${challenge_data[i]['id']}`, value: JSON.stringify(userSteps)})
+      await Storage.setItem({
+        key: `challenge_user_step${challenge_data[i]["id"]}`,
+        value: JSON.stringify(userSteps),
+      });
       // await Storage.setItem({key: `challenge_target${challenge_data[i]['id']}`, value: toString(challenge_data[i]['target'])})
       // await Storage.setItem({key: `challenge_milestone${challenge_data[i]['id']}`, value: toString(challenge_data[i]['milestone'])})
     }
@@ -167,8 +196,8 @@ const LoginScreen = () => {
     }
     // Loading map
     await Storage.setItem({
-      key: 'isDarkMode',
-      value: 'false',
+      key: "isDarkMode",
+      value: "false",
     });
 
     navigation.navigate("MainScreen");

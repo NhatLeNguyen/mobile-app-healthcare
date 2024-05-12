@@ -19,7 +19,8 @@ import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 import { ThemeContext } from "../MainScreen/ThemeProvider";
 
 const db = SQLite.openDatabaseAsync("health-care.db");

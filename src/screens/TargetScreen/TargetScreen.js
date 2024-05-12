@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import InputWithHeader from "../../components/InputWithHeader";
 import { useContext, useEffect, useState } from "react";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 import Storage from "expo-storage";
 import { useToast } from "react-native-toast-notifications";
 import { ThemeContext } from "../MainScreen/ThemeProvider";

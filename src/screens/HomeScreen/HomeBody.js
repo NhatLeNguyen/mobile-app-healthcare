@@ -15,7 +15,8 @@ import TaskBlock from "../../components/TaskBlock";
 import { Inter_500Medium } from "@expo-google-fonts/inter";
 import { useFonts } from "expo-font";
 import Fonts from "../../constants/Fonts";
-import * as SQLite from 'expo-sqlite/next'
+// import * as SQLite from 'expo-sqlite/next'
+import * as SQLite from "expo-sqlite";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import { useNavigation } from "@react-navigation/native";
 import Storage from "expo-storage";

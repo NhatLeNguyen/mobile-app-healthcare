@@ -15,8 +15,8 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
   useEffect(() => {
     console.log(song);
     const initAudio = async () => {
-      // const { sound } = await Audio.Sound.createAsync({uri: song});
-      const { sound } = await Audio.Sound.createAsync(song);
+      const { sound } = await Audio.Sound.createAsync({uri: 'https://cdns-preview-c.dzcdn.net/stream/c-c674fb656a9ccc637053832c3a1fffca-1.mp3'});
+      // const { sound } = await Audio.Sound.createAsync(song);
       setSound(sound);
       setS(sound)
       const { durationMillis } = await sound.getStatusAsync();

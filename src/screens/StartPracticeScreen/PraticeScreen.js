@@ -28,9 +28,9 @@ import MusicList from "../../components/MusicList/MusicList";
 import { musicData } from "../../components/MusicList/MusicData";
 import NhacCuaTui from "nhaccuatui-api-full";
 import { getFormatedDate } from "react-native-modern-datepicker";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 import Storage from "expo-storage";
-
 const db = SQLite.openDatabaseAsync("health-care.db");
 
 const MUSIC_INDEX_DEFAULT = 0;
@@ -71,48 +71,54 @@ function PracticeScreen() {
 
   const [date, setDate] = useState(new Date());
   useEffect(() => {
-    if (isLoadedMusicList == 0) {
-      console.log("vllll");
-      NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
-        // console.log(response);
-        for (let i = 0; i < response.playlist.songs.length; i++) {
-          let info = response.playlist.songs[i];
-          let key = info["key"];
-          let name = info["title"];
-          let thumbnail = info["thumbnail"];
-          let artists = "";
-          for (let j = 0; j < info.artists.length; j++) {
-            artists += info.artists[j].name;
-            if (j < info.artists.length - 1) {
-              artists += ", ";
-            }
-          }
-          let song_url = "";
-          await NhacCuaTui.getSong(key).then((data) => {
-            if (data.song.streamUrls.length > 0) {
-              song_url = data.song.streamUrls[0].streamUrl;
-            }
-          });
-          if (song_url !== "") {
-            setMusicList((prev) => [
-              ...prev,
-              {
-                key: key,
-                name: name,
-                thumbnail: thumbnail,
-                artists: artists,
-                url: song_url,
-              },
-            ]);
-          }
-          if( i == 1 & song_url !== ""){
-            setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
-          }
-        }
-      });
-      setIsLoadedMusicList(1);
+    const loading = async () => {
+      
     }
-  }, []);
+    loading()
+  }, [])
+  // useEffect(() => {
+  //   if (isLoadedMusicList == 0) {
+  //     console.log("vllll");
+  //     NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
+  //       // console.log(response);
+  //       for (let i = 0; i < response.playlist.songs.length; i++) {
+  //         let info = response.playlist.songs[i];
+  //         let key = info["key"];
+  //         let name = info["title"];
+  //         let thumbnail = info["thumbnail"];
+  //         let artists = "";
+  //         for (let j = 0; j < info.artists.length; j++) {
+  //           artists += info.artists[j].name;
+  //           if (j < info.artists.length - 1) {
+  //             artists += ", ";
+  //           }
+  //         }
+  //         let song_url = "";
+  //         await NhacCuaTui.getSong(key).then((data) => {
+  //           if (data.song.streamUrls.length > 0) {
+  //             song_url = data.song.streamUrls[0].streamUrl;
+  //           }
+  //         });
+  //         if (song_url !== "") {
+  //           setMusicList((prev) => [
+  //             ...prev,
+  //             {
+  //               key: key,
+  //               name: name,
+  //               thumbnail: thumbnail,
+  //               artists: artists,
+  //               url: song_url,
+  //             },
+  //           ]);
+  //         }
+  //         if( i == 1 & song_url !== ""){
+  //           setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
+  //         }
+  //       }
+  //     });
+  //     setIsLoadedMusicList(1);
+  //   }
+  // }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
       let now = new Date();

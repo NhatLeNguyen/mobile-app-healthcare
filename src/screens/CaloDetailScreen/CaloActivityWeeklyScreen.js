@@ -18,7 +18,8 @@ import CaloDailyDetail from "./CaloDailyDetail";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 import { useNavigation } from "@react-navigation/native";
-import * as SQLite from "expo-sqlite/next";
+// import * as SQLite from "expo-sqlite/next";
+import * as SQLite from "expo-sqlite";
 import Storage from "expo-storage";
 import { ThemeContext } from "../MainScreen/ThemeProvider";
 
