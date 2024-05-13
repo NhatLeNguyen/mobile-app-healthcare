@@ -199,7 +199,6 @@ function ChallengeMap({ route }) {
           style={{ flex: 0.5, justifyContent: "center", alignItems: "center" }}
         >
           <Text style={{ color: "white", fontSize: 15 }}>Thành tích</Text>
-          <Text>{}</Text>
           <Image
             source={{
               uri: "https://cdn-icons-png.flaticon.com/512/1246/1246381.png",

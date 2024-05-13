@@ -1,0 +1,89 @@
+[33mcommit 180f88bc27b2f7e62c17ee462df3a264bba45831[m[33m ([m[1;36mHEAD -> [m[1;32mkhang[m[33m, [m[1;31morigin/khang[m[33m)[m
+Author: KhangSimple <you@example.com>
+Date:   Sun May 12 09:23:28 2024 +0700
+
+    error :((
+
+[33mcommit 8acaae3ed40e78af93250a3842f269931e7c57f4[m
+Author: KhangSimple <you@example.com>
+Date:   Sun May 12 09:23:14 2024 +0700
+
+    lại lỗi
+
+[33mcommit 73ae945f5e9de8f7c37137a2d44548eb51a6147d[m
+Author: KhangSimple <you@example.com>
+Date:   Sat May 11 19:39:00 2024 +0700
+
+    change color chart
+
+[33mcommit 8e177794db9bd1b2c75098d59a82419816d6cc34[m
+Author: KhangSimple <you@example.com>
+Date:   Sat May 11 17:44:03 2024 +0700
+
+    (change) : change theme of challenge
+
+[33mcommit af9c794396bc2419ad313f70068e45d96f81d2c8[m
+Author: KhangSimple <you@example.com>
+Date:   Sat May 11 11:00:54 2024 +0700
+
+    (update): update Challenge Block
+
+[33mcommit 5beed440b524ea034ed62487cad814c4e9458af9[m
+Author: KhangSimple <you@example.com>
+Date:   Fri Apr 26 09:01:01 2024 +0700
+
+    (fix) : fix get weekly data
+
+[33mcommit 69a4ec89aeb583f0d0d9bbb1f9df0895e5cdc18a[m
+Author: KhangSimple <you@example.com>
+Date:   Thu Apr 25 22:11:59 2024 +0700
+
+    (change): changing logic in Challenge
+
+[33mcommit bb94b213364360044131a24c89add10774cc19ed[m
+Author: KhangSimple <you@example.com>
+Date:   Mon Apr 22 17:11:04 2024 +0700
+
+    (api): complete draw milestone
+
+[33mcommit 75fce75ed4582e3c19ac8e2953df72406d1b596c[m
+Author: KhangSimple <you@example.com>
+Date:   Sun Apr 21 23:31:23 2024 +0700
+
+    complete draw process line and avatar pos
+
+[33mcommit a1b7d0ae3969c259e36273a47c0d6153f854d705[m
+Author: KhangSimple <you@example.com>
+Date:   Sun Apr 21 15:39:36 2024 +0700
+
+    complete get challenge map
+
+[33mcommit fe52b63e607ffa01a9a3b8a6ffda6e70dedec049[m
+Author: KhangSimple <you@example.com>
+Date:   Sat Apr 20 18:45:06 2024 +0700
+
+    add Challenge Map UI
+
+[33mcommit dab9916c1979e247f897b3a08e19f5a2de4e81fc[m
+Author: KhangSimple <you@example.com>
+Date:   Sat Apr 20 11:12:10 2024 +0700
+
+    (create) : challengeScreen
+
+[33mcommit 3c10f76e5f4619ee7ba20b8d2980f6bb82238eeb[m
+Author: KhangSimple <you@example.com>
+Date:   Fri Apr 19 21:56:13 2024 +0700
+
+    ...
+
+[33mcommit 267b543cd96832b9048322d3d380dc59b83437c2[m
+Author: KhangSimple <you@example.com>
+Date:   Thu Apr 18 21:52:57 2024 +0700
+
+    complete DarkMode yeahh
+
+[33mcommit cee31357696d186eb4ad92b39dd00064f148b3c7[m
+Author: KhangSimple <you@example.com>
+Date:   Thu Apr 18 18:55:48 2024 +0700
+
+    darkMode Time
