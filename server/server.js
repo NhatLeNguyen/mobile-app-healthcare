@@ -9,6 +9,12 @@ import auth from './middleware/auth.js';
 import jwt from 'jsonwebtoken';
 import { IP } from './configs/IP.js';
 import nodemailer from "nodemailer";
+import path from 'path'
+import { fileURLToPath } from 'url';
+
+// Xác định lại __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 const app = express();
@@ -41,13 +47,20 @@ app.post("/send-email", async (req, res) => {
 
   // Configure transporter using your email provider settings
   let transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure:true,
-    logger:true,
-    debug:true,
+    // service: "gmail",
+    host:"smtp.gmail.com",
+    // secure:true,
+    // logger:true,
+    // debug:true,
+    port: 587,
+    secure: false,
     auth: {
       user: "healthcaresystemkl@gmail.com",
-      pass: "healthcaresystemlk",
+      pass: "gwci oprp zbsx sege",
+    },
+    tls: {
+      // do not fail on invalid certs
+      rejectUnauthorized: false,
     },
   });
 
@@ -57,6 +70,12 @@ app.post("/send-email", async (req, res) => {
     to: to,
     subject: subject,
     text: text,
+    attachments : [
+      {
+        filename: 'healthcare.png',
+        path: path.join(__dirname, '../src/assets/images', 'meme.png')
+      }
+    ]
   };
 
   // Send email

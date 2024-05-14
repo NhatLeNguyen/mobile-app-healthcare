@@ -19,7 +19,7 @@ import { useToast } from "react-native-toast-notifications";
 import { Storage } from "expo-storage";
 import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { getFormatedDate } from "react-native-modern-datepicker";
-// import * as MailComposer from "expo-mail-composer";
+import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
 // import CameraComponent from "../../components/camera/CameraComponent";
@@ -257,7 +257,7 @@ const LoginScreen = () => {
       .post(`http://${IP}:1510/send-email`, {
         to: emailGetPass,
         subject: "Lấy lại mật khẩu",
-        text: `Mật khẩu của bạn là '${results1[0].password}'. Lưu ý bảo mật để tránh mất mật khẩu`,
+        text: `Chúng tôi đã nhận được yêu cầu lấy lại mật khẩu cho tài khoản của bạn (Health Care App).\nMật khẩu hiện tại của bạn là '${results1[0].password}'. Lưu ý lưu trữ và bảo mật để tránh mất mật khẩu`,
       })
       .then(function (response) {
         console.log(response);
