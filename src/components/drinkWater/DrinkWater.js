@@ -9,15 +9,24 @@ import {
   Linking,
 } from "react-native";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../screens/MainScreen/ThemeProvider";
 import imagePath from "../../constants/imagePath";
+import Storage from "expo-storage";
 
-function DrinkWater({ currentMl, pressedFunction }) {
+function DrinkWater({ pressedFunction }) {
+  const [currentMl, setCurrentMl] = useState(0);
   const themeValue = useContext(ThemeContext);
   const [isPressed, setIsPress] = useState(false);
   const [image1, setImage1] = useState(imagePath.drinkWater);
   const [image2, setImage2] = useState(imagePath.drinkWater);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const ml = await Storage.getItem({key:'currentMl'})
+  //     setCurrentMl(ml)
+  //   })()
+  // }, [])
   return (
     <Pressable
       style={[
@@ -34,7 +43,7 @@ function DrinkWater({ currentMl, pressedFunction }) {
       <Text
         style={[styles.heading, themeValue.isDarkMode && { color: "#e2e3e7" }]}
       >
-        {currentMl} / 2.000 ml
+        {Math.min(currentMl, 2000) >= 1000 ?Math.min(currentMl, 2000) : Math.min(currentMl, 2000)} / 2.000 ml
       </Text>
       <View style={styles.imageContainer}>
         <Image
@@ -50,7 +59,7 @@ function DrinkWater({ currentMl, pressedFunction }) {
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: "gray",
+          backgroundColor:themeValue.isDarkMode ? "gray" : '#b3e5fc',
           width: 100,
           alignItems: "center",
           height: 40,
@@ -60,13 +69,26 @@ function DrinkWater({ currentMl, pressedFunction }) {
         }}
         onPress={() => {
           setImage2(imagePath.drinkWaterGif);
+          const inteval = setInterval( async () => {
+            setCurrentMl((prev) => {
+              if((prev + 2) % 250 != 0){
+                return prev + 2
+              }
+              else{
+                clearInterval(inteval);
+                // Storage.setItem({key:'currentMl', value: prev + 2})
+                return prev + 2 
+              }
+            })
+          },52)
           setTimeout(() => {
             setImage2(imagePath.drinkWater)
+            clearInterval(inteval)
           },6600)
           
         }}
       >
-        <Text> +250 ml</Text>
+        <Text style={{color: themeValue.isDarkMode ? '#e2e3e7' : 'black'}}> + 250 ml</Text>
       </TouchableOpacity>
     </Pressable>
   );

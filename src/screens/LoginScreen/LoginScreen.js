@@ -214,6 +214,10 @@ const LoginScreen = () => {
       key: 'isDarkMode',
       value: 'false',
     });
+    await Storage.setItem({
+      key: 'currentMl',
+      value: '0',
+    });
 
     navigation.navigate("MainScreen");
   };
@@ -273,7 +277,7 @@ const LoginScreen = () => {
   
   return (
     <View style={styles.container}>
-      {user ? (
+      {/* {user ? (
         <Profile user={user} />
       ) : (
         <Button
@@ -281,7 +285,7 @@ const LoginScreen = () => {
           title="Sign in with Facebook"
           onPress={handlePressAsync}
         />
-      )}
+      )} */}
       {/* <CameraComponent /> */}
       <Modal
         transparent

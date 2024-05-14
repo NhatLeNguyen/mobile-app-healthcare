@@ -75,8 +75,6 @@ function HomeBody({isRefresh}) {
     };
     loading();
   }, [today, isRefresh]);
-
-
   return (
     <View style={styles.container}>
       <TaskBlock
@@ -111,7 +109,7 @@ function HomeBody({isRefresh}) {
       <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
         UỐNG NƯỚC
       </Text>
-      <DrinkWater currentMl={500} pressedFunction={() => console.log('hehe')}/>
+      <DrinkWater pressedFunction={() => console.log('hehe')}/>
       <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
         KHÁM PHÁ
       </Text>
