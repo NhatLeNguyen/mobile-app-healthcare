@@ -20,7 +20,7 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 import { useNavigation } from "@react-navigation/native";
 import Storage from "expo-storage";
 import { ThemeContext } from "../MainScreen/ThemeProvider";
-
+import DrinkWater from "../../components/drinkWater/DrinkWater";
 const db = SQLite.openDatabaseAsync('health-care.db')
 
 function HomeBody({isRefresh}) {
@@ -108,6 +108,10 @@ function HomeBody({isRefresh}) {
         targetColor="#fdbd40"
         pressedFunction={() => {navigation.navigate('CaloActivityDetail', {name: 'calo_week'})}}
       />
+      <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
+        UỐNG NƯỚC
+      </Text>
+      <DrinkWater currentMl={500} pressedFunction={() => console.log('hehe')}/>
       <Text style={[styles.heading, themeValue.isDarkMode && {color: '#e2e3e7'}]}>
         KHÁM PHÁ
       </Text>
