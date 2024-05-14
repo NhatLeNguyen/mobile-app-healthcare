@@ -12,16 +12,42 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": "true"
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
     "scheme": [
-      "facebookLogin",
-      "fb1143668800122936"
+      "DemoRN",
+      "fb2229751890707238"
     ],
     "android": {
-      "package": "com.anonymous.DemoRN"
-    }
+      "package": "com.anonymous.DemoRN",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c4532a37-8342-4d7e-bb77-f5a3c037832a"
+      }
+    },
+    "owner": "k.lostctrl"
   },
   "name": "DemoRN"
 }

@@ -22,7 +22,7 @@ import { CameraView } from "expo-camera/next";
 import { Video } from "expo-av";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import * as FileSystem from "expo-file-system";
-// import { RNCamera } from "react-native-camera";
+import * as MediaLibrary from 'expo-media-library'
 
 // // Function to compute brightness from video frames
 // function computeBrightness(videoFrames) {
@@ -113,6 +113,10 @@ function CameraComponent() {
   const [imageUrl, setImageUrl] = useState();
   const [frames, setFrames] = useState([]);
   const [rgbMatrix, setRgbMatrix] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState();
+  const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
+  const [photo, setPhoto] = useState();
+  
   // useEffect(() => {
   //   const loading =async () => {
   //     await requestCameraPermissionsAsync()
@@ -121,7 +125,23 @@ function CameraComponent() {
   //   }
   //   loading()
   // },[])
-  const takePicture = async () => {};
+    useEffect(() => {
+        (async () => {
+            const cameraPermission = await requestCameraPermissionsAsync();
+            const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+            setHasCameraPermission(cameraPermission.status === 'granted');
+            setHasMediaLibraryPermission(mediaLibraryPermission.status === 'granted')
+        })()
+    },[])
+  const takePicture = async () => {
+    let options = {
+        quality: 1, 
+        base64: true,
+        exif: false
+    }
+    let newPhoto = await cameraRef.current.takePictureAsync(options)
+    setPhoto(newPhoto)
+  };
 
   const handleCameraReady = () => {
     setIsCameraReady(true);
@@ -166,14 +186,14 @@ function CameraComponent() {
           overflow: "hidden",
         }}
       >
-        <Image 
+        {/* <Image 
           source={{uri: imageUrl ? imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnEy2t0mwIlSoVaza9Tm0MLYRK29oihDYWdzQOwGTR2A&s'}}
           style={{height: 100, width: 100}}
-        />
+        /> */}
         <Camera
           ref={cameraRef}
           type={Camera.Constants.Type.back}
-          style={{height: 100, width: 100}}
+          style={{height: 50, width: 50}}
           flashMode={flash}
           onCameraReady={handleCameraReady}
         />

@@ -85,7 +85,7 @@ android {
 
     namespace 'com.anonymous.DemoRN'
     defaultConfig {
-        manifestPlaceholders = [appAuthRedirectScheme: 'facebookLogin']
+        manifestPlaceholders = [appAuthRedirectScheme: 'DemoRN']
         applicationId 'com.anonymous.DemoRN'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion

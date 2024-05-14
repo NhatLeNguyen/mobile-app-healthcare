@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -22,7 +22,13 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 // import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
-import CameraComponent from "../../components/camera/CameraComponent";
+// import CameraComponent from "../../components/camera/CameraComponent";
+import * as Facebook from "expo-auth-session/providers/facebook"
+import * as WebBrowser from "expo-web-browser"
+import { StatusBar } from "expo-status-bar";
+
+const check = WebBrowser.maybeCompleteAuthSession();
+console.log(check);
 // import {
 //   GoogleSignin,
 //   GoogleSigninButton,
@@ -34,6 +40,16 @@ const db = SQLite.openDatabaseAsync("health-care.db");
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(email);
+}
+
+function Profile({ user }) {
+  return (
+    <View style={styles.profile}>
+      <Image source={{ uri: user.picture.data.url }} style={styles.image} />
+      <Text style={styles.name}>{user.name}</Text>
+      <Text>ID: {user.id}</Text>
+    </View>
+  );
 }
 
 function validatePassword(password) {
@@ -58,6 +74,34 @@ function validatePassword(password) {
 }
 
 const LoginScreen = () => {
+  const [user, setUser] = useState(null);
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    clientId: '2229751890707238'
+  })
+
+  useEffect(() => {
+    console.log(response)
+    if(response && response.type === 'success' && response.authentication){
+      (async () => {
+        const userInfoResponse = await fetch(
+          `https://graph.facebook.com/me?access_token=${response.authentication.accessToken}&fields=id,name,picture.type(large)`
+        )
+        const userInfo = await userInfoResponse.json();
+        console.log(userInfo);
+        setUser(userInfo)
+        console.log(JSON.stringify(response, null , 2));
+      })()
+    }
+  }, [response])
+
+  const handlePressAsync = async () => {
+    const result = await promptAsync();
+    if(result.type !== 'success'){
+      alert("Uh oh, something went wrong");
+      return ;
+    }
+  }
+
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -226,8 +270,19 @@ const LoginScreen = () => {
     //   }
     // )
   };
+  
   return (
     <View style={styles.container}>
+      {user ? (
+        <Profile user={user} />
+      ) : (
+        <Button
+          disabled={!request}
+          title="Sign in with Facebook"
+          onPress={handlePressAsync}
+        />
+      )}
+      {/* <CameraComponent /> */}
       <Modal
         transparent
         animationType="fade"
@@ -400,6 +455,17 @@ const styles = StyleSheet.create({
   add: {
     paddingBottom: 10,
     paddingTop: 10,
+  },
+  profile: {
+    alignItems: "center",
+  },
+  name: {
+    fontSize: 20,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
 });
 

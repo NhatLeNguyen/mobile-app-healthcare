@@ -16,6 +16,7 @@ import MainScreen from "./src/screens/MainScreen/MainScreen";
 import InitialScreen from "./src/screens/InitialScreen/InitialScreen";
 import { ToastProvider } from "react-native-toast-notifications";
 import messaging from '@react-native-firebase/messaging';
+import registerNNPushToken from 'native-notify';
 
 // import * as Device from 'expo-device';
 // import * as Notifications from 'expo-notifications';
@@ -52,6 +53,8 @@ SplashScreen.preventAutoHideAsync().then((result) =>
 );
 
 export default function App() {
+  registerNNPushToken(21287, 'x2deMiRdHTSj2jsONLHufU');
+  
   const [isAppReady, setIsAppReady] = useState(false);
 
   const [fontsLoaded, fontError] = useFonts({
