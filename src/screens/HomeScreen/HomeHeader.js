@@ -45,7 +45,7 @@ function validatePassword(password) {
   }
 }
 
-function HomeHeader() {
+function HomeHeader({isRefresh}) {
   const themeValue = useContext(ThemeContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [avatar, setAvatar] = useState(
@@ -75,7 +75,7 @@ function HomeHeader() {
       setName(na);
     };
     loading();
-  }, []);
+  }, [isRefresh]);
 
   const handleBlur = () => {
     Keyboard.dismiss();

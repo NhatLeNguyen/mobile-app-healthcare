@@ -27,7 +27,7 @@ function HomeScreen() {
     <ScrollView style={[styles.container, {backgroundColor: isDarkMode ? '#202125': '#f2f2f2'}]} refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
     }>
-      <HomeHeader />
+      <HomeHeader isRefresh={refreshing}/>
       <HomeCircleInfo isRefresh={refreshing}/>
       <HomeBody isRefresh={refreshing}/>
     </ScrollView>

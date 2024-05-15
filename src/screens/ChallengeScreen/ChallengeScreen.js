@@ -124,7 +124,6 @@ function ChallengeScreen() {
     };
     loading();
   }, []);
-  console.log(challengeData);
   return (
     <ScrollView style={[styles.container,themeValue.isDarkMode && {
       backgroundColor: '#202125'
