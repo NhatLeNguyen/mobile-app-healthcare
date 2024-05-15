@@ -1,6 +1,13 @@
 import Storage from "expo-storage";
-import { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { Avatar, Button } from "react-native-elements";
 import ChallengeBlock from "./ChallengeBlock";
 import axios from "axios";
@@ -12,6 +19,15 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 function ChallengeScreen() {
   const themeValue = useContext(ThemeContext);
   const navigation = useNavigation();
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    navigation.navigate("ChallengeScreen");
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
   const [avatar, setAvatar] = useState(
     "https://cdn.pixabay.com/photo/2015/12/01/20/28/road-1072821_1280.jpg"
   );
@@ -22,7 +38,7 @@ function ChallengeScreen() {
       setAvatar(ava);
     };
     loading();
-  }, []);
+  }, [refreshing]);
   useEffect(() => {
     const loading = async () => {
       await axios
@@ -31,22 +47,22 @@ function ChallengeScreen() {
           var data = response.data.data;
           // const today = new Date()
           // for(let i = 0 ; i < data.length ; i++){
-            // const startDate = new Date(data['start_date'])
-            // const endDate = new Date()
-            // 0 : Sap ra mat
-            // 1 : Dang dien ra
-            // 2 : Da ket thuc
-            // if(getFormatedDate(today, 'YYYY-MM-YY') < data[i]['start_date']){
-            //   data[i]['status'] = 0
-            // }
-            // else if(getFormatedDate(today, 'YYYY-MM-YY') <= data[i]['end_date']){
-            //   data[i]['status'] = 1
-            // }
-            // else{
-            //   data[i]['status'] = 2
-            // }
+          // const startDate = new Date(data['start_date'])
+          // const endDate = new Date()
+          // 0 : Sap ra mat
+          // 1 : Dang dien ra
+          // 2 : Da ket thuc
+          // if(getFormatedDate(today, 'YYYY-MM-YY') < data[i]['start_date']){
+          //   data[i]['status'] = 0
           // }
-          data.sort(function(a, b) {
+          // else if(getFormatedDate(today, 'YYYY-MM-YY') <= data[i]['end_date']){
+          //   data[i]['status'] = 1
+          // }
+          // else{
+          //   data[i]['status'] = 2
+          // }
+          // }
+          data.sort(function (a, b) {
             return new Date(b.end_date) - new Date(a.end_date);
           });
           // console.log(data);
@@ -57,7 +73,7 @@ function ChallengeScreen() {
         });
     };
     loading();
-  }, []);
+  }, [refreshing]);
   useEffect(() => {
     const saveInfo = async (key, value) => {
       await Storage.setItem({ key: key, value: value });
@@ -83,7 +99,7 @@ function ChallengeScreen() {
             data[i]["current_user_step"] = totalUserSteps;
             data[i]["all_user_step"] = user_step_obj;
           }
-          data.sort(function(a, b) {
+          data.sort(function (a, b) {
             return new Date(b.end_date) - new Date(a.end_date);
           });
           setChallengeData(data);
@@ -123,11 +139,19 @@ function ChallengeScreen() {
         });
     };
     loading();
-  }, []);
+  }, [refreshing]);
   return (
-    <ScrollView style={[styles.container,themeValue.isDarkMode && {
-      backgroundColor: '#202125'
-    }]}>
+    <ScrollView
+      style={[
+        styles.container,
+        themeValue.isDarkMode && {
+          backgroundColor: "#202125",
+        },
+      ]}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={{ paddingTop: 60 }}>
         <Text
           style={[
@@ -221,10 +245,10 @@ function ChallengeScreen() {
                 marginRight: 40,
                 borderRadius: 30,
                 marginTop: 20,
-                elevation: 4
+                elevation: 4,
               },
               themeValue.isDarkMode && {
-                backgroundColor: '#2d2d2f',
+                backgroundColor: "#2d2d2f",
               },
             ]}
           >
@@ -260,8 +284,8 @@ function ChallengeScreen() {
             target={data.target}
             image_url={data.url}
             thumbIcon={data.thumbImage}
-            startDate={data['start_date']}
-            endDate={data['end_date']}
+            startDate={data["start_date"]}
+            endDate={data["end_date"]}
             onPress={() =>
               navigation.navigate("ChallengeMap", {
                 challenge_id: data.id,
@@ -294,7 +318,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f2f2f2",
     flex: 1,
-    paddingBottom: 30
+    paddingBottom: 30,
     // alignItems: 'center'
   },
   blackColor: {

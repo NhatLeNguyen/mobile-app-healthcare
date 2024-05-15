@@ -30,6 +30,7 @@ import NhacCuaTui from "nhaccuatui-api-full";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import axios from "axios";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
 
@@ -70,82 +71,131 @@ function PracticeScreen() {
   const [musicSearched, setMusicSearched] = useState([]);
 
   const [date, setDate] = useState(new Date());
-  useEffect(() => {
-    if (isLoadedMusicList == 0) {
-      console.log("vllll");
-      NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
-        // console.log(response);
-        for (let i = 0; i < response.playlist.songs.length; i++) {
-          let info = response.playlist.songs[i];
-          let key = info["key"];
-          let name = info["title"];
-          let thumbnail = info["thumbnail"];
-          let artists = "";
-          for (let j = 0; j < info.artists.length; j++) {
-            artists += info.artists[j].name;
-            if (j < info.artists.length - 1) {
-              artists += ", ";
-            }
-          }
-          let song_url = "";
-          await NhacCuaTui.getSong(key).then((data) => {
-            if (data.song.streamUrls.length > 0) {
-              song_url = data.song.streamUrls[0].streamUrl;
-            }
-          });
-          if (song_url !== "") {
-            setMusicList((prev) => [
-              ...prev,
-              {
-                key: key,
-                name: name,
-                thumbnail: thumbnail,
-                artists: artists,
-                url: song_url,
-              },
-            ]);
-          }
-          if( i == 1 & song_url !== ""){
-            setChoosenSong(prev => ({key: key,name: name,thumbnail: thumbnail,artists: artists,url: song_url}))
-          }
-        }
-      });
-      setIsLoadedMusicList(1);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isLoadedMusicList == 0) {
+  //     console.log("vllll");
+  //     NhacCuaTui.getTop100("iY1AnIsXedqE").then(async (response) => {
+  //       // console.log(response);
+  //       for (let i = 0; i < response.playlist.songs.length; i++) {
+  //         let info = response.playlist.songs[i];
+  //         let key = info["key"];
+  //         let name = info["title"];
+  //         let thumbnail = info["thumbnail"];
+  //         let artists = "";
+  //         for (let j = 0; j < info.artists.length; j++) {
+  //           artists += info.artists[j].name;
+  //           if (j < info.artists.length - 1) {
+  //             artists += ", ";
+  //           }
+  //         }
+  //         let song_url = "";
+  //         await NhacCuaTui.getSong(key).then((data) => {
+  //           if (data.song.streamUrls.length > 0) {
+  //             song_url = data.song.streamUrls[0].streamUrl;
+  //           }
+  //         });
+  //         if (song_url !== "") {
+  //           setMusicList((prev) => [
+  //             ...prev,
+  //             {
+  //               key: key,
+  //               name: name,
+  //               thumbnail: thumbnail,
+  //               artists: artists,
+  //               url: song_url,
+  //             },
+  //           ]);
+  //         }
+  //         if ((i == 1) & (song_url !== "")) {
+  //           setChoosenSong((prev) => ({
+  //             key: key,
+  //             name: name,
+  //             thumbnail: thumbnail,
+  //             artists: artists,
+  //             url: song_url,
+  //           }));
+  //         }
+  //       }
+  //     });
+  //     setIsLoadedMusicList(1);
+  //   }
+  // }, []);
   const handleCompletePractice = () => {
     if (isFirstLocated) {
       let now = new Date();
       const loading = async () => {
-        let id = await Storage.getItem({key : 'user_id'})
+        let id = await Storage.getItem({ key: "user_id" });
         // console.log("Saving...");
         console.log([
           "1",
           // getFormatedDate(date, "hh:mm:ss"),
-          ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
-          ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
+          ("0" + date.getHours()).slice(-2) +
+            ":" +
+            ("0" + date.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + date.getSeconds()).slice(-2),
+          ("0" + now.getHours()).slice(-2) +
+            ":" +
+            ("0" + now.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + now.getSeconds()).slice(-2),
           getFormatedDate(date, "YYYY-MM-DD"),
           steps,
           totalDistance,
           minute + ":" + second,
           5.0,
-          JSON.stringify(posList)
+          JSON.stringify(posList),
         ]);
-        // (await db).runSync(
-        //   "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        //   [
-        //     id,
-        //     ('0' + date.getHours()).slice(-2)+':'+('0' + date.getMinutes()).slice(-2)+':'+('0' + date.getSeconds()).slice(-2),
-        //     ('0' + now.getHours()).slice(-2)+':'+('0' + now.getMinutes()).slice(-2)+':'+('0' + now.getSeconds()).slice(-2),
-        //     getFormatedDate(date, "YYYY-MM-DD"),
-        //     steps,
-        //     totalDistance,
-        //     minute + ":" + second,
-        //     Math.ceil(3 * 60 * totalDistance),
-        //     JSON.stringify(posList)
-        //   ]
-        // );
-        // console.log("Saving successfully");
+        (await db).runSync(
+          "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            id,
+            ("0" + date.getHours()).slice(-2) +
+              ":" +
+              ("0" + date.getMinutes()).slice(-2) +
+              ":" +
+              ("0" + date.getSeconds()).slice(-2),
+            ("0" + now.getHours()).slice(-2) +
+              ":" +
+              ("0" + now.getMinutes()).slice(-2) +
+              ":" +
+              ("0" + now.getSeconds()).slice(-2),
+            getFormatedDate(date, "YYYY-MM-DD"),
+            steps,
+            totalDistance,
+            minute + ":" + second,
+            Math.ceil(3 * 60 * totalDistance),
+            JSON.stringify(posList),
+          ]
+        );
+
+        // let challenge_data = []
+
+        // await axios
+        //   .get(`http://${IP}:1510/getChallenge`, {})
+        //   .then(function (response) {
+        //     const data = response.data.data;
+        //     challenge_data = data;
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
+        // for (let i = 0; i < challenge_data.length; i++) {
+        //   let newUserSteps = await Storage.getItem({key: `challenge_user_step${challenge_data[i]["id"]}`})
+        //   console.log(newUserSteps);
+        //   // for (let j = 0; j < newUserSteps.length; j++){
+        //   //   if(newUserSteps[j]['user_id'] == id){
+        //   //     newUserSteps[j]['totalUserSteps'] = newUserSteps[j]['totalUserSteps'] + steps
+        //   //     break
+        //   //   }
+        //   // }
+        //   // await Storage.setItem({
+        //   //   key: `challenge_user_step${challenge_data[i]["id"]}`,
+        //   //   value: JSON.stringify(newUserSteps),
+        //   // });
+        // }
+
+        console.log("Saving successfully");
       };
 
       loading();
@@ -437,18 +487,18 @@ function PracticeScreen() {
     
         )} */}
         {/* {console.log(choosenSong)} */}
-        {choosenSong &&
-        <MusicPlayer
-          image={choosenSong.thumbnail}
-          name={capitalizeFirstLetter(choosenSong.name)}
-          author={choosenSong.artists}
-          song={choosenSong.url}
-          isChanged={isChangedMusic}
-          setIsChanged={setIsChangedMusic}
-          s={sound}
-          setS={setSound}
-        />
-        }
+        {choosenSong && (
+          <MusicPlayer
+            image={choosenSong.thumbnail}
+            name={capitalizeFirstLetter(choosenSong.name)}
+            author={choosenSong.artists}
+            song={choosenSong.url}
+            isChanged={isChangedMusic}
+            setIsChanged={setIsChangedMusic}
+            s={sound}
+            setS={setSound}
+          />
+        )}
       </View>
       <View style={styles.info}>
         <View style={styles.infoBlock}>
@@ -469,7 +519,7 @@ function PracticeScreen() {
         </View>
         <View style={styles.infoBlock}>
           <Text style={styles.headerText}>Calories</Text>
-          <Text style={styles.infoText}> 
+          <Text style={styles.infoText}>
             {Math.ceil(3 * 60 * totalDistance)}
             <Text style={styles.subText}> kcal</Text>
           </Text>
