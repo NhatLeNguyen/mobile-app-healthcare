@@ -9,15 +9,17 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Camera } from 'expo-camera';
-import {
-  Camera,
-  CameraType,
-  getCameraPermissionsAsync,
-  requestCameraPermissionsAsync,
-  requestMicrophonePermissionsAsync,
-  getMicrophonePermissionsAsync,
-} from "expo-camera";
+// import { Camera } from 'expo-camera';
+import { Camera } from "react-native-vision-camera";
+// import {
+//   Camera,
+//   CameraType,
+//   getCameraPermissionsAsync,
+//   requestCameraPermissionsAsync,
+//   requestMicrophonePermissionsAsync,
+//   getMicrophonePermissionsAsync,
+// } from "expo-camera";
+
 import { CameraView } from "expo-camera/next";
 import { Video } from "expo-av";
 import * as VideoThumbnails from "expo-video-thumbnails";

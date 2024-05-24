@@ -22,7 +22,7 @@ import { getFormatedDate } from "react-native-modern-datepicker";
 import * as MailComposer from "expo-mail-composer";
 import axios from "axios";
 import { IP } from "../../constants/Constants";
-// import CameraComponent from "../../components/camera/CameraComponent";
+import CameraComponent from "../../components/camera/CameraComponent";
 import * as Facebook from "expo-auth-session/providers/facebook"
 import * as WebBrowser from "expo-web-browser"
 import { StatusBar } from "expo-status-bar";
@@ -265,6 +265,13 @@ const LoginScreen = () => {
       .catch(function (error) {
         console.log(error);
       });
+    
+    toast.show("Gửi thành công", {
+      type: "success",
+      offset: 50,
+      animationType: "zoom-in",
+    });
+    setIsModalVisible(false)
     // await MailComposer.composeAsync(
     //   {
     //     recipients: [emailGetPass],
@@ -286,7 +293,7 @@ const LoginScreen = () => {
           onPress={handlePressAsync}
         />
       )} */}
-      {/* <CameraComponent /> */}
+      <CameraComponent />
       <Modal
         transparent
         animationType="fade"
