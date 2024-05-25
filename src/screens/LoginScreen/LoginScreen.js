@@ -293,7 +293,7 @@ const LoginScreen = () => {
           onPress={handlePressAsync}
         />
       )} */}
-      <CameraComponent />
+      {/* <CameraComponent /> */}
       <Modal
         transparent
         animationType="fade"
