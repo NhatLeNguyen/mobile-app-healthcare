@@ -3,12 +3,8 @@
     "name": "DemoRN",
     "slug": "DemoRN",
     "version": "1.0.0",
-    "permissions": [
-      "CAMERA",
-      "RECORD_AUDIO"
-    ],
     "splash": {
-      "image": "./src/assets/images/practice.jpg",
+      "image": "./src/assets/images/practice.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
@@ -30,17 +26,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "scheme": [
-      "DemoRN",
-      "fb2229751890707238"
-    ],
+    "scheme": ["DemoRN"],
     "android": {
-      "package": "com.anonymous.DemoRN",
-      "permissions": [
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-        "android.permission.ACCESS_MEDIA_LOCATION"
-      ]
+      "package": "com.anonymous.DemoRN"
     },
     "extra": {
       "eas": {
@@ -48,6 +36,5 @@
       }
     },
     "owner": "k.lostctrl"
-  },
-  "name": "DemoRN"
+  }
 }

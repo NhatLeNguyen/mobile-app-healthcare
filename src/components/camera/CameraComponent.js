@@ -10,107 +10,29 @@ import {
   Image,
 } from "react-native";
 // import { Camera } from 'expo-camera';
-// import {
-//   Camera,
-//   CameraType,
-//   getCameraPermissionsAsync,
-//   requestCameraPermissionsAsync,
-//   requestMicrophonePermissionsAsync,
-//   getMicrophonePermissionsAsync,
-// } from "expo-camera";
-import { Camera } from "react-native-vision-camera";
+import {
+  Camera,
+  CameraType,
+  getCameraPermissionsAsync,
+  requestCameraPermissionsAsync,
+  requestMicrophonePermissionsAsync,
+  getMicrophonePermissionsAsync,
+} from "expo-camera";
+// import { Camera } from "react-native-vision-camera";
 import { CameraView } from "expo-camera/next";
 import { Video } from "expo-av";
 import * as VideoThumbnails from "expo-video-thumbnails";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library'
-
-// // Function to compute brightness from video frames
-// function computeBrightness(videoFrames) {
-//   const brightnessValues = [];
-//   videoFrames.forEach(frame => {
-//       let totalBrightness = 0;
-//       for (let i = 0; i < frame.length; i += 4) {
-//           // Assuming frame is in RGBA format, summing up red channel values
-//           totalBrightness += frame[i];
-//       }
-//       // Computing average brightness for the frame
-//       const averageBrightness = totalBrightness / (frame.length / 4);
-//       brightnessValues.push(averageBrightness);
-//   });
-//   return brightnessValues;
-// }
-
-// // Function to apply band-pass filter
-// function applyBandPassFilter(brightnessSignal, sampleRate, lowFreq, highFreq) {
-//   const bandPassFilteredSignal = [];
-//   // Butterworth filter coefficients calculation
-//   const b = []; // Numerator coefficients
-//   const a = []; // Denominator coefficients
-//   // Filter initialization
-//   // Filtering the brightness signal
-//   for (let i = 0; i < brightnessSignal.length; i++) {
-//       let filteredValue = 0;
-//       // Applying the filter equation
-//       // Collecting filtered values
-//       bandPassFilteredSignal.push(filteredValue);
-//   }
-//   return bandPassFilteredSignal;
-// }
-
-// // Function to compute FFT
-// function computeFFT(signal) {
-//   const fftResult = [];
-//   // FFT computation logic
-//   return fftResult;
-// }
-
-// // Function to detect peaks
-// function detectPeaks(fftMagnitude, freqRange) {
-//   const peaks = [];
-//   // Peak detection logic
-//   return peaks;
-// }
-
-// // Function to smooth heart rate
-// function smoothHeartRate(fftPeaks, fftResolution, bpmRange) {
-//   let smoothedHeartRate = null;
-//   // Smoothing logic
-//   return smoothedHeartRate;
-// }
-
-// // Example usage
-// const videoFrames = []; // Video frames as RGBA arrays
-// const sampleRate = 30; // Sample rate (frames per second)
-// const lowFreq = 40 / 60; // Low frequency limit (in Hz)
-// const highFreq = 230 / 60; // High frequency limit (in Hz)
-// const fftResolution = 1; // FFT resolution (in Hz)
-// const bpmRange = [40, 230]; // Heart rate range (in BPM)
-
-// // Compute brightness from video frames
-// const brightnessSignal = computeBrightness(videoFrames);
-
-// // Apply band-pass filter
-// const bandPassFilteredSignal = applyBandPassFilter(brightnessSignal, sampleRate, lowFreq, highFreq);
-
-// // Compute FFT
-// const fftResult = computeFFT(bandPassFilteredSignal);
-
-// // Detect peaks in FFT
-// const fftPeaks = detectPeaks(fftResult, bpmRange);
-
-// // Smooth heart rate
-// const smoothedHeartRate = smoothHeartRate(fftPeaks, fftResolution, bpmRange);
-
-// console.log('Smoothed Heart Rate:', smoothedHeartRate);
+import {firebase,storage } from '../../../firebaseConfig.js';
+import axios from "axios";
 
 function CameraComponent() {
   const cameraRef = useRef(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.torch);
   const [capturedFrames, setCapturedFrames] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
-  const [heartRate, setHeartRate] = useState(0);
   const [imageUrl, setImageUrl] = useState();
   const [frames, setFrames] = useState([]);
   const [rgbMatrix, setRgbMatrix] = useState(null);
@@ -118,6 +40,38 @@ function CameraComponent() {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
   
+  const [uploading, setUploading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState('');
+  const [heartRate, setHeartRate] = useState(70);
+
+  // Hàm tải video từ bộ nhớ đệm
+  const uploadVideoFromCache = async (cacheUri) => {
+    setUploading(true);
+    const response = await fetch(cacheUri);
+    const blob = await response.blob();
+    const ref = storage.ref().child(`videos/${Date.now()}_${cacheUri.split('/').pop()}`);
+    const snapshot = ref.put(blob);
+
+    snapshot.on(firebase.storage.TaskEvent.STATE_CHANGED, {
+      'next': (snapshot) => {
+        console.log(snapshot);
+      },
+      'error': (error) => {
+        console.log(error);
+        setUploading(false);
+      },
+      'complete': () => {
+        ref.getDownloadURL().then((downloadURL) => {
+          console.log('File available at:', downloadURL);
+          // setVideoUrl(downloadURL)
+          caculateHeartRate(downloadURL)
+          setUploading(false);
+        });
+      }
+    });
+  };
+
+  // Giả sử URI của video trong bộ nhớ đệm là "file:///path/to/cached/video.mp4"
   // useEffect(() => {
   //   const loading =async () => {
   //     await requestCameraPermissionsAsync()
@@ -134,6 +88,22 @@ function CameraComponent() {
             setHasMediaLibraryPermission(mediaLibraryPermission.status === 'granted')
         })()
     },[])
+
+  const caculateHeartRate = async (video_url) => {
+    axios
+      .get('http://192.168.1.13:5000/api?query=' + video_url, {
+      })
+      .then(function (response) {
+        console.log('Nhịp tim: ', response.data['avg_bpm'])
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    caculateHeartRate('https://firebasestorage.googleapis.com/v0/b/health-care-9c97f.appspot.com/o/videos%2F1716630938152_6d2dac06-2681-4738-b874-3fae41589806.mp4?alt=media&token=185f4753-d7b4-415c-9463-61df69ab9d1b')
+  }, [])
+
   const takePicture = async () => {
     let options = {
         quality: 1, 
@@ -148,33 +118,34 @@ function CameraComponent() {
     setIsCameraReady(true);
   };
 
-//   const processFrame = async () => {
-//     if (cameraRef.current) {
-//       try {
-//         const options = {
-//           quality: "720p",
-//           maxDuration: 5, // Ghi tối đa 5 giây
-//           mute: true,
-//         };
-//         const { uri } = await cameraRef.current.recordAsync(options);
-//         console.log("Video recorded at:", uri);
-
-//         await cameraRef.current.stopRecording();
-//       } catch (error) {
-//         console.error("Failed to start recording:", error);
-//       }
-//     }
-//   };
-
-  const processFrames = async (videoUri) => {
-    try {
-
-      const url = await VideoThumbnails.getThumbnailAsync(videoUri, { time: 4500 });
-      setImageUrl(url["uri"])
-    } catch (err) {
-      console.error("Failed to exact frames:", err);
+  const processFrame = async () => {
+    if (cameraRef.current) {
+      try {
+        const options = {
+          videoStabilizationMode: Camera.Constants.VideoStabilization.cinematic,
+          quality: "480p",
+          maxDuration: 18, // Ghi tối đa 5 giây
+          mute: true,
+        };
+        const { uri } = await cameraRef.current.recordAsync(options);
+        console.log("Video recorded at:", uri);
+        await cameraRef.current.stopRecording();
+        uploadVideoFromCache(uri)
+      } catch (error) {
+        console.error("Failed to start recording:", error);
+      }
     }
   };
+
+  // const processFrames = async (videoUri) => {
+  //   try {
+
+  //     const url = await VideoThumbnails.getThumbnailAsync(videoUri, { time: 4500 });
+  //     setImageUrl(url["uri"])
+  //   } catch (err) {
+  //     console.error("Failed to exact frames:", err);
+  //   }
+  // };
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
@@ -198,13 +169,6 @@ function CameraComponent() {
           flashMode={flash}
           onCameraReady={handleCameraReady}
         />
-        {/* <RNCamera
-          ref={cameraRef}
-          // style={{ flex: 1 }}
-          type={RNCamera.Constants.Type.back}
-          autoFocus={RNCamera.Constants.AutoFocus.on}
-          flashMode={RNCamera.Constants.FlashMode.off}
-        /> */}
       </View>
       <TouchableOpacity
         style={{
@@ -218,7 +182,7 @@ function CameraComponent() {
       >
         <Text>Record</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           backgroundColor: "red",
           height: 30,
@@ -228,7 +192,7 @@ function CameraComponent() {
         onPress={() => processFrames('file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FDemoRN-45abfef4-1c02-4d7e-b05f-a6aaec65f549/Camera/8bf4c205-6f72-4ae6-ac51-f1072a1d937a.mp4')}
       >
         <Text>Caculate heart rate</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

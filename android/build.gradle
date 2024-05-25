@@ -13,11 +13,18 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+    }
+    plugins {
+        id ( "com.android.application" )
+        // Add the Google services Gradle plugin
+        id ( "com.google.gms.google-services" )
     }
     dependencies {
-        classpath('com.android.tools.build:gradle')
-        classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('com.android.tools.build:gradle:7.0.4')
         classpath('expo-dev-launcher-gradle-plugin:3.6.9')
+        implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+        implementation("com.google.firebase:firebase-analytics")
     }
     
 }
