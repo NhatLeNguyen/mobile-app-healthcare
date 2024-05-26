@@ -43,6 +43,8 @@ function CameraComponent() {
   const [uploading, setUploading] = useState(false);
   const [videoUrl, setVideoUrl] = useState('');
   const [heartRate, setHeartRate] = useState(70);
+  const [isCompleteMeasure, setIsCompleteMeasure] = useState(false)
+  const [isImageGifVisiable, setIsImageGifVisiable] = useState(false)
 
   // Hàm tải video từ bộ nhớ đệm
   const uploadVideoFromCache = async (cacheUri) => {
@@ -95,14 +97,14 @@ function CameraComponent() {
       })
       .then(function (response) {
         console.log('Nhịp tim: ', response.data['avg_bpm'])
+        setHeartRate(response.data['avg_bpm'])
+        setIsImageGifVisiable(false);
+        setIsCompleteMeasure(true);
       })
       .catch(function (error) {
         console.log(error);
       });
   }
-  useEffect(() => {
-    caculateHeartRate('https://firebasestorage.googleapis.com/v0/b/health-care-9c97f.appspot.com/o/videos%2F1716630938152_6d2dac06-2681-4738-b874-3fae41589806.mp4?alt=media&token=185f4753-d7b4-415c-9463-61df69ab9d1b')
-  }, [])
 
   const takePicture = async () => {
     let options = {
@@ -119,6 +121,8 @@ function CameraComponent() {
   };
 
   const processFrame = async () => {
+    setIsCompleteMeasure(false)
+    setIsImageGifVisiable(true)
     if (cameraRef.current) {
       try {
         const options = {
@@ -156,43 +160,41 @@ function CameraComponent() {
           alignItems: "center",
           borderRadius: 120,
           overflow: "hidden",
+
         }}
       >
-        {/* <Image 
-          source={{uri: imageUrl ? imageUrl : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnEy2t0mwIlSoVaza9Tm0MLYRK29oihDYWdzQOwGTR2A&s'}}
-          style={{height: 100, width: 100}}
-        /> */}
         <Camera
           ref={cameraRef}
           type={Camera.Constants.Type.back}
-          style={{height: 50, width: 50}}
+          style={{height: 100, width: 100}}
           flashMode={flash}
           onCameraReady={handleCameraReady}
         />
+        {isImageGifVisiable && 
+          <Image 
+            source={{uri: 'https://media4.giphy.com/media/VGK2WUT3amXjG/200w.gif?cid=6c09b952aiaxr3lb8m0bgp7kgb0mh9mmrsnda3hz6piw9of3'}}
+            style={{height: 100, width: '100%', marginTop: 50}}
+          />
+        }
+        {isCompleteMeasure && <Text style={{color:'white', fontSize: 20, marginTop: 30}}>Nhịp tim</Text>}
+        {isCompleteMeasure && <Text style={{color:'white', fontSize: 50, color:'lime'}}>{Math.floor(heartRate)}</Text>}
       </View>
+      
       <TouchableOpacity
         style={{
-          backgroundColor: "red",
-          height: 30,
+          backgroundColor: isImageGifVisiable ? "rgba(255,255,255, 0.2)" : "white",
           justifyContent: "center",
           alignItems: "center",
-          marginBottom: 15
-        }}
+          marginBottom: 5,
+          padding: 5,
+          borderRadius: 10
+          }
+        }
         onPress={() => processFrame()}
+        disabled={isImageGifVisiable ? true : false}
       >
-        <Text>Record</Text>
+        <Text style={{fontSize: 18, color: isImageGifVisiable ? "rgba(255,255,255, 0.3)" : "black",fontFamily:'Inter_500Medium'}}>Đo nhịp tim</Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        style={{
-          backgroundColor: "red",
-          height: 30,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        onPress={() => processFrames('file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FDemoRN-45abfef4-1c02-4d7e-b05f-a6aaec65f549/Camera/8bf4c205-6f72-4ae6-ac51-f1072a1d937a.mp4')}
-      >
-        <Text>Caculate heart rate</Text>
-      </TouchableOpacity> */}
     </View>
   );
 }

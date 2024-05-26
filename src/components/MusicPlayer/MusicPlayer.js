@@ -106,7 +106,7 @@ function MusicPlayer({ image, name, author, song, isChanged, setIsChanged ,s ,se
           onValueChange={handleSeek}
         />
       </View>
-      <View style={{ position: 'absolute', right: 30 }}>
+      <View style={{ position: 'absolute', right: 20 }}>
         {isPlaying && (
           <Ionicons
             name="pause-sharp"
@@ -138,5 +138,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "left",
+    margin: 0
   },
 });

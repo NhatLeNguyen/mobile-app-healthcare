@@ -30,6 +30,7 @@ import NhacCuaTui from "nhaccuatui-api-full";
 import { getFormatedDate } from "react-native-modern-datepicker";
 import * as SQLite from "expo-sqlite/next";
 import Storage from "expo-storage";
+import CameraComponent from "../../components/camera/CameraComponent";
 import axios from "axios";
 
 const db = SQLite.openDatabaseAsync("health-care.db");
@@ -71,6 +72,8 @@ function PracticeScreen() {
   const [musicSearched, setMusicSearched] = useState([]);
 
   const [date, setDate] = useState(new Date());
+
+  const [heartRateModalVisible ,setHeartRateModalVisible] = useState(false)
   // useEffect(() => {
   //   if (isLoadedMusicList == 0) {
   //     console.log("vllll");
@@ -146,28 +149,28 @@ function PracticeScreen() {
           5.0,
           JSON.stringify(posList),
         ]);
-        (await db).runSync(
-          "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            id,
-            ("0" + date.getHours()).slice(-2) +
-              ":" +
-              ("0" + date.getMinutes()).slice(-2) +
-              ":" +
-              ("0" + date.getSeconds()).slice(-2),
-            ("0" + now.getHours()).slice(-2) +
-              ":" +
-              ("0" + now.getMinutes()).slice(-2) +
-              ":" +
-              ("0" + now.getSeconds()).slice(-2),
-            getFormatedDate(date, "YYYY-MM-DD"),
-            steps,
-            totalDistance,
-            minute + ":" + second,
-            Math.ceil(3 * 60 * totalDistance),
-            JSON.stringify(posList),
-          ]
-        );
+        // (await db).runSync(
+        //   "insert into practicehistory(user_id, start_time, end_time, date, steps, distances, practice_time, caloris, posList) values(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        //   [
+        //     id,
+        //     ("0" + date.getHours()).slice(-2) +
+        //       ":" +
+        //       ("0" + date.getMinutes()).slice(-2) +
+        //       ":" +
+        //       ("0" + date.getSeconds()).slice(-2),
+        //     ("0" + now.getHours()).slice(-2) +
+        //       ":" +
+        //       ("0" + now.getMinutes()).slice(-2) +
+        //       ":" +
+        //       ("0" + now.getSeconds()).slice(-2),
+        //     getFormatedDate(date, "YYYY-MM-DD"),
+        //     steps,
+        //     totalDistance,
+        //     minute + ":" + second,
+        //     Math.ceil(3 * 60 * totalDistance),
+        //     JSON.stringify(posList),
+        //   ]
+        // );
 
         // let challenge_data = []
 
@@ -454,6 +457,45 @@ function PracticeScreen() {
           </View>
         </View>
       </Modal>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={heartRateModalVisible}
+        // style={{height: 80, flex: 0.5 }}
+        onRequestClose={() => {setHeartRateModalVisible(false), setIsPlayed(true)}}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingBottom: 50,
+            // backgroundColor: "rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              height: "65%",
+              padding: 20,
+              borderRadius: 20,
+              backgroundColor: "rgb(6,6,6)",
+              borderWidth: 1,
+              // borderColor: '#bfd474',
+              borderColor: "white",
+              elevation: 5,
+            }}
+          >
+            <CameraComponent />
+            <Pressable
+                  style={{ top: 8, right: 8, position: "absolute" }}
+                  onPress={() => {setIsPlayed(true);setHeartRateModalVisible(false)}}
+                >
+                  <Ionicons name="close" size={25} color="gray" />
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <View style={{ height: "50%" }}>
         {!isFirstLocated && (
           <View
@@ -487,6 +529,7 @@ function PracticeScreen() {
     
         )} */}
         {/* {console.log(choosenSong)} */}
+        <View style={{backgroundColor: "#171717",height: "60%",marginLeft: 20,borderRadius: 20,justifyContent: "left",alignItems: "center",}}>
         {choosenSong && (
           <MusicPlayer
             image={choosenSong.thumbnail}
@@ -499,6 +542,10 @@ function PracticeScreen() {
             setS={setSound}
           />
         )}
+        </View>
+        <TouchableOpacity onPress={() => {setIsPlayed(false);setHeartRateModalVisible(true)}} activeOpacity={0.7} style={{backgroundColor:'green', marginLeft:10, backgroundColor: '#171717', borderRadius: 20}}>
+          <FontAwesome name="heartbeat" size={30} color="red" style={{padding: 10}}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.info}>
         <View style={styles.infoBlock}>
@@ -603,12 +650,19 @@ const styles = StyleSheet.create({
     // alignItems: 'center'
   },
   music: {
-    backgroundColor: "#171717",
-    height: "8%",
-    margin: 20,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    // backgroundColor: "#171717",
+    // height: "8%",
+    // margin: 20,
+    // borderRadius: 20,
+    // justifyContent: "left",
+    // alignItems: "center",
+    // width: '75%'
+    width: '100%',
+    height: '8%',
+    flex: 1,
+    flexDirection: 'row',
+    // backgroundColor: 'blue',
+    alignItems: 'center',
   },
   info: {
     flexDirection: "row",
